@@ -13,7 +13,7 @@ Open the local URL shown by Vite. To make a production build, run `npm run build
 
 ## Add your hero video
 
-Put your video at `public/videos/hero.mp4`. The full-screen hero will autoplay it muted and loop it. Until the file is there, a dark fallback visual appears behind the centered title. See `public/videos/README.md` for export tips.
+Your original is saved at `source-videos/hero.mov`. The site plays the short web version at `public/videos/hero.mp4`, with `hero-poster.jpg` displayed while it loads. The video autoplays muted and loops.
 
 ## Personalize it
 

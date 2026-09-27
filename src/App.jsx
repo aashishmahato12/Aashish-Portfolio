@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const projects = [
   { id: '01', title: 'Kinetic Frames', type: 'Film & Motion', category: 'film', className: 'card-kinetic', line: 'Rhythm, light, and movement.' },
@@ -69,7 +69,7 @@ function Hero() {
   return (
     <section className="hero" id="top" aria-labelledby="hero-title">
       <div className="hero-fallback" aria-hidden="true"><div className="fallback-light" /></div>
-      <video ref={videoRef} className={`hero-video ${videoReady ? 'is-ready' : ''}`} autoPlay muted loop playsInline preload="metadata" aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)}>
+      <video ref={videoRef} className={`hero-video ${videoReady ? 'is-ready' : ''}`} autoPlay muted loop playsInline preload="metadata" poster="/videos/hero-poster.jpg" aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)}>
         <source src="/videos/hero.mp4" type="video/mp4" />
       </video>
       <div className="hero-shade" aria-hidden="true" />
