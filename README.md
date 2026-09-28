@@ -11,10 +11,10 @@ npm run dev
 
 Open the local URL shown by Vite. To make a production build, run `npm run build`.
 
-## Hero video
+## Media
 
-The home page and Projects page play the Cloudinary reel in `src/portfolio-data.js`. `public/videos/hero-poster.jpg` appears while it loads. The hero video autoplays muted and loops; the gallery player has controls.
+The homepage plays the Cloudinary reel in `src/portfolio-data.js`. `public/videos/hero-poster.jpg` appears while it loads. The reel is also available with controls on the Work and Gallery pages.
 
 ## Personalize it
 
-Edit the headline, introduction, services, and six concept cards in `src/App.jsx`. Add real featured projects, gallery media, and collaborators in `src/portfolio-data.js`. Project cards can have a `cover` and a `media` array of video or photo items. Collaborators can have a `logo` path and optional website `href`. The Projects page is at `/projects/`; empty project and company lists show clearly labeled placeholders. Both pages share one React app, with animated transitions handled by `src/SiteRouter.jsx`. Styles are in `src/style.css`, `src/redesign.css`, `src/projects.css`, and `src/projects-theme.css`.
+The homepage previews the Gallery, About, and Work pages. Page content and transitions are in `src/Experience.jsx`; the existing video hero is in `src/App.jsx`. Add real projects, media, and collaborators in `src/portfolio-data.js`. The current reel and its poster are the only live gallery pieces, and any missing media is labeled as a placeholder. Add a `cover` and optional `media` array to each featured project to display it on the homepage, Work page, and Gallery page.

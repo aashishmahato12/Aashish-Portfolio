@@ -10,8 +10,10 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: path.join(root, 'index.html'),
-        projects: path.join(root, 'projects/index.html'),
+        home: path.join(root, 'index.html'),
+        work: path.join(root, 'work/index.html'),
+        gallery: path.join(root, 'gallery/index.html'),
+        about: path.join(root, 'about/index.html'),
       },
     },
   },
