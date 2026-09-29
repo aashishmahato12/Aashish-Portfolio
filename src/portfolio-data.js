@@ -70,6 +70,38 @@ export const featuredProjects = [
   },
 ];
 
+// Public work verified against the linked live site and GitHub repositories.
+export const webProjects = [
+  {
+    id: 'cosmic-electrical-web', title: 'Cosmic Electrical', category: 'Client website',
+    description: 'A website for Cosmic Electrical Limited, presenting its transmission, distribution, substation, and electrification work.',
+    liveUrl: 'https://cosmic-electrical-six.vercel.app/',
+    mark: `${logo}/cosmic-electrical.webp`,
+    theme: 'cosmic',
+  },
+  {
+    id: 'unisync-web', title: 'UniSync', category: 'Student dashboard',
+    description: 'A responsive React dashboard for college notices, events, payments, documents, and a student assistant.',
+    liveUrl: 'https://unisync-dun.vercel.app/',
+    repoUrl: 'https://github.com/aashishmahato12/UniSync',
+    theme: 'unisync',
+  },
+  {
+    id: 'portfolio-web', title: 'Aashish Portfolio', category: 'Creative portfolio',
+    description: 'A responsive portfolio bringing film, photography, design, and code into one experience.',
+    liveUrl: 'https://aashish-mahato.com.np/',
+    repoUrl: 'https://github.com/aashishmahato12/Aashish-Portfolio',
+    theme: 'portfolio',
+  },
+  {
+    id: 'n8n-oauth-web', title: 'n8n OAuth Site', category: 'Web utility',
+    description: 'A small deployed site for an n8n OAuth project.',
+    liveUrl: 'https://n8n-oauth-site.vercel.app/',
+    repoUrl: 'https://github.com/aashishmahato12/n8n-oauth-site',
+    theme: 'oauth',
+  },
+];
+
 export const galleryMedia = [
   heroReel,
   { id: 'prayer-flags', type: 'photo', title: 'Prayer flags', category: 'Photography', src: `${photo}/tree-final-27.webp` },

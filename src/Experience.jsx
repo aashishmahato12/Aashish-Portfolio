@@ -6,12 +6,19 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animate, stagger } from 'animejs';
 import App from './App.jsx';
 import { Cursor, CursorFollow, CursorProvider } from './components/animate-ui/components/animate/cursor.jsx';
-import { collaborators, featuredProjects, galleryMedia, heroReel } from './portfolio-data.js';
+import { PreviewLinkCard, PreviewLinkCardContent, PreviewLinkCardImage, PreviewLinkCardPortal, PreviewLinkCardTrigger } from './components/animate-ui/primitives/radix/preview-link-card.jsx';
+import { collaborators, featuredProjects, galleryMedia, heroReel, webProjects } from './portfolio-data.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const routeFor = (path) => path.startsWith('/work') ? 'work' : path.startsWith('/gallery') ? 'gallery' : path.startsWith('/about') ? 'about' : 'home';
-const titles = { home: 'Aashish Mahato — Creative Portfolio', work: 'Work — Aashish Mahato', gallery: 'Gallery — Aashish Mahato', about: 'About — Aashish Mahato' };
+const routeFor = (path) => {
+  const skill = path.match(/^\/work\/(film|photography|motion|branding|graphic|digital|web)\/?$/);
+  if (skill) return `skill-${skill[1]}`;
+  return path.startsWith('/gallery') ? 'gallery' : path.startsWith('/about') ? 'about' : 'home';
+};
+const titles = { home: 'Aashish Mahato — Creative Portfolio', gallery: 'Gallery — Aashish Mahato', about: 'About — Aashish Mahato' };
+const skillTitles = { film: 'Film', photography: 'Photography', motion: 'Motion Graphics', branding: 'Branding', graphic: 'Graphic Design', digital: 'Digital', web: 'Web Development' };
+const titleFor = (route) => route.startsWith('skill-') ? `${skillTitles[route.slice(6)]} — Aashish Mahato` : titles[route];
 
 function usePageMotion(dependency) {
   useLayoutEffect(() => {
@@ -44,7 +51,7 @@ function ReelVideo({ item = heroReel, controls = false, className = '' }) {
 }
 
 function SiteNav({ current }) {
-  return <header className="inner-nav"><a className="inner-logo" href="/" aria-label="Aashish Mahato home">A/M<span>®</span></a><nav aria-label="Main navigation"><a href="/work/" aria-current={current === 'work' ? 'page' : undefined}>Work</a><a href="/gallery/" aria-current={current === 'gallery' ? 'page' : undefined}>Gallery</a><a href="/about/" aria-current={current === 'about' ? 'page' : undefined}>About</a></nav><a className="inner-home" href="/">BACK HOME ↗</a></header>;
+  return <header className="inner-nav"><a className="inner-logo" href="/" aria-label="Aashish Mahato home">A/M<span>®</span></a><nav aria-label="Main navigation"><a href="/#my-work" aria-current={current === 'work' ? 'page' : undefined}>My Work</a><a href="/gallery/" aria-current={current === 'gallery' ? 'page' : undefined}>Gallery</a><a href="/about/" aria-current={current === 'about' ? 'page' : undefined}>About</a></nav><a className="inner-home" href="/">BACK HOME ↗</a></header>;
 }
 
 function SectionTop({ number, label, aside }) {
@@ -66,6 +73,20 @@ function CollaboratorMarqueeRow({ companies, reverse = false }) {
 function HomeCollaborators() {
   const midpoint = Math.ceil(collaborators.length / 2);
   return <section className="home-collaborators" aria-labelledby="home-collaborators-title"><div className="experience-shell"><SectionTop number="04" label="COLLABORATIONS" aside="NAMES FROM THE WORK" /><div className="home-collaborators-heading" data-reveal><h2 id="home-collaborators-title">WORKED<br /><em>WITH.</em></h2><p>Selected teams and brands I've worked with.</p></div></div><div className="collaborator-marquees" aria-label="Company logos"><CollaboratorMarqueeRow companies={collaborators.slice(0, midpoint)} reverse /><CollaboratorMarqueeRow companies={collaborators.slice(midpoint)} /></div></section>;
+}
+
+function HomeProof() {
+  const sectionRef = useRef(null);
+  const mosaic = [galleryMedia[1], featuredProjects[3], galleryMedia[3], featuredProjects[0], galleryMedia[7], featuredProjects[5], featuredProjects[1], galleryMedia[5], featuredProjects[4], galleryMedia[8], featuredProjects[2], galleryMedia[9]];
+  const projects = [featuredProjects[3], featuredProjects[4], featuredProjects[5]];
+  useLayoutEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const context = gsap.context(() => {
+      gsap.from('.home-proof-tile', { autoAlpha: 0, y: 28, scale: .92, duration: .65, stagger: .055, ease: 'power3.out', scrollTrigger: { trigger: '.home-proof-mosaic', start: 'top 85%', once: true } });
+    }, sectionRef);
+    return () => context.revert();
+  }, []);
+  return <section className="home-proof" ref={sectionRef} aria-labelledby="home-proof-title"><div className="home-proof-inner"><div className="home-proof-mosaic" aria-hidden="true">{mosaic.map((item, index) => <div className="home-proof-tile" key={`${item.id}-${index}`}><img src={item.cover || item.src} alt="" loading="lazy" /></div>)}</div><div className="home-proof-title" data-reveal><span>THE PEOPLE AND THE PROJECTS</span><h2 id="home-proof-title">MADE WITH TEAMS.<br /><em>BUILT WITH INTENT.</em></h2><p>A few of the collaborations behind the images, identities, and experiences.</p></div><div className="home-proof-cards">{projects.map((project, index) => { const company = collaborators.find((item) => item.name === project.company); return <a className="home-proof-card" href={projectHref(project)} key={project.id} data-reveal><div className="home-proof-card-head"><span className="home-proof-card-logo">{company && <img src={company.logo} alt="" loading="lazy" />}</span><div><strong>{project.company}</strong><small>{project.category}</small></div><span aria-hidden="true">↗</span></div><span className="home-proof-card-index">{String(index + 1).padStart(2, '0')} / CLIENT NOTE PLACEHOLDER</span><h3>{project.title}</h3><p>Client feedback for this collaboration can be added here later.</p></a>; })}</div></div></section>;
 }
 
 function Home() {
@@ -183,23 +204,110 @@ function Home() {
       <div className="experience-shell"><a className="experience-text-link" href="/gallery/">ENTER THE FULL GALLERY <span>↗</span></a></div>
     </section>
 
-    <section className="home-about" aria-labelledby="home-about-title"><div className="experience-shell"><SectionTop number="02" label="THE PERSON" aside="A FEW WORDS BEFORE THE WORK" /><div className="home-about-grid"><div data-reveal><span className="experience-eyebrow">WHO I AM / WHY ME</span><h2 id="home-about-title">ONE IDEA.<br /><em>MANY WAYS</em><br />TO MAKE IT.</h2></div><div className="home-about-copy" data-reveal><span className="about-age">20 <small>YEARS OLD</small></span><p>I'm Aashish Mahato. I work across film, photography, design, and digital experiences. I follow an idea into the format that gives it the most life.</p><p>I keep refining a project until it meets the client's expectations and my own standards.</p><a className="experience-text-link" href="/about/">MORE ABOUT ME <span>↗</span></a></div></div></div></section>
+    <section className="home-about" aria-labelledby="home-about-title"><div className="experience-shell"><SectionTop number="02" label="THE PERSON" aside="A FEW WORDS BEFORE THE WORK" /><div className="home-about-grid"><div data-reveal><span className="experience-eyebrow">WHO I AM / WHY ME</span><h2 id="home-about-title">ONE IDEA.<br /><em>MANY WAYS</em><br />TO MAKE IT.</h2></div><div className="home-about-copy" data-reveal><span className="about-age">20 <small>YEARS OLD</small></span><p>I'm Aashish Mahato. I work across film, photography, design, and web development. I follow an idea into the format that gives it the most life.</p><p>I keep refining a project until it meets the client's expectations and my own standards.</p><a className="experience-text-link" href="/about/">MORE ABOUT ME <span>↗</span></a></div></div></div></section>
 
-    <section className="home-work" aria-labelledby="home-work-title"><div className="experience-shell"><SectionTop number="03" label="SELECTED WORK" aside="A SHORT PREVIEW" /><div className="home-work-heading" data-reveal><h2 id="home-work-title">A CLOSER<br /><em>LOOK.</em></h2><p>Each project deserves its own story. This is a glimpse before you explore the full work.</p></div><a href={featuredProjects[0] ? `/work/#${featuredProjects[0].id}` : '/work/'} className="home-feature" data-reveal><div className="home-feature-visual"><img src={featuredProjects[0]?.cover || heroReel.poster} alt={featuredProjects[0] ? `${featuredProjects[0].title} cover` : 'Current showreel cover'} loading="lazy" /><span>EXPLORE THE WORK ↗</span></div><div className="home-feature-info"><span>01 / {featuredProjects[0]?.category || 'FILM & MOTION'}</span><h3>{featuredProjects[0]?.title || 'THE SHOWREEL'}</h3><span>VIEW WORK ↗</span></div></a>{featuredProjects.length > 1 && <div className="home-project-list">{featuredProjects.slice(1,4).map((project,index)=><a href={`/work/#${project.id}`} key={project.id}><span>{String(index+2).padStart(2,'0')} / {project.category}</span><strong>{project.title}</strong><span>↗</span></a>)}</div>}{!featuredProjects.length && <p className="home-work-note">More project stories will appear here when the real work is added.</p>}<a className="experience-text-link" href="/work/">EXPLORE ALL WORK <span>↗</span></a></div></section>
+    <HomeSkills />
     <HomeCollaborators />
+    <HomeProof />
     <SiteFooter />
   </main></>;
 }
 
-function ProjectStory({ project, index }) {
+const photographyProjects = galleryMedia.filter((item) => item.category === 'Photography').map((item) => ({ id: item.id, title: item.title, category: 'Photography', cover: item.src, media: [item] }));
+const workSkills = [
+  { id: 'film', name: 'FILM', line: 'Scenes, stories, and places in motion.', cover: featuredProjects[0].cover, preview: featuredProjects[1].cover, capabilities: ['Videography', 'Editing', 'Visual storytelling'], projects: [{ id: 'showreel', title: 'Current showreel', category: 'Film', description: 'A moving overview of my visual work.', cover: heroReel.poster, media: [heroReel] }, ...featuredProjects.filter((project) => project.category === 'Travel Film')] },
+  { id: 'photography', name: 'PHOTOGRAPHY', line: 'Still images that hold a moment.', cover: photographyProjects[0].cover, preview: photographyProjects[1].cover, capabilities: ['Composition', 'Portraits', 'Landscape'], projects: photographyProjects },
+  { id: 'motion', name: 'MOTION GRAPHICS', line: 'Design and ideas brought into movement.', cover: featuredProjects[2].cover, preview: featuredProjects[2].cover, capabilities: ['Animation', 'Motion design', 'Editing'], projects: featuredProjects.filter((project) => project.category === 'Motion Graphics') },
+  { id: 'branding', name: 'BRANDING', line: 'Visual systems built for a name and an idea.', cover: featuredProjects[3].cover, preview: featuredProjects[4].cover, capabilities: ['Visual identity', 'Art direction', 'Brand mockups'], projects: featuredProjects.filter((project) => project.category === 'Brand & Digital') },
+  { id: 'graphic', name: 'GRAPHIC DESIGN', line: 'Clear visual communication across formats.', cover: featuredProjects[5].cover, preview: featuredProjects[5].media[1].src, capabilities: ['Campaign graphics', 'Social design', 'Layout'], projects: featuredProjects.filter((project) => project.category === 'Graphic Design') },
+  { id: 'digital', name: 'DIGITAL', line: 'Interfaces and digital concepts shaped with design.', cover: featuredProjects[3].media.find((item) => item.category === 'Digital').src, preview: featuredProjects[4].media.find((item) => item.category === 'Digital').src, capabilities: ['Web design', 'UI concepts', 'Frontend'], projects: featuredProjects.filter((project) => project.category === 'Brand & Digital') },
+  { id: 'web', name: 'WEB DEVELOPMENT', line: 'Sites and tools made to work in the real world.', cover: webProjects[0].mark, preview: webProjects[0].mark, capabilities: ['Responsive websites', 'React interfaces', 'Web tools'], projects: webProjects },
+];
+const projectHref = (project) => `/work/${workSkills.find((skill) => skill.projects.some((item) => item.id === project.id))?.id || 'film'}/#${project.id}`;
+
+function WorkProjectCard({ project, index, skillId }) {
   const video = project.media?.find((item) => item.type === 'video');
-  const photos = project.media?.filter((item) => item.type === 'photo') || [];
-  return <article className="project-story" id={project.id} data-reveal><div className="project-story-heading"><span>{String(index + 1).padStart(2, '0')} / {project.category}</span><h2>{project.title}</h2><p>{project.description}</p></div><div className="project-story-main">{video ? <ReelVideo item={video} controls /> : <img src={project.cover} alt={`${project.title} cover`} loading="lazy" />}</div>{photos.length > 0 && <div className="project-story-gallery">{photos.filter((item) => item.src !== project.cover).map((item) => <figure key={item.src}><img src={item.src} alt={item.title} loading="lazy" /><figcaption>{item.title}</figcaption></figure>)}</div>}<div className="project-story-meta"><span>{project.company || 'INDEPENDENT PROJECT'}</span><span>{project.year || ''}</span></div></article>;
+  const photos = project.media?.filter((item) => item.type === 'photo' && (skillId === 'digital' ? item.category === 'Digital' : skillId === 'branding' ? item.category === 'Branding' : true)) || [];
+  const cover = photos[0]?.src || project.cover;
+  const extraPhotos = photos.filter((item) => item.src !== cover);
+  return <article className={`work-project-card ${['branding', 'graphic', 'digital'].includes(skillId) ? 'work-project-card--design' : ''} ${skillId === 'web' ? 'work-project-card--web' : ''}`} id={project.id} data-reveal>
+    <div className="work-project-visual">{skillId === 'web' ? <div className={`web-project-art web-project-art--${project.theme}`}><div className="web-project-browser"><span /><span /><span /><small>{new URL(project.liveUrl).hostname}</small></div><div className="web-project-art-content">{project.mark && <img src={project.mark} alt="" loading="lazy" />}<span>{project.category}</span><strong>{project.title}</strong><i>↗</i></div></div> : video ? <ReelVideo item={video} controls /> : <img src={cover} alt={project.title} loading="lazy" />}</div>
+    <div className="work-project-info"><span>{String(index + 1).padStart(2, '0')} / {project.category}</span><h3>{project.title}</h3><p>{project.description || project.category}</p></div>
+    {skillId === 'web' && <div className="web-project-links"><a href={project.liveUrl} target="_blank" rel="noopener noreferrer">VISIT SITE ↗</a>{project.repoUrl && <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">VIEW CODE ↗</a>}</div>}
+    {extraPhotos.length > 0 && <div className="work-project-extras">{extraPhotos.map((item) => <figure key={item.src}><img src={item.src} alt={item.title} loading="lazy" /><figcaption>{item.title}</figcaption></figure>)}</div>}
+  </article>;
 }
 
-function WorkPage() {
-  usePageMotion('work');
-  return <div className="inner-page"><SiteNav current="work" /><main><section className="inner-intro experience-shell"><SectionTop number="01" label="WORK" aside="FILM · IMAGE · DESIGN · DIGITAL" /><h1 data-reveal>THE WORK<span>.</span></h1><p data-reveal>Films, visual identities, and designs made across mediums.</p></section><section className="work-feature experience-shell" aria-labelledby="work-feature-title"><div className="work-feature-heading" data-reveal><span>FEATURED / 001</span><h2 id="work-feature-title">CURRENT<br /><em>SHOWREEL.</em></h2></div><div className="work-feature-media" data-reveal><ReelVideo controls /></div><div className="work-feature-meta"><span>FILM & MOTION</span><p>A moving overview of my visual work. Play the complete reel above.</p><a href="/gallery/">OPEN GALLERY ↗</a></div></section><section className="project-stories experience-shell"><SectionTop number="02" label="PROJECT STORIES" aside={`${String(featuredProjects.length).padStart(2,'0')} PROJECTS`} />{featuredProjects.map((project,index)=><ProjectStory project={project} index={index} key={project.id}/>)}</section></main><SiteFooter /></div>;
+function WorkSkillCard({ skill, index }) {
+  const href = `/work/${skill.id}/`;
+  return <PreviewLinkCard href={href} src={skill.preview} width={320} height={200} followCursor="x" openDelay={120} closeDelay={80}>
+    <PreviewLinkCardTrigger asChild><a className="work-skill-card" href={href}><span className="work-skill-card-media"><img src={skill.cover} alt="" loading="lazy" /></span><span className="work-skill-card-meta"><span>{String(index + 1).padStart(2, '0')} / {String(skill.projects.length).padStart(2, '0')} WORKS</span><span aria-hidden="true">↗</span></span><strong>{skill.name}</strong><span className="work-skill-card-line">{skill.line}</span></a></PreviewLinkCardTrigger>
+    <PreviewLinkCardPortal><PreviewLinkCardContent side="top" sideOffset={16} className="work-skill-preview"><PreviewLinkCardImage alt={`${skill.name} work preview`} /><span className="work-skill-preview-info"><strong>{skill.name}</strong><span>EXPLORE {String(skill.projects.length).padStart(2, '0')} WORKS ↗</span></span></PreviewLinkCardContent></PreviewLinkCardPortal>
+  </PreviewLinkCard>;
+}
+
+function HomeSkills() {
+  const sectionRef = useRef(null);
+  useLayoutEffect(() => {
+    const media = gsap.matchMedia();
+    media.add('(prefers-reduced-motion: no-preference)', () => {
+      const context = gsap.context(() => {
+        const cards = gsap.utils.toArray('.work-skill-card');
+        gsap.from(cards, {
+          autoAlpha: 0, y: 72, rotateX: 8, transformOrigin: '50% 100%',
+          duration: .9, stagger: .09, ease: 'power3.out',
+          scrollTrigger: { trigger: '.work-skills-list', start: 'top 86%', once: true },
+        });
+      }, sectionRef);
+      return () => context.revert();
+    });
+    return () => media.revert();
+  }, []);
+  return <section className="home-skills" id="my-work" ref={sectionRef} aria-labelledby="home-skills-title"><div className="experience-shell"><SectionTop number="03" label="MY WORK" aside="CHOOSE A DISCIPLINE" /><div className="work-skills-heading" data-reveal><h2 id="home-skills-title">WHAT I<br /><em>MAKE.</em></h2><p>Film, image, design, and code. Choose a skill to see the projects behind it.</p></div><div className="work-skills-list">{workSkills.map((skill, index) => <WorkSkillCard skill={skill} index={index} key={skill.id} />)}</div></div></section>;
+}
+
+function SkillPage({ skillId }) {
+  const skill = workSkills.find((item) => item.id === skillId);
+  const heroVideo = skillId === 'film' ? featuredProjects[0].media[0] : skillId === 'motion' ? featuredProjects[2].media[0] : null;
+  const heroVideoStart = skillId === 'film' ? 6 : 3;
+  const heroRef = useRef(null);
+  const [heroVideoReady, setHeroVideoReady] = useState(false);
+  usePageMotion(skillId);
+  useEffect(() => {
+    if (!window.location.hash) return undefined;
+    const frame = window.requestAnimationFrame(() => document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.scrollIntoView());
+    return () => window.cancelAnimationFrame(frame);
+  }, [skillId]);
+  useEffect(() => {
+    if (!heroVideo) return undefined;
+    const video = heroRef.current?.querySelector('.skill-hero-video');
+    if (!video) return undefined;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && video.dataset.ready === 'true') video.play().catch(() => {});
+      else video.pause();
+    }, { threshold: .1 });
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [heroVideo]);
+  useLayoutEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const hero = heroRef.current;
+    const context = gsap.context(() => {
+      const routeOverlay = document.querySelector('.experience-transition');
+      const delay = routeOverlay && getComputedStyle(routeOverlay).display !== 'none' ? .48 : .05;
+      gsap.timeline({ delay, defaults: { ease: 'power3.out' } })
+        .from('.skill-hero-image', { scale: 1.12, duration: 1.4 }, 0)
+        .from('.skill-hero-content h1', { autoAlpha: 0, y: 70, duration: 1 }, .18)
+        .from('.skill-hero-content p', { autoAlpha: 0, y: 25, duration: .7 }, .5)
+        .from('.skill-hero-overline, .skill-hero-bottom', { autoAlpha: 0, y: 15, duration: .6, stagger: .08 }, .58);
+      gsap.to('.skill-hero-image', { yPercent: 12, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    }, hero);
+    return () => context.revert();
+  }, [skillId]);
+  return <div className={`inner-page skill-page skill-page--${skill.id}`}><SiteNav current="work" /><main>
+    <section className="skill-hero" ref={heroRef} aria-labelledby="skill-title"><div className="skill-hero-image"><img src={skill.cover} alt="" />{heroVideo && <video className={`skill-hero-video ${heroVideoReady ? 'is-ready' : ''}`} src={heroVideo.src} muted playsInline preload="metadata" poster={skill.cover} aria-hidden="true" onLoadedMetadata={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} onSeeked={(event) => { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onEnded={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} />}</div><div className="skill-hero-shade" /><div className="skill-hero-content experience-shell"><div className="skill-hero-overline"><a href="/#my-work">← ALL SKILLS</a><span>{String(workSkills.indexOf(skill) + 1).padStart(2, '0')} / {String(workSkills.length).padStart(2, '0')}</span></div><div><span className="skill-hero-kicker">AASHISH MAHATO / MY WORK</span><h1 id="skill-title">{skill.name}<i>.</i></h1><p>{skill.line}</p></div><div className="skill-hero-bottom"><span>SELECTED PROJECTS BELOW</span><span>SCROLL ↓</span></div></div></section>
+    <section className={`work-detail work-detail--${skill.id}`}><div className="experience-shell"><nav className="work-detail-switcher" aria-label="Explore other skills">{workSkills.map((item) => <a href={`/work/${item.id}/`} key={item.id} aria-current={skill.id === item.id ? 'page' : undefined}>{item.name}</a>)}</nav><div className="work-detail-heading" data-reveal><span>{skill.name} / THE PRACTICE</span><h2>THE WORK<i>.</i></h2><p>{skill.line}</p><div className="work-detail-capabilities" aria-label={`${skill.name} skills`}>{skill.capabilities.map((capability) => <span key={capability}>{capability}</span>)}</div></div><div className="work-project-grid">{skill.projects.map((project, index) => <WorkProjectCard project={project} index={index} skillId={skill.id} key={project.id} />)}</div>{skill.id === 'web' && <div className="github-proof" data-reveal><div className="github-proof-heading"><div><span>PUBLIC GITHUB ACTIVITY / SEPTEMBER 2026 SNAPSHOT</span><h3>THE WORK<br /><em>BEHIND THE WORK.</em></h3><p>A snapshot of my GitHub contribution activity. Visit my profile for the latest projects and activity.</p></div><a href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer">VIEW GITHUB ↗</a></div><a className="github-proof-image" href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer" aria-label="View current GitHub contribution activity"><img src="/media/github-contributions-2026-09.png" alt="Screenshot of Aashish Mahato's GitHub contribution graph in September 2026" loading="lazy" /></a></div>}<div className="skill-page-end"><a href="/#my-work">← ALL SKILLS</a><a href="/gallery/">FULL GALLERY ↗</a></div></div></section>
+  </main><SiteFooter /></div>;
 }
 
 function GalleryPage() {
@@ -344,6 +452,17 @@ export default function Experience() {
   }, []);
 
   useEffect(() => {
+    if (!window.location.hash) return undefined;
+    const frame = window.requestAnimationFrame(() => {
+      const target = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+      if (target && lenisRef.current) lenisRef.current.scrollTo(target, { immediate: true, force: true });
+      else target?.scrollIntoView();
+      ScrollTrigger.refresh();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
     const moveTo = (url, push) => {
       const next = routeFor(url.pathname);
       if (next === current.current) { if (push) window.history.pushState({}, '', url); return; }
@@ -354,7 +473,7 @@ export default function Experience() {
         if (push) window.history.pushState({}, '', url);
         current.current = next;
         flushSync(() => setRoute(next));
-        document.title = titles[next];
+        document.title = titleFor(next);
         if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true, force: true });
         else window.scrollTo(0, 0);
         window.requestAnimationFrame(() => {
@@ -379,7 +498,7 @@ export default function Experience() {
       const link = event.target.closest('a[href]');
       if (!link || link.target && link.target !== '_self' || link.hasAttribute('download')) return;
       const url = new URL(link.href, window.location.href);
-      if (url.origin !== window.location.origin || !['/','/work/','/gallery/','/about/'].includes(url.pathname) || routeFor(url.pathname) === current.current) return;
+      if (url.origin !== window.location.origin || !(/^\/work\/(?:film|photography|motion|branding|graphic|digital|web)\/$/.test(url.pathname) || ['/','/gallery/','/about/'].includes(url.pathname)) || routeFor(url.pathname) === current.current) return;
       event.preventDefault();
       moveTo(url, true);
     };
@@ -389,6 +508,6 @@ export default function Experience() {
     return () => { document.removeEventListener('click', onClick); window.removeEventListener('popstate', onPop); };
   }, []);
 
-  const Page = { home: Home, work: WorkPage, gallery: GalleryPage, about: AboutPage }[route];
-  return <><div key={route}><Page /></div><div className="experience-transition" ref={overlay} aria-hidden="true"><span>A/M<small>®</small></span><i /><p>IMAGE · MOTION · DESIGN · CODE</p></div></>;
+  const Page = route.startsWith('skill-') ? SkillPage : { home: Home, gallery: GalleryPage, about: AboutPage }[route];
+  return <><div key={route}><Page skillId={route.startsWith('skill-') ? route.slice(6) : undefined} /></div><div className="experience-transition" ref={overlay} aria-hidden="true"><span>A/M<small>®</small></span><i /><p>IMAGE · MOTION · DESIGN · CODE</p></div></>;
 }

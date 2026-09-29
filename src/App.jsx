@@ -15,7 +15,7 @@ function Header() {
   return (
     <header className="site-header">
       <a className="wordmark" href="#top" aria-label="Aashish Mahato, back to top">A/M<span>®</span></a>
-      <nav className="hero-nav" aria-label="Main navigation"><a href="/work/">Work</a><a href="/gallery/">Gallery</a><a href="/about/">About</a></nav>
+      <nav className="hero-nav" aria-label="Main navigation"><a href="/#my-work">My Work</a><a href="/gallery/">Gallery</a><a href="/about/">About</a></nav>
     </header>
   );
 }
@@ -43,6 +43,10 @@ function Hero() {
         const second = lines[1].querySelectorAll('.hero-letter:not(.hero-period)');
         const period = lines[1].querySelector('.hero-period');
         const intro = hero.querySelector('.site-intro');
+        if (window.location.hash === '#my-work') {
+          gsap.set(intro, { display: 'none' });
+          return;
+        }
         const timeline = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
         gsap.set(intro, { display: 'grid', yPercent: 0 });
