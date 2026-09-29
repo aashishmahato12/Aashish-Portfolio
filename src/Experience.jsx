@@ -58,6 +58,11 @@ function SectionTop({ number, label, aside }) {
   return <div className="experience-section-top"><span>{number} / {label}</span><span>{aside}</span></div>;
 }
 
+function MaskedHeroTitle({ text, id }) {
+  const words = text.split(' ');
+  return <h1 id={id} aria-label={`${text}.`}>{words.map((word, index) => <span className="masked-title-mask" aria-hidden="true" key={`${word}-${index}`}><span className="masked-title-word">{word}{index === words.length - 1 && <i className="masked-title-dot">.</i>}</span></span>)}</h1>;
+}
+
 function SiteFooter() {
   return <footer className="experience-footer"><a href="/" className="footer-logo">A/M<span>®</span></a><p>IMAGE · MOTION · DESIGN · CODE</p><a href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer">GITHUB ↗</a><span>© 2026 AASHISH MAHATO</span></footer>;
 }
@@ -295,17 +300,21 @@ function SkillPage({ skillId }) {
     const context = gsap.context(() => {
       const routeOverlay = document.querySelector('.experience-transition');
       const delay = routeOverlay && getComputedStyle(routeOverlay).display !== 'none' ? .48 : .05;
+      const wordCount = hero.querySelectorAll('.masked-title-word').length;
       gsap.timeline({ delay, defaults: { ease: 'power3.out' } })
         .from('.skill-hero-image', { scale: 1.12, duration: 1.4 }, 0)
-        .from('.skill-hero-content h1', { autoAlpha: 0, y: 70, duration: 1 }, .18)
-        .from('.skill-hero-content p', { autoAlpha: 0, y: 25, duration: .7 }, .5)
-        .from('.skill-hero-overline, .skill-hero-bottom', { autoAlpha: 0, y: 15, duration: .6, stagger: .08 }, .58);
+        .from('.skill-hero-overline > *', { autoAlpha: 0, y: -18, duration: .65, stagger: .08 }, .12)
+        .from('.skill-hero-kicker', { autoAlpha: 0, y: 20, duration: .65 }, .2)
+        .from('.masked-title-word', { yPercent: 115, rotateX: -16, transformOrigin: '50% 100%', duration: 1.05, ease: 'power4.out', stagger: .12 }, .32)
+        .from('.masked-title-dot', { autoAlpha: 0, scale: 0, rotation: -60, transformOrigin: '50% 75%', ease: 'back.out(2)', duration: .55 }, .67 + (wordCount - 1) * .12)
+        .from('.skill-hero-main p', { autoAlpha: 0, y: 25, duration: .75 }, .62 + (wordCount - 1) * .12)
+        .from('.skill-hero-bottom > span', { autoAlpha: 0, y: 16, duration: .6, stagger: .08 }, .9 + (wordCount - 1) * .12);
       gsap.to('.skill-hero-image', { yPercent: 12, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
     }, hero);
     return () => context.revert();
   }, [skillId]);
   return <div className={`inner-page skill-page skill-page--${skill.id}`}><SiteNav current="work" /><main>
-    <section className="skill-hero" ref={heroRef} aria-labelledby="skill-title"><div className="skill-hero-image"><img src={skill.cover} alt="" />{heroVideo && <video className={`skill-hero-video ${heroVideoReady ? 'is-ready' : ''}`} src={heroVideo.src} muted playsInline preload="metadata" poster={skill.cover} aria-hidden="true" onLoadedMetadata={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} onSeeked={(event) => { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onEnded={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} />}</div><div className="skill-hero-shade" /><div className="skill-hero-content experience-shell"><div className="skill-hero-overline"><a href="/#my-work">← ALL SKILLS</a><span>{String(workSkills.indexOf(skill) + 1).padStart(2, '0')} / {String(workSkills.length).padStart(2, '0')}</span></div><div><span className="skill-hero-kicker">AASHISH MAHATO / MY WORK</span><h1 id="skill-title">{skill.name}<i>.</i></h1><p>{skill.line}</p></div><div className="skill-hero-bottom"><span>SELECTED PROJECTS BELOW</span><span>SCROLL ↓</span></div></div></section>
+    <section className="skill-hero" ref={heroRef} aria-labelledby="skill-title"><div className="skill-hero-image"><img src={skill.cover} alt="" />{heroVideo && <video className={`skill-hero-video ${heroVideoReady ? 'is-ready' : ''}`} src={heroVideo.src} muted playsInline preload="metadata" poster={skill.cover} aria-hidden="true" onLoadedMetadata={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} onSeeked={(event) => { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onEnded={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} />}</div><div className="skill-hero-shade" /><div className="skill-hero-content experience-shell"><div className="skill-hero-overline"><a href="/#my-work">← ALL SKILLS</a><span>{String(workSkills.indexOf(skill) + 1).padStart(2, '0')} / {String(workSkills.length).padStart(2, '0')}</span></div><div className="skill-hero-main"><span className="skill-hero-kicker">AASHISH MAHATO / MY WORK</span><MaskedHeroTitle text={skill.name} id="skill-title" /><p>{skill.line}</p></div><div className="skill-hero-bottom"><span>SELECTED PROJECTS BELOW</span><span>SCROLL ↓</span></div></div></section>
     <section className={`work-detail work-detail--${skill.id}`}><div className="experience-shell"><nav className="work-detail-switcher" aria-label="Explore other skills">{workSkills.map((item) => <a href={`/work/${item.id}/`} key={item.id} aria-current={skill.id === item.id ? 'page' : undefined}>{item.name}</a>)}</nav><div className="work-detail-heading" data-reveal><span>{skill.name} / THE PRACTICE</span><h2>THE WORK<i>.</i></h2><p>{skill.line}</p><div className="work-detail-capabilities" aria-label={`${skill.name} skills`}>{skill.capabilities.map((capability) => <span key={capability}>{capability}</span>)}</div></div><div className="work-project-grid">{skill.projects.map((project, index) => <WorkProjectCard project={project} index={index} skillId={skill.id} key={project.id} />)}</div>{skill.id === 'web' && <div className="github-proof" data-reveal><div className="github-proof-heading"><div><span>PUBLIC GITHUB ACTIVITY / SEPTEMBER 2026 SNAPSHOT</span><h3>THE WORK<br /><em>BEHIND THE WORK.</em></h3><p>A snapshot of my GitHub contribution activity. Visit my profile for the latest projects and activity.</p></div><a href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer">VIEW GITHUB ↗</a></div><a className="github-proof-image" href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer" aria-label="View current GitHub contribution activity"><img src="/media/github-contributions-2026-09.png" alt="Screenshot of Aashish Mahato's GitHub contribution graph in September 2026" loading="lazy" /></a></div>}<div className="skill-page-end"><a href="/#my-work">← ALL SKILLS</a><a href="/gallery/">FULL GALLERY ↗</a></div></div></section>
   </main><SiteFooter /></div>;
 }
@@ -429,8 +438,25 @@ function GalleryPage() {
 }
 
 function AboutPage() {
+  const introRef = useRef(null);
   usePageMotion('about');
-  return <div className="inner-page about-page"><SiteNav current="about" /><main><section className="inner-intro experience-shell"><SectionTop number="01" label="ABOUT" aside="THE PERSON BEHIND THE FRAME" /><h1 data-reveal>WHO I AM<span>.</span></h1><p data-reveal>I'm Aashish Mahato, a 20-year-old multidisciplinary creative working across film, photography, design, and digital experiences.</p></section><section className="about-statement experience-shell"><div data-reveal><span>WHY WORK WITH ME</span><h2>ONE IDEA.<br /><em>NO SINGLE</em><br />FORMAT.</h2></div><div data-reveal><p>The strongest idea may need more than one medium. I can see it as a frame, shape it in motion, and carry its visual language into digital space.</p><p>I stay with the details and keep refining until the result meets the client's expectations and my own standards.</p></div></section><section className="about-capabilities experience-shell"><SectionTop number="02" label="CAPABILITIES" aside="HOW I MAKE THINGS" /><div>{[['01','IMAGE','Photography · Videography'],['02','MOTION','Editing · Motion graphics'],['03','DESIGN','Identity · Graphic design'],['04','DIGITAL','Web · Apps · Creative technology']].map(([number,title,detail])=><div className="capability-line" key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{detail}</p></div>)}</div></section><section className="about-collaborators experience-shell"><SectionTop number="03" label="COLLABORATIONS" aside="COMPANIES & BRANDS" /><div className="about-collaborators-heading" data-reveal><h2>WORKED<br /><em>WITH.</em></h2><p>Selected teams and brands I've worked with.</p></div><div className="collaborator-grid">{collaborators.map((company)=><CollaboratorMark key={company.name} company={company}/>)}</div></section></main><SiteFooter /></div>;
+  useLayoutEffect(() => {
+    const media = gsap.matchMedia();
+    media.add('(prefers-reduced-motion: no-preference)', () => {
+      const context = gsap.context(() => {
+        const routeOverlay = document.querySelector('.experience-transition');
+        const delay = routeOverlay && getComputedStyle(routeOverlay).display !== 'none' ? .5 : .08;
+        gsap.timeline({ delay, defaults: { ease: 'power4.out' } })
+          .from('.experience-section-top > span', { autoAlpha: 0, y: -14, duration: .6, stagger: .08 }, 0)
+          .from('.masked-title-word', { yPercent: 115, rotateX: -18, transformOrigin: '50% 100%', duration: 1.05, stagger: .1 }, .24)
+          .from('.masked-title-dot', { autoAlpha: 0, scale: 0, rotation: -60, duration: .55, ease: 'back.out(2)' }, .78)
+          .from(':scope > p', { autoAlpha: 0, y: 28, duration: .75 }, .66);
+      }, introRef);
+      return () => context.revert();
+    });
+    return () => media.revert();
+  }, []);
+  return <div className="inner-page about-page"><SiteNav current="about" /><main><section className="inner-intro experience-shell" ref={introRef}><SectionTop number="01" label="ABOUT" aside="THE PERSON BEHIND THE FRAME" /><MaskedHeroTitle text="WHO I AM" /><p>I'm Aashish Mahato, a 20-year-old multidisciplinary creative working across film, photography, design, and digital experiences.</p></section><section className="about-statement experience-shell"><div data-reveal><span>WHY WORK WITH ME</span><h2>ONE IDEA.<br /><em>NO SINGLE</em><br />FORMAT.</h2></div><div data-reveal><p>The strongest idea may need more than one medium. I can see it as a frame, shape it in motion, and carry its visual language into digital space.</p><p>I stay with the details and keep refining until the result meets the client's expectations and my own standards.</p></div></section><section className="about-capabilities experience-shell"><SectionTop number="02" label="CAPABILITIES" aside="HOW I MAKE THINGS" /><div>{[['01','IMAGE','Photography · Videography'],['02','MOTION','Editing · Motion graphics'],['03','DESIGN','Identity · Graphic design'],['04','DIGITAL','Web · Apps · Creative technology']].map(([number,title,detail])=><div className="capability-line" key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{detail}</p></div>)}</div></section><section className="about-collaborators experience-shell"><SectionTop number="03" label="COLLABORATIONS" aside="COMPANIES & BRANDS" /><div className="about-collaborators-heading" data-reveal><h2>WORKED<br /><em>WITH.</em></h2><p>Selected teams and brands I've worked with.</p></div><div className="collaborator-grid">{collaborators.map((company)=><CollaboratorMark key={company.name} company={company}/>)}</div></section></main><SiteFooter /></div>;
 }
 
 export default function Experience() {
