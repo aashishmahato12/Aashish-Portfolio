@@ -5,35 +5,31 @@ import './gallery-effects.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function GalleryZoomScene({ photos, sceneIndex, sceneCount }) {
+export function GalleryZoomGrid({ items }) {
   const ref = useRef(null);
   useLayoutEffect(() => {
     const media = gsap.matchMedia();
     media.add('(min-width: 701px) and (prefers-reduced-motion: no-preference)', () => {
       const context = gsap.context(() => {
         const root = ref.current;
-        const layers = gsap.utils.toArray('.gallery-zoom-layer', root);
-        const nonCenter = layers.filter((_, index) => index !== 4);
-        gsap.timeline({ scrollTrigger: { trigger: root, start: 'top top', end: '+=185%', scrub: true, pin: true, anticipatePin: 1 } })
-          .set(nonCenter, { autoAlpha: 0 })
-          .to(nonCenter, { autoAlpha: 1, duration: .08 }, .02)
-          .from(layers, { scale: 3.333, ease: 'none', duration: 1 }, 0);
+        const stage = root.querySelector('.gallery-zoom-stage');
+        const otherTiles = gsap.utils.toArray('.gallery-zoom-tile:not(.is-center)', root);
+        const caption = root.querySelector('.gallery-zoom-caption');
+        gsap.set(otherTiles, { autoAlpha: 0 });
+        gsap.set(caption, { autoAlpha: 0, y: 30 });
+        gsap.timeline({ scrollTrigger: { trigger: root, start: 'top top', end: '+=220%', scrub: true, pin: true, anticipatePin: 1, invalidateOnRefresh: true } })
+          .fromTo(stage, { scale: 4.3 }, { scale: 1, ease: 'none', duration: 1 }, 0)
+          .to(otherTiles, { autoAlpha: 1, duration: .2, stagger: { amount: .2, from: 'center' } }, .24)
+          .to(caption, { autoAlpha: 1, y: 0, duration: .2 }, .72);
       }, ref);
       return () => context.revert();
     });
     return () => media.revert();
   }, []);
-  const headingId = `gallery-zoom-heading-${sceneIndex}`;
-  return <section className="gallery-zoom" ref={ref} aria-labelledby={headingId}>
-    <div className="gallery-zoom-heading"><span>THE ARCHIVE / {String(sceneIndex + 1).padStart(2, '0')} OF {String(sceneCount).padStart(2, '0')}</span><h2 id={headingId}>A WORLD<br /><em>OF FRAMES.</em></h2><p>SCROLL TO REVEAL ↓</p></div>
-    <div className="gallery-zoom-stage">{photos.map((item, index) => <div className={`gallery-zoom-layer ${index === 4 ? 'is-center' : ''}`} key={`${item.src}-${index}`}><div className="gallery-zoom-block"><img src={item.src} alt={item.title} loading={sceneIndex === 0 && index === 4 ? 'eager' : 'lazy'} /></div></div>)}</div>
+  return <section className="gallery-zoom" ref={ref} aria-label="Scroll to reveal the complete visual library">
+    <div className="gallery-zoom-stage">{items.map((item, index) => <a className={`gallery-zoom-tile ${index === 0 ? 'is-center' : ''}`} href={`#gallery-item-${item.id}`} key={item.id}><img src={item.type === 'video' ? item.poster : item.src} alt={item.title} loading={index === 0 ? 'eager' : 'lazy'} /><span>{item.type === 'video' ? '▶ FILM' : item.category || 'IMAGE'}</span></a>)}</div>
+    <div className="gallery-zoom-caption"><span>THE COMPLETE VISUAL ARCHIVE / {String(items.length).padStart(2, '0')} PIECES</span><strong>ONE WORLD.<br /><em>MANY FRAMES.</em></strong><span>SCROLL FOR MORE ↓</span></div>
   </section>;
-}
-
-export function GalleryZoomGrid({ photos }) {
-  const scenes = [];
-  for (let index = 0; index < photos.length; index += 9) scenes.push(photos.slice(index, index + 9));
-  return <>{scenes.map((scene, index) => <GalleryZoomScene key={scene[0].src} photos={scene} sceneIndex={index} sceneCount={scenes.length} />)}</>;
 }
 
 export function GalleryPhotoFlow({ photos }) {

@@ -17,7 +17,7 @@ const skills = [
 ];
 
 function AnimatedLine({ text }) {
-  return <span className="about-redesign-line" aria-label={text}>{Array.from(text).map((letter, index) => <span className="about-redesign-letter" aria-hidden="true" key={`${letter}-${index}`}>{letter === ' ' ? '\u00a0' : letter}</span>)}</span>;
+  return <span className="about-redesign-line" aria-hidden="true">{Array.from(text).map((letter, index) => <span className="about-redesign-letter" key={`${letter}-${index}`}>{letter === ' ' ? '\u00a0' : letter}</span>)}</span>;
 }
 
 export function AboutOpening() {
@@ -27,8 +27,9 @@ export function AboutOpening() {
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
       const context = gsap.context(() => {
-        const root = ref.current;
-        gsap.timeline({ delay: .15, defaults: { ease: 'power4.out' } })
+        const routeOverlay = document.querySelector('.experience-transition');
+        const delay = routeOverlay && getComputedStyle(routeOverlay).display !== 'none' ? .55 : .15;
+        gsap.timeline({ delay, defaults: { ease: 'power4.out' } })
           .from('.about-redesign-hero .about-redesign-letter', { yPercent: 115, rotateX: -25, stagger: .032, duration: .85 }, 0)
           .from('.about-redesign-hero-art', { clipPath: 'inset(100% 0 0 0)', scale: 1.12, duration: 1.15 }, .15)
           .from('.about-redesign-hero-meta > *', { autoAlpha: 0, y: 25, stagger: .1, duration: .75 }, .55)
@@ -47,15 +48,15 @@ export function AboutOpening() {
     <section className="about-redesign-hero" aria-labelledby="about-redesign-title">
       <div className="about-redesign-hero-backdrop" aria-hidden="true">A/M</div>
       <div className="about-redesign-hero-inner">
-        <div className="about-redesign-eyebrow"><span>01 / THE PERSON BEHIND THE WORK</span><span>NEPAL · AVAILABLE WORLDWIDE</span></div>
-        <h1 id="about-redesign-title"><AnimatedLine text="AASHISH" /><AnimatedLine text="MAHATO." /></h1>
+        <div className="about-redesign-eyebrow"><span>01 / THE PERSON BEHIND THE WORK</span><span>BASED IN NEPAL · WORKING ACROSS MEDIA</span></div>
+        <h1 id="about-redesign-title" aria-label="Aashish Mahato"><AnimatedLine text="AASHISH" /><AnimatedLine text="MAHATO." /></h1>
         <div className="about-redesign-hero-art"><img src="/media/photos/tree-final-27.webp" alt="A photograph from Aashish's visual work" fetchPriority="high" /></div>
         <div className="about-redesign-age" aria-label="20 years old"><strong>20</strong><span>YEARS YOUNG<br />ALWAYS MAKING</span></div>
         <div className="about-redesign-hero-meta"><p>FILM. IMAGE. DESIGN. CODE.</p><p>I move between mediums to make the idea feel right.</p><a href="#about-redesign-manifesto">GET TO KNOW ME <span aria-hidden="true">↓</span></a></div>
       </div>
     </section>
     <section className="about-redesign-manifesto" id="about-redesign-manifesto" aria-labelledby="about-manifesto-title">
-      <div className="about-redesign-manifesto-top"><span>02 / WHY WORK WITH ME</span><span>ONE MIND. MANY WAYS TO MAKE.</span></div>
+      <div className="about-redesign-manifesto-top"><span>WHY WORK WITH ME</span><span>ONE MIND. MANY WAYS TO MAKE.</span></div>
       <div className="about-redesign-manifesto-grid"><div className="about-redesign-manifesto-rule" aria-hidden="true"><i /></div><div><h2 id="about-manifesto-title"><span><span className="about-redesign-manifesto-word">THE IDEA</span></span><span><span className="about-redesign-manifesto-word">COMES FIRST.</span></span><span><em className="about-redesign-manifesto-word">I FIND ITS FORM.</em></span></h2><div className="about-redesign-manifesto-copy"><p>A film can become a photograph. A visual identity can become a digital experience. I work across all of them, so each project gets the form it deserves.</p><p>I keep refining the details until the result meets the client's expectations and my own.</p><span>CURIOUS BY NATURE / COMMITTED TO THE FINISH</span></div></div></div>
     </section>
   </div>;
@@ -84,7 +85,7 @@ export function AboutAfterTimeline() {
 
   const logoRows = [collaborators.slice(0, 6), collaborators.slice(6)];
   return <div className="about-redesign-after" ref={ref}>
-    <section className="about-redesign-skills" aria-labelledby="about-skills-title"><div className="about-redesign-section-head"><span>04 / THE PRACTICE</span><span>SEVEN WAYS IN</span></div><div className="about-redesign-skills-heading"><h2 id="about-skills-title">I MAKE<br /><em>THINGS MOVE.</em></h2><p>Every skill opens into real work. Pick a direction and explore.</p></div><div className="about-redesign-skill-grid">{skills.map((skill) => <a className={`about-redesign-skill about-redesign-skill-${skill.size}`} href={skill.href} key={skill.number}><img src={skill.image} alt="" loading="lazy" /><span className="about-redesign-skill-shade" /><span className="about-redesign-skill-top">{skill.number} / 07 <span>EXPLORE ↗</span></span><span className="about-redesign-skill-bottom"><strong>{skill.title}</strong><small>{skill.detail}</small></span></a>)}</div></section>
-    <section className="about-redesign-collaborations" aria-labelledby="about-collaborations-title"><div className="about-redesign-section-head"><span>05 / IN GOOD COMPANY</span><span>COLLABORATIONS</span></div><div className="about-redesign-collab-heading"><div className="about-redesign-count"><strong>{collaborators.length}</strong><span>BRANDS & TEAMS<br />WORKED WITH</span></div><h2 id="about-collaborations-title">MADE<br /><em>TOGETHER.</em></h2></div><p>Different people, different ambitions, one shared goal: make something worth seeing.</p><div className="about-redesign-logo-rows" aria-label="Companies and brands Aashish has worked with">{logoRows.map((row, index) => <div className="about-redesign-logo-viewport" key={index}><div className="about-redesign-logo-track">{[...row, ...row].map((company, itemIndex) => <div className="about-redesign-logo" key={`${company.name}-${itemIndex}`} aria-hidden={itemIndex >= row.length}><img src={company.logo} alt={itemIndex >= row.length ? '' : company.name} loading="lazy" /></div>)}</div></div>)}</div></section>
+    <section className="about-redesign-skills" aria-labelledby="about-skills-title"><div className="about-redesign-section-head"><span>03 / THE PRACTICE</span><span>SEVEN WAYS IN</span></div><div className="about-redesign-skills-heading"><h2 id="about-skills-title">I MAKE<br /><em>THINGS MOVE.</em></h2><p>Every skill opens into real work. Pick a direction and explore.</p></div><div className="about-redesign-skill-grid">{skills.map((skill) => <a className={`about-redesign-skill about-redesign-skill-${skill.size}`} href={skill.href} key={skill.number}><img src={skill.image} alt="" loading="lazy" /><span className="about-redesign-skill-shade" /><span className="about-redesign-skill-top">{skill.number} / 07 <span>EXPLORE ↗</span></span><span className="about-redesign-skill-bottom"><strong>{skill.title}</strong><small>{skill.detail}</small></span></a>)}</div></section>
+    <section className="about-redesign-collaborations" aria-labelledby="about-collaborations-title"><div className="about-redesign-section-head"><span>04 / IN GOOD COMPANY</span><span>COLLABORATIONS</span></div><div className="about-redesign-collab-heading"><div className="about-redesign-count"><strong>{collaborators.length}</strong><span>BRANDS & TEAMS<br />WORKED WITH</span></div><h2 id="about-collaborations-title">MADE<br /><em>TOGETHER.</em></h2></div><p>Different people, different ambitions, one shared goal: make something worth seeing.</p><div className="about-redesign-logo-rows" aria-label="Companies and brands Aashish has worked with">{logoRows.map((row, index) => <div className="about-redesign-logo-viewport" key={index}><div className="about-redesign-logo-track">{[...row, ...row].map((company, itemIndex) => <div className="about-redesign-logo" key={`${company.name}-${itemIndex}`} aria-hidden={itemIndex >= row.length}><img src={company.logo} alt={itemIndex >= row.length ? '' : company.name} loading="lazy" /></div>)}</div></div>)}</div></section>
   </div>;
 }

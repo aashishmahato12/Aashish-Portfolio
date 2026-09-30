@@ -38,6 +38,24 @@ function Hero() {
     const motion = gsap.matchMedia();
     motion.add('(prefers-reduced-motion: no-preference)', () => {
       const context = gsap.context(() => {
+        const foreground = hero.querySelector('.hero-zoom-foreground');
+        const image = foreground.querySelector('img');
+        gsap.timeline({ scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: '+=110%',
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        } })
+          .to(image, { scale: 2.5, z: 350, ease: 'power1.inOut', duration: 1 }, 0)
+          .to(foreground, { autoAlpha: 0, ease: 'power2.in', duration: .3 }, .7);
+      }, hero);
+      return () => context.revert();
+    });
+    motion.add('(prefers-reduced-motion: no-preference)', () => {
+      const context = gsap.context(() => {
         const lines = hero.querySelectorAll('.hero-name-line');
         const first = lines[0].querySelectorAll('.hero-letter');
         const second = lines[1].querySelectorAll('.hero-letter:not(.hero-period)');
@@ -144,6 +162,7 @@ function Hero() {
       <div className="hero-fallback" aria-hidden="true"><div className="fallback-light" /></div>
       <video ref={videoRef} className={`hero-video ${videoReady ? 'is-ready' : ''}`} autoPlay muted loop playsInline preload="metadata" poster={heroReel.poster} src={heroReel.src} aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)} />
       <div className="hero-shade" aria-hidden="true" />
+      <div className="hero-zoom-foreground" aria-hidden="true"><img src="/media/photos/sun-set-21.webp" alt="" /></div>
       <div className="site-intro" aria-hidden="true"><span className="site-intro-mark">A/M<span>®</span></span><span className="site-intro-rule" /><span className="site-intro-caption">CREATIVE PORTFOLIO / 2026</span></div>
       <Header />
       <div className="hero-content">

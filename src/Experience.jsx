@@ -8,7 +8,11 @@ import App from './App.jsx';
 import HomePanels from './HomePanels.jsx';
 import ParallaxChapters from './ParallaxChapters.jsx';
 import AboutTimeline from './AboutTimeline.jsx';
-import { GalleryZoomGrid, GalleryPhotoFlow, GalleryFinalGrid } from './GalleryEffects.jsx';
+import { AboutOpening, AboutAfterTimeline } from './AboutSections.jsx';
+import { GalleryZoomGrid, GalleryFinalGrid } from './GalleryEffects.jsx';
+import GalleryLetterTitle from './GalleryLetterTitle.jsx';
+import GalleryIsometricWave from './GalleryIsometricWave.jsx';
+import GalleryCinematic from './GalleryCinematic.jsx';
 import { Cursor, CursorFollow, CursorProvider } from './components/animate-ui/components/animate/cursor.jsx';
 import { PreviewLinkCard, PreviewLinkCardContent, PreviewLinkCardImage, PreviewLinkCardPortal, PreviewLinkCardTrigger } from './components/animate-ui/primitives/radix/preview-link-card.jsx';
 import { collaborators, featuredProjects, galleryMedia, heroReel, webProjects } from './portfolio-data.js';
@@ -401,11 +405,12 @@ function GalleryPage() {
   return <div className="inner-page gallery-page" ref={pageRef}>
     <SiteNav current="gallery" />
     <main>
-      <section className="inner-intro gallery-intro experience-shell"><SectionTop number="01" label="GALLERY" aside="WATCH / VIEW / EXPLORE" /><h1 className="gallery-intro-title" aria-label="The Gallery."><span className="gallery-title-line" aria-hidden="true"><span><HeroCharacters text="THE" /></span></span><span className="gallery-title-line" aria-hidden="true"><span><HeroCharacters text="GALLERY" /><i className="masked-title-dot">.</i></span></span></h1><p>Moving images and still frames across photography, film, branding, and graphic design.</p></section>
-      <GalleryZoomGrid photos={allPhotos} />
-      <GalleryPhotoFlow photos={allPhotos} />
-      <section className="gallery-content experience-shell"><div className="gallery-controls"><span aria-live="polite">{String(items.length).padStart(2, '0')} PIECES</span><div role="group" aria-label="Gallery filter">{[['all','ALL'],['video','FILMS'],['photography','PHOTOS'],['design','DESIGN']].map(([value,label])=><button type="button" key={value} aria-pressed={filter===value} onClick={()=>changeFilter(value)}>{label}</button>)}</div></div><div className="gallery-grid" ref={gridRef}>{items.map((item, index)=><article className="gallery-piece" key={item.id}><div className="gallery-piece-media">{item.type==='video'?<ReelVideo item={item} controls />:<button type="button" onPointerEnter={(event)=>animateHover(event,true)} onPointerLeave={(event)=>animateHover(event,false)} onClick={(event)=>{photoTriggerRef.current=event.currentTarget;setPhoto(item)}} aria-label={`Open ${item.title}`}><img src={item.src} alt={item.title} loading="lazy" /><span>EXPAND ↗</span></button>}</div><div className="gallery-piece-caption"><span>{String(index+1).padStart(2,'0')} / {item.category || item.type.toUpperCase()}</span><h2>{item.title}</h2></div></article>)}</div></section>
+      <section className="inner-intro gallery-intro experience-shell"><SectionTop number="01" label="GALLERY" aside="WATCH / VIEW / EXPLORE" /><GalleryLetterTitle /><p>Moving images and still frames across photography, film, branding, and graphic design.</p></section>
+      <GalleryZoomGrid items={allMedia} />
+      <section className="gallery-content experience-shell" id="gallery-library"><div className="gallery-library-heading"><span>THE FULL ARCHIVE / PHOTOS & FILMS</span><h2>THE <em>ARCHIVE.</em></h2><p>Explore every frame. Open a photograph or play a film.</p></div><div className="gallery-controls"><span aria-live="polite">{String(items.length).padStart(2, '0')} PIECES</span><div role="group" aria-label="Gallery filter">{[['all','ALL'],['video','FILMS'],['photography','PHOTOS'],['design','DESIGN']].map(([value,label])=><button type="button" key={value} aria-pressed={filter===value} onClick={()=>changeFilter(value)}>{label}</button>)}</div></div><div className="gallery-grid" ref={gridRef}>{items.map((item, index)=><article className="gallery-piece" id={`gallery-item-${item.id}`} key={item.id}><div className="gallery-piece-media">{item.type==='video'?<ReelVideo item={item} controls />:<button type="button" onPointerEnter={(event)=>animateHover(event,true)} onPointerLeave={(event)=>animateHover(event,false)} onClick={(event)=>{photoTriggerRef.current=event.currentTarget;setPhoto(item)}} aria-label={`Open ${item.title}`}><img src={item.src} alt={item.title} loading="lazy" /><span>EXPAND ↗</span></button>}</div><div className="gallery-piece-caption"><span>{String(index+1).padStart(2,'0')} / {item.category || item.type.toUpperCase()}</span><h2>{item.title}</h2></div></article>)}</div></section>
+      <GalleryIsometricWave items={allMedia} />
       <GalleryFinalGrid photos={allPhotos} />
+      <GalleryCinematic items={allMedia} />
     </main>
     <SiteFooter />
     {photo && <div className="gallery-lightbox" ref={lightboxRef} role="dialog" aria-modal="true" aria-label={photo.title} onMouseDown={(event)=>{if(event.target===event.currentTarget)closePhoto()}}><button type="button" onClick={closePhoto} aria-label="Close photo">CLOSE ×</button><img src={photo.src} alt={photo.title}/><div className="gallery-lightbox-meta"><span>{photo.category || 'VISUAL ARCHIVE'}</span><strong>{photo.title}</strong></div></div>}
@@ -413,25 +418,7 @@ function GalleryPage() {
 }
 
 function AboutPage() {
-  const introRef = useRef(null);
-  usePageMotion('about');
-  useLayoutEffect(() => {
-    const media = gsap.matchMedia();
-    media.add('(prefers-reduced-motion: no-preference)', () => {
-      const context = gsap.context(() => {
-        const routeOverlay = document.querySelector('.experience-transition');
-        const delay = routeOverlay && getComputedStyle(routeOverlay).display !== 'none' ? .5 : .08;
-        gsap.timeline({ delay, defaults: { ease: 'power4.out' } })
-          .from('.experience-section-top > span', { autoAlpha: 0, y: -14, duration: .6, stagger: .08 }, 0)
-          .from('.masked-title-char', { yPercent: 125, rotateX: -25, transformOrigin: '50% 100%', duration: .9, stagger: .055 }, .24)
-          .from('.masked-title-dot', { autoAlpha: 0, scale: 0, rotation: -60, duration: .55, ease: 'back.out(2)' }, .78)
-          .from(':scope > p', { autoAlpha: 0, y: 28, duration: .75 }, .72);
-      }, introRef);
-      return () => context.revert();
-    });
-    return () => media.revert();
-  }, []);
-  return <div className="inner-page about-page"><SiteNav current="about" /><main><section className="inner-intro experience-shell" ref={introRef}><SectionTop number="01" label="ABOUT" aside="THE PERSON BEHIND THE FRAME" /><MaskedHeroTitle text="WHO I AM" /><p>I'm Aashish Mahato, a 20-year-old multidisciplinary creative working across film, photography, design, and digital experiences.</p></section><section className="about-statement experience-shell"><div data-reveal><span>WHY WORK WITH ME</span><h2>ONE IDEA.<br /><em>NO SINGLE</em><br />FORMAT.</h2></div><div data-reveal><p>The strongest idea may need more than one medium. I can see it as a frame, shape it in motion, and carry its visual language into digital space.</p><p>I stay with the details and keep refining until the result meets the client's expectations and my own standards.</p></div></section><AboutTimeline /><section className="about-capabilities experience-shell"><SectionTop number="03" label="CAPABILITIES" aside="HOW I MAKE THINGS" /><div>{[['01','IMAGE','Photography · Videography'],['02','MOTION','Editing · Motion graphics'],['03','DESIGN','Identity · Graphic design'],['04','DIGITAL','Web · Apps · Creative technology']].map(([number,title,detail])=><div className="capability-line" key={number} data-reveal><span>{number}</span><h3>{title}</h3><p>{detail}</p></div>)}</div></section><section className="about-collaborators experience-shell"><SectionTop number="04" label="COLLABORATIONS" aside="COMPANIES & BRANDS" /><div className="about-collaborators-heading" data-reveal><h2>WORKED<br /><em>WITH.</em></h2><p>Selected teams and brands I've worked with.</p></div><div className="collaborator-grid">{collaborators.map((company)=><CollaboratorMark key={company.name} company={company}/>)}</div></section></main><SiteFooter /></div>;
+  return <div className="inner-page about-page"><SiteNav current="about" /><main><AboutOpening /><AboutTimeline /><AboutAfterTimeline /></main><SiteFooter /></div>;
 }
 
 export default function Experience() {
