@@ -15,12 +15,73 @@ const letterImages = [
 
 export default function GalleryLetterTitle() {
   const ref = useRef(null);
+  const autoControllerRef = useRef(null);
 
-  useEffect(() => () => {
-    if (ref.current) gsap.killTweensOf(ref.current.querySelectorAll('.gallery-hover-letter, .gallery-hover-glyph, .gallery-hover-image'));
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const letters = Array.from(ref.current.querySelectorAll('.gallery-hover-letter'));
+    let timeline;
+    let delay;
+    let stopped = false;
+
+    const reset = () => letters.forEach((letter) => {
+      const glyph = letter.querySelector('.gallery-hover-glyph');
+      const image = letter.querySelector('.gallery-hover-image');
+      gsap.set(letter, { clearProps: 'width' });
+      gsap.set(glyph, { clearProps: 'opacity,visibility,scale' });
+      gsap.set(image, { autoAlpha: 0, scale: 1, rotation: 0, xPercent: 0 });
+    });
+    const stop = () => {
+      delay?.kill();
+      timeline?.kill();
+      gsap.killTweensOf(letters);
+      reset();
+    };
+    const play = () => {
+      if (stopped) return;
+      const widths = letters.map((letter) => letter.querySelector('.gallery-hover-glyph').getBoundingClientRect().width);
+      const order = gsap.utils.shuffle(letters.map((_, index) => index));
+      timeline = gsap.timeline({ onComplete: () => { reset(); delay = gsap.delayedCall(1.05, play); } });
+      order.forEach((index, position) => {
+        const letter = letters[index];
+        const glyph = letter.querySelector('.gallery-hover-glyph');
+        const image = letter.querySelector('.gallery-hover-image');
+        const width = widths[index];
+        const desired = Math.max(width * 1.45, Math.min(window.innerWidth * .14, 190));
+        const expanded = Math.min(desired, width + Math.max(12, window.innerWidth - 40 - widths.reduce((sum, value) => sum + value, 0)));
+        const at = Math.max(0, position * gsap.utils.random(.68, .82) + gsap.utils.random(-.07, .07));
+        const direction = gsap.utils.random([-1, 1]);
+        const tilt = gsap.utils.random(4, 10) * direction;
+        timeline.set(letter, { width }, at)
+          .to(letter, { width: expanded, duration: gsap.utils.random(.48, .58), ease: 'power3.out' }, at)
+          .to(glyph, { autoAlpha: 0, scale: .7, duration: .22 }, at)
+          .fromTo(image, { autoAlpha: 0, scale: .7, rotation: tilt, xPercent: direction * 13 }, { autoAlpha: 1, scale: 1, rotation: 0, xPercent: 0, duration: .45, ease: 'back.out(1.6)' }, at)
+          .to(image, { autoAlpha: 0, scale: .82, rotation: -tilt * .5, duration: .32, ease: 'power2.in' }, at + .57)
+          .to(glyph, { autoAlpha: 1, scale: 1, duration: .32 }, at + .65)
+          .to(letter, { width, duration: .48, ease: 'elastic.out(1,.6)' }, at + .65);
+      });
+    };
+    const schedule = (seconds = 1.4) => {
+      delay?.kill();
+      timeline?.kill();
+      delay = gsap.delayedCall(seconds, play);
+    };
+    autoControllerRef.current = { stop, schedule };
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) schedule(2.3);
+      else stop();
+    }, { threshold: .1 });
+    Promise.resolve(document.fonts?.ready).then(() => { if (!stopped) observer.observe(ref.current); });
+    return () => {
+      stopped = true;
+      observer.disconnect();
+      stop();
+      autoControllerRef.current = null;
+    };
   }, []);
 
   const show = (event) => {
+    autoControllerRef.current?.stop();
     const letter = event.currentTarget;
     const glyph = letter.querySelector('.gallery-hover-glyph');
     const image = letter.querySelector('.gallery-hover-image');
@@ -54,6 +115,7 @@ export default function GalleryLetterTitle() {
     gsap.to(glyph, { autoAlpha: 1, scale: 1, duration: reduced ? 0 : .35, delay: reduced ? 0 : .1, ease: 'power2.out' });
     gsap.to(image, { autoAlpha: 0, scale: .8, rotation: 6, duration: reduced ? 0 : .25, ease: 'power2.in' });
     gsap.to(image.querySelector('img'), { x: 0, y: 0, rotation: 0, duration: reduced ? 0 : .3, overwrite: 'auto' });
+    autoControllerRef.current?.schedule(1.5);
   };
 
   return <h1 className="gallery-intro-title" aria-label="The Gallery." ref={ref}>

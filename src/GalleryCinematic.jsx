@@ -11,9 +11,10 @@ export default function GalleryCinematic({ items }) {
 
   useLayoutEffect(() => {
     const media = gsap.matchMedia();
-    media.add('(min-width: 701px) and (prefers-reduced-motion: no-preference)', () => {
+    media.add('(prefers-reduced-motion: no-preference)', () => {
       const context = gsap.context(() => {
         const root = rootRef.current;
+        const isPhone = window.matchMedia('(max-width: 700px)').matches;
         const cards = gsap.utils.toArray('.cinematic-card', root);
         const words = gsap.utils.toArray('.cinematic-line', root);
         const progress = root.querySelector('.cinematic-progress-fill');
@@ -22,7 +23,7 @@ export default function GalleryCinematic({ items }) {
           scrollTrigger: {
             trigger: root,
             start: 'top top',
-            end: '+=320%',
+            end: () => `+=${window.innerHeight * (isPhone ? 3.6 : 3.2)}`,
             scrub: 1,
             pin: true,
             anticipatePin: 1,
@@ -33,15 +34,15 @@ export default function GalleryCinematic({ items }) {
         gsap.set(cards.slice(1), { autoAlpha: 0 });
         gsap.set(words.slice(1), { autoAlpha: 0, y: 35 });
         timeline.to(progress, { scaleX: 1, duration: 6, ease: 'none' }, 0)
-          .fromTo(world, { z: -120, rotateY: -7 }, { z: 90, rotateY: 7, duration: 6, ease: 'none' }, 0);
+          .fromTo(world, { z: isPhone ? -60 : -120, rotateY: -7 }, { z: isPhone ? 45 : 90, rotateY: 7, duration: 6, ease: 'none' }, 0);
 
         cards.forEach((card, index) => {
           const at = index;
-          timeline.fromTo(card, { z: -220, xPercent: index % 2 ? 14 : -14, rotateY: index % 2 ? -16 : 16, scale: .82 }, {
-            z: 100, xPercent: 0, rotateY: 0, scale: 1, duration: 1.05, ease: 'power2.out',
+          timeline.fromTo(card, { z: isPhone ? -160 : -220, xPercent: index % 2 ? 14 : -14, rotateY: index % 2 ? -16 : 16, scale: .82 }, {
+            z: isPhone ? 70 : 100, xPercent: 0, rotateY: 0, scale: 1, duration: 1.05, ease: 'power2.out',
           }, at);
           if (index) timeline.to(card, { autoAlpha: 1, duration: .3 }, at - .16);
-          if (index < cards.length - 1) timeline.to(card, { z: 400, scale: 1.18, autoAlpha: 0, duration: .7, ease: 'power2.in' }, at + .88);
+          if (index < cards.length - 1) timeline.to(card, { z: isPhone ? 220 : 400, scale: 1.18, autoAlpha: 0, duration: .7, ease: 'power2.in' }, at + .88);
           if (index < words.length - 1) {
             timeline.to(words[index], { autoAlpha: 0, y: -32, duration: .25 }, at + .7);
             timeline.to(words[index + 1], { autoAlpha: 1, y: 0, duration: .35 }, at + .9);
