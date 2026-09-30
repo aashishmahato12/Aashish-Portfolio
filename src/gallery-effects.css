@@ -63,3 +63,23 @@
 .gallery-library-heading h2 em{color:#d1ad80;font:italic 400 .95em Georgia,serif;letter-spacing:-.065em}
 .gallery-library-heading p{align-self:flex-end;max-width:350px;margin:10px 0 0;color:#aeb9ae;font:400 16px/1.6 'DM Sans',sans-serif}
 @media(max-width:700px){.gallery-library-heading{padding:85px 0 55px}.gallery-library-heading h2{font-size:clamp(52px,11vw,85px)}.gallery-library-heading p{align-self:flex-start;margin:0;font-size:14px}}
+
+/* Archive: compact introduction and an uncropped, natural-ratio media wall. */
+.gallery-library-heading{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,340px);align-items:end;column-gap:28px;row-gap:16px;padding:76px 0 42px}
+.gallery-library-heading>span{grid-column:1/-1}
+.gallery-library-heading h2{font-size:clamp(44px,6vw,92px);line-height:.92}
+.gallery-library-heading p{align-self:end;max-width:340px;margin:0 0 3px;font-size:14px}
+.gallery-content .gallery-controls{gap:18px;padding:12px 0}
+.gallery-content .gallery-controls>div{flex-wrap:wrap;justify-content:flex-end;gap:3px}
+.gallery-content .gallery-controls button{padding:7px 11px;white-space:nowrap}
+.gallery-content .gallery-grid{display:block;columns:3;column-gap:clamp(12px,1.6vw,24px);padding-top:30px}
+.gallery-content .gallery-piece{display:inline-block;width:100%;margin:0 0 28px;break-inside:avoid;vertical-align:top}
+.gallery-content .gallery-piece:nth-child(2n){margin-top:0}
+.gallery-content .gallery-piece-media{aspect-ratio:auto;overflow:visible;background:transparent}
+.gallery-content .gallery-piece-media button{display:block;width:100%;height:auto}
+.gallery-content .gallery-piece-media img,.gallery-content .gallery-piece-media video{display:block;width:100%;height:auto;object-fit:contain}
+.gallery-content .gallery-piece-media video{aspect-ratio:auto;background:#111}
+.gallery-content .gallery-piece-caption{align-items:flex-start;gap:12px;margin-top:10px;padding-top:10px}
+.gallery-content .gallery-piece-caption h2{font-size:clamp(15px,1.35vw,21px);text-align:right}
+@media(max-width:900px){.gallery-content .gallery-grid{columns:2}.gallery-library-heading{grid-template-columns:1fr 240px}}
+@media(max-width:700px){.gallery-library-heading{display:block;padding:62px 0 30px}.gallery-library-heading h2{margin:13px 0 20px;font-size:clamp(42px,11vw,68px)}.gallery-library-heading p{max-width:320px;font-size:13px}.gallery-content .gallery-controls{display:block}.gallery-content .gallery-controls>div{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-top:8px}.gallery-content .gallery-controls button{font-size:8px;padding:7px 8px}.gallery-content .gallery-grid{columns:1;padding-top:22px}.gallery-content .gallery-piece{margin-bottom:32px}.gallery-content .gallery-piece-caption h2{font-size:17px}}

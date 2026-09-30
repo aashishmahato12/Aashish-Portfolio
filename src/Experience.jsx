@@ -9,7 +9,7 @@ import HomePanels from './HomePanels.jsx';
 import ParallaxChapters from './ParallaxChapters.jsx';
 import AboutTimeline from './AboutTimeline.jsx';
 import { AboutOpening, AboutAfterTimeline } from './AboutSections.jsx';
-import { GalleryZoomGrid, GalleryFinalGrid } from './GalleryEffects.jsx';
+import { GalleryFinalGrid } from './GalleryEffects.jsx';
 import GalleryLetterTitle from './GalleryLetterTitle.jsx';
 import GalleryIsometricWave from './GalleryIsometricWave.jsx';
 import GalleryCinematic from './GalleryCinematic.jsx';
@@ -342,16 +342,6 @@ function GalleryPage() {
       const refresh = window.requestAnimationFrame(() => ScrollTrigger.refresh());
       return () => { window.cancelAnimationFrame(refresh); context.revert(); };
     });
-    media.add('(min-width: 701px) and (prefers-reduced-motion: no-preference)', () => {
-      const context = gsap.context(() => {
-        Array.from(grid.querySelectorAll('.gallery-piece')).forEach((card) => {
-          const image = card.querySelector('.gallery-piece-media img');
-          if (!image) return;
-          gsap.fromTo(image, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: true } });
-        });
-      }, grid);
-      return () => context.revert();
-    });
     return () => media.revert();
   }, [filter]);
 
@@ -394,7 +384,7 @@ function GalleryPage() {
   const animateHover = (event, active) => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const image = event.currentTarget.querySelector('img');
-    if (image) gsap.to(image, { scale: active ? 1.09 : 1, duration: active ? .75 : .6, ease: 'power3.out', overwrite: 'auto' });
+    if (image) gsap.to(image, { filter: active ? 'brightness(1.1)' : 'brightness(1)', duration: .35, ease: 'power2.out', overwrite: 'auto' });
   };
 
   const combined = [...galleryMedia, ...featuredProjects.flatMap((project) => (project.media || []).map((item,index) => ({ ...item, id: item.id || `${project.id}-${index}`, title: item.title || project.title })))];
@@ -406,11 +396,10 @@ function GalleryPage() {
     <SiteNav current="gallery" />
     <main>
       <section className="inner-intro gallery-intro experience-shell"><SectionTop number="01" label="GALLERY" aside="WATCH / VIEW / EXPLORE" /><GalleryLetterTitle /><p>Moving images and still frames across photography, film, branding, and graphic design.</p></section>
-      <GalleryZoomGrid items={allMedia} />
+      <GalleryCinematic items={allMedia} />
       <section className="gallery-content experience-shell" id="gallery-library"><div className="gallery-library-heading"><span>THE FULL ARCHIVE / PHOTOS & FILMS</span><h2>THE <em>ARCHIVE.</em></h2><p>Explore every frame. Open a photograph or play a film.</p></div><div className="gallery-controls"><span aria-live="polite">{String(items.length).padStart(2, '0')} PIECES</span><div role="group" aria-label="Gallery filter">{[['all','ALL'],['video','FILMS'],['photography','PHOTOS'],['design','DESIGN']].map(([value,label])=><button type="button" key={value} aria-pressed={filter===value} onClick={()=>changeFilter(value)}>{label}</button>)}</div></div><div className="gallery-grid" ref={gridRef}>{items.map((item, index)=><article className="gallery-piece" id={`gallery-item-${item.id}`} key={item.id}><div className="gallery-piece-media">{item.type==='video'?<ReelVideo item={item} controls />:<button type="button" onPointerEnter={(event)=>animateHover(event,true)} onPointerLeave={(event)=>animateHover(event,false)} onClick={(event)=>{photoTriggerRef.current=event.currentTarget;setPhoto(item)}} aria-label={`Open ${item.title}`}><img src={item.src} alt={item.title} loading="lazy" /><span>EXPAND ↗</span></button>}</div><div className="gallery-piece-caption"><span>{String(index+1).padStart(2,'0')} / {item.category || item.type.toUpperCase()}</span><h2>{item.title}</h2></div></article>)}</div></section>
       <GalleryIsometricWave items={allMedia} />
       <GalleryFinalGrid photos={allPhotos} />
-      <GalleryCinematic items={allMedia} />
     </main>
     <SiteFooter />
     {photo && <div className="gallery-lightbox" ref={lightboxRef} role="dialog" aria-modal="true" aria-label={photo.title} onMouseDown={(event)=>{if(event.target===event.currentTarget)closePhoto()}}><button type="button" onClick={closePhoto} aria-label="Close photo">CLOSE ×</button><img src={photo.src} alt={photo.title}/><div className="gallery-lightbox-meta"><span>{photo.category || 'VISUAL ARCHIVE'}</span><strong>{photo.title}</strong></div></div>}

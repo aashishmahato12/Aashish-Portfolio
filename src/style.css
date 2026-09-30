@@ -2,10 +2,6 @@
 
 .hero-fallback{background-image:linear-gradient(180deg,#0506083d,#05060861),url('/videos/hero-poster.jpg');background-position:center;background-size:cover}
 
-.hero-zoom-foreground{position:absolute;inset:0;z-index:0;overflow:hidden;perspective:500px;pointer-events:none;will-change:opacity}
-.hero-zoom-foreground img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(.54) saturate(.82);will-change:transform}
-.hero-content,.hero-scroll,.hero-edition{z-index:2}
-@media(prefers-reduced-motion:reduce){.hero-zoom-foreground{display:none}}
 
 .hero-name-line {
   overflow: hidden;
