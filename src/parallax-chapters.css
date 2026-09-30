@@ -1,0 +1,9 @@
+.parallax-chapter{position:relative;display:grid;place-items:center;height:100svh;min-height:540px;overflow:hidden;isolation:isolate;background:#17221c;color:#f5f1e8;text-align:center}
+.parallax-chapter-image{position:absolute;inset:-28% 0;z-index:-2;background-size:cover;background-position:center;will-change:transform}
+.parallax-chapter-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,#07100b9c,#07100b42 50%,#07100b9c)}
+.parallax-chapter-content{padding:35px}
+.parallax-chapter-content span{color:#d7b88b;font:700 10px 'DM Sans',sans-serif;letter-spacing:.23em}
+.parallax-chapter-content h2{margin:30px 0 16px;font:650 clamp(60px,10vw,155px)/.9 'Manrope',sans-serif;letter-spacing:-.08em}
+.parallax-chapter-content p{font:400 clamp(16px,2vw,25px) 'DM Sans',sans-serif;color:#f0eee8}
+@media(max-width:700px){.parallax-chapter-content h2{font-size:clamp(45px,12vw,80px)}}
+@media(prefers-reduced-motion:reduce){.parallax-chapter-image{will-change:auto}}
