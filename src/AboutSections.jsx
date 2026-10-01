@@ -49,8 +49,8 @@ export function AboutOpening() {
       <div className="about-redesign-hero-backdrop" aria-hidden="true">A/M</div>
       <div className="about-redesign-hero-inner">
         <div className="about-redesign-eyebrow"><span>01 / THE PERSON BEHIND THE WORK</span><span>BASED IN NEPAL · WORKING ACROSS MEDIA</span></div>
-        <h1 id="about-redesign-title" aria-label="Aashish Mahato"><AnimatedLine text="AASHISH" /><AnimatedLine text="MAHATO." /></h1>
-        <div className="about-redesign-hero-art"><img src="/media/photos/tree-final-27.webp" alt="A photograph from Aashish's visual work" fetchPriority="high" /></div>
+        <h1 id="about-redesign-title" aria-label="Aashish Mahato"><AnimatedLine text="AASHISH" />{' '}<AnimatedLine text="MAHATO." /></h1>
+        <div className="about-redesign-hero-art"><img src="/media/photos/tree-final-27.webp" alt="Colorful prayer flags photographed by Aashish Mahato" fetchPriority="high" /></div>
         <div className="about-redesign-age" aria-label="20 years old"><strong>20</strong><span>YEARS YOUNG<br />ALWAYS MAKING</span></div>
         <div className="about-redesign-hero-meta"><p>FILM. IMAGE. DESIGN. CODE.</p><p>I move between mediums to make the idea feel right.</p><a href="#about-redesign-manifesto">GET TO KNOW ME <span aria-hidden="true">↓</span></a></div>
       </div>
