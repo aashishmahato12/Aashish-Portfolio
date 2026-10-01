@@ -24,9 +24,42 @@ const routeFor = (path) => {
   if (skill) return `skill-${skill[1]}`;
   return path.startsWith('/gallery') ? 'gallery' : path.startsWith('/about') ? 'about' : 'home';
 };
-const titles = { home: 'Aashish Mahato — Creative Portfolio', gallery: 'Gallery — Aashish Mahato', about: 'About — Aashish Mahato' };
-const skillTitles = { film: 'Film', photography: 'Photography', motion: 'Motion Graphics', branding: 'Branding', graphic: 'Graphic Design', digital: 'Digital', web: 'Web Development' };
-const titleFor = (route) => route.startsWith('skill-') ? `${skillTitles[route.slice(6)]} — Aashish Mahato` : titles[route];
+const searchMeta = {
+  home: ['Aashish Mahato | Filmmaker, Photographer & Designer', 'Explore the films, photography, motion graphics, branding, graphic design, and websites of Aashish Mahato, a multidisciplinary creative based in Nepal.', '/'],
+  about: ['About Aashish Mahato | Film, Design & Code', 'Meet Aashish Mahato, a Nepal-based creative working across film, photography, design, motion, and web development.', '/about/'],
+  gallery: ['Gallery | Films, Photography & Design by Aashish Mahato', 'Browse Aashish Mahato’s visual archive of films, photography, branding, and graphic design projects.', '/gallery/'],
+  'skill-film': ['Film Projects | Aashish Mahato', 'Watch selected films and visual storytelling projects by filmmaker Aashish Mahato.', '/work/film/'],
+  'skill-photography': ['Photography Portfolio | Aashish Mahato', 'Explore portraits, places, and moments captured by photographer Aashish Mahato.', '/work/photography/'],
+  'skill-motion': ['Motion Graphics | Aashish Mahato', 'See motion graphics, animated visuals, and moving-image projects by Aashish Mahato.', '/work/motion/'],
+  'skill-branding': ['Branding Projects | Aashish Mahato', 'Explore logo, identity, and branding projects created by Aashish Mahato.', '/work/branding/'],
+  'skill-graphic': ['Graphic Design Projects | Aashish Mahato', 'See graphic design projects, campaign artwork, and visual communication by Aashish Mahato.', '/work/graphic/'],
+  'skill-digital': ['Digital Projects | Aashish Mahato', 'Explore digital product and interface design projects by Aashish Mahato.', '/work/digital/'],
+  'skill-web': ['Web Development Projects | Aashish Mahato', 'Explore websites and web development projects built by Aashish Mahato.', '/work/web/'],
+};
+const searchImages = {
+  home: '/videos/hero-poster.jpg',
+  about: '/media/photos/tree-final-27.webp',
+  gallery: '/media/photos/tree-final-27.webp',
+  'skill-film': '/media/posters/mustang.jpg',
+  'skill-photography': '/media/photos/tree-final-27.webp',
+  'skill-motion': '/media/posters/product-motion.jpg',
+  'skill-branding': '/media/branding/document.webp',
+  'skill-graphic': '/media/design/162.webp',
+  'skill-digital': '/media/branding/mockup5.webp',
+  'skill-web': '/media/logos/cosmic-electrical.webp',
+};
+
+function updateSearchMeta(route) {
+  const [title, description, path] = searchMeta[route];
+  const url = `https://aashish-mahato.com.np${path}`;
+  document.title = title;
+  document.querySelector('meta[name="description"]')?.setAttribute('content', description);
+  document.querySelector('link[rel="canonical"]')?.setAttribute('href', url);
+  document.querySelector('meta[property="og:url"]')?.setAttribute('content', url);
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
+  document.querySelector('meta[property="og:image"]')?.setAttribute('content', `https://aashish-mahato.com.np${searchImages[route]}`);
+}
 
 function usePageMotion(dependency) {
   useLayoutEffect(() => {
@@ -450,7 +483,7 @@ export default function Experience() {
         if (push) window.history.pushState({}, '', url);
         current.current = next;
         flushSync(() => setRoute(next));
-        document.title = titleFor(next);
+        updateSearchMeta(next);
         if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true, force: true });
         else window.scrollTo(0, 0);
         window.requestAnimationFrame(() => {
