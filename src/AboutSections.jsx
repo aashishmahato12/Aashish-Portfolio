@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { collaborators, featuredProjects, galleryMedia } from './portfolio-data.js';
 import './about-sections.css';
+import { creativeBio, officialProfiles } from './seo-data.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -57,7 +58,7 @@ export function AboutOpening() {
     </section>
     <section className="about-redesign-manifesto" id="about-redesign-manifesto" aria-labelledby="about-manifesto-title">
       <div className="about-redesign-manifesto-top"><span>WHY WORK WITH ME</span><span>ONE MIND. MANY WAYS TO MAKE.</span></div>
-      <div className="about-redesign-manifesto-grid"><div className="about-redesign-manifesto-rule" aria-hidden="true"><i /></div><div><h2 id="about-manifesto-title"><span><span className="about-redesign-manifesto-word">THE IDEA</span></span><span><span className="about-redesign-manifesto-word">COMES FIRST.</span></span><span><em className="about-redesign-manifesto-word">I FIND ITS FORM.</em></span></h2><div className="about-redesign-manifesto-copy"><p>A film can become a photograph. A visual identity can become a digital experience. I work across all of them, so each project gets the form it deserves.</p><p>I keep refining the details until the result meets the client's expectations and my own.</p><span>CURIOUS BY NATURE / COMMITTED TO THE FINISH</span></div></div></div>
+      <div className="about-redesign-manifesto-grid"><div className="about-redesign-manifesto-rule" aria-hidden="true"><i /></div><div><h2 id="about-manifesto-title"><span><span className="about-redesign-manifesto-word">THE IDEA</span></span><span><span className="about-redesign-manifesto-word">COMES FIRST.</span></span><span><em className="about-redesign-manifesto-word">I FIND ITS FORM.</em></span></h2><div className="about-redesign-manifesto-copy"><p>{creativeBio}</p><p>A film can become a photograph. A visual identity can become a digital experience. I work across all of them, so each project gets the form it deserves.</p><p>I keep refining the details until the result meets the client's expectations and my own.</p><p className="official-profile-links" aria-label="Aashish Mahato’s official profiles">{officialProfiles.map((profile) => <a href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">{profile.label} ↗</a>)}</p><span>CURIOUS BY NATURE / COMMITTED TO THE FINISH</span></div></div></div>
     </section>
   </div>;
 }

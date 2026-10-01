@@ -1,3 +1,4 @@
+import { mediaAlt, mediaDescription } from './media-text.js';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -23,7 +24,7 @@ function PanelVideo({ item, play }) {
     preference.addEventListener('change', sync);
     return () => { video.pause(); document.removeEventListener('visibilitychange', sync); preference.removeEventListener('change', sync); };
   }, [play]);
-  return <video ref={ref} src={play ? (window.matchMedia('(max-width: 700px)').matches && item.mobileSrc ? item.mobileSrc : item.src) : undefined} poster={item.poster} muted loop playsInline preload="none" aria-label={item.title} />;
+  return <video ref={ref} src={play ? (window.matchMedia('(max-width: 700px)').matches && item.mobileSrc ? item.mobileSrc : item.src) : undefined} poster={item.poster} muted loop playsInline preload="none" aria-label={item.title} title={mediaDescription(item)} />;
 }
 
 export default function HomePanels({ lenisRef }) {
@@ -100,7 +101,7 @@ export default function HomePanels({ lenisRef }) {
     <div className="experience-shell home-panels-intro"><div className="experience-section-top"><span>01 / THE MOVING IMAGE</span><span>A VISUAL FIRST LOOK</span></div><span className="home-panels-kicker">THE PORTFOLIO IN FRAMES</span><h2 id="home-gallery-title">THE WORK <em>MOVES.</em></h2><p>Film, photographs, and the ideas between them. Scroll through the work.</p></div>
     <div className="home-panel-stage">
       <div className="home-panel-track">{panels.map((item, index) => <article className="home-panel" id={`work-panel-${index + 1}`} key={item.id}>
-        <div className="home-panel-media">{item.type === 'video' ? <PanelVideo item={item} play={stageVisible && current === index} /> : <img src={item.src} alt={item.title} loading="lazy" />}</div>
+        <div className="home-panel-media">{item.type === 'video' ? <PanelVideo item={item} play={stageVisible && current === index} /> : <img src={item.src} alt={mediaAlt(item)} loading="lazy" />}</div>
         <div className="home-panel-shade" />
         <div className="home-panel-content"><span>FRAME {String(index + 1).padStart(2, '0')} / {String(panels.length).padStart(2, '0')} · {item.category || item.type.toUpperCase()}</span><h3>{item.title}</h3><p>{item.type === 'video' ? 'A story in motion.' : 'A moment held in a frame.'}</p></div>
       </article>)}</div>

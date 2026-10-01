@@ -1,3 +1,4 @@
+import { mediaAlt, mediaDescription } from './media-text.js';
 import React, { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import Lenis from 'lenis';
@@ -5,6 +6,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animate, stagger } from 'animejs';
 import App from './App.jsx';
+import { searchMeta, searchImages, structuredData, officialProfiles } from './seo-data.js';
 import HomePanels from './HomePanels.jsx';
 import ParallaxChapters from './ParallaxChapters.jsx';
 import { Cursor, CursorFollow, CursorProvider } from './components/animate-ui/components/animate/cursor.jsx';
@@ -26,35 +28,19 @@ const routeFor = (path) => {
   if (skill) return `skill-${skill[1]}`;
   return path.startsWith('/gallery') ? 'gallery' : path.startsWith('/about') ? 'about' : 'home';
 };
-const searchMeta = {
-  home: ['Aashish Mahato — Film, Photography & Design', 'Explore the films, photography, motion graphics, branding, graphic design, and websites of Aashish Mahato, a multidisciplinary creative based in Nepal.', '/'],
-  about: ['About Aashish Mahato | Film, Design & Code', 'Meet Aashish Mahato, a Nepal-based creative working across film, photography, design, motion, and web development.', '/about/'],
-  gallery: ['Gallery | Films, Photography & Design by Aashish Mahato', 'Browse Aashish Mahato’s visual archive of films, photography, branding, and graphic design projects.', '/gallery/'],
-  'skill-film': ['Film Projects | Aashish Mahato', 'Watch selected films and visual storytelling projects by filmmaker Aashish Mahato.', '/work/film/'],
-  'skill-photography': ['Photography Portfolio | Aashish Mahato', 'Explore portraits, places, and moments captured by photographer Aashish Mahato.', '/work/photography/'],
-  'skill-motion': ['Motion Graphics | Aashish Mahato', 'See motion graphics, animated visuals, and moving-image projects by Aashish Mahato.', '/work/motion/'],
-  'skill-branding': ['Branding Projects | Aashish Mahato', 'Explore logo, identity, and branding projects created by Aashish Mahato.', '/work/branding/'],
-  'skill-graphic': ['Graphic Design Projects | Aashish Mahato', 'See graphic design projects, campaign artwork, and visual communication by Aashish Mahato.', '/work/graphic/'],
-  'skill-digital': ['Digital Projects | Aashish Mahato', 'Explore digital product and interface design projects by Aashish Mahato.', '/work/digital/'],
-  'skill-web': ['Web Development Projects | Aashish Mahato', 'Explore websites and web development projects built by Aashish Mahato.', '/work/web/'],
-};
-const searchImages = {
-  home: '/videos/hero-poster.jpg',
-  about: '/media/photos/tree-final-27.webp',
-  gallery: '/media/photos/tree-final-27.webp',
-  'skill-film': '/media/posters/mustang.jpg',
-  'skill-photography': '/media/photos/tree-final-27.webp',
-  'skill-motion': '/media/posters/product-motion.jpg',
-  'skill-branding': '/media/branding/document.webp',
-  'skill-graphic': '/media/design/162.webp',
-  'skill-digital': '/media/branding/mockup5.webp',
-  'skill-web': '/media/logos/cosmic-electrical.webp',
-};
 
 function updateSearchMeta(route) {
   const [title, description, path] = searchMeta[route];
   const url = `https://aashish-mahato.com.np${path}`;
   document.title = title;
+  let schema = document.getElementById('portfolio-structured-data');
+  if (!schema) {
+    schema = document.createElement('script');
+    schema.id = 'portfolio-structured-data';
+    schema.type = 'application/ld+json';
+    document.head.append(schema);
+  }
+  schema.textContent = JSON.stringify(structuredData(route));
   document.querySelector('meta[name="description"]')?.setAttribute('content', description);
   document.querySelector('link[rel="canonical"]')?.setAttribute('href', url);
   document.querySelector('meta[property="og:url"]')?.setAttribute('content', url);
@@ -90,7 +76,7 @@ function ReelVideo({ item = heroReel, controls = false, className = '' }) {
     observer.observe(video);
     return () => observer.disconnect();
   }, [controls]);
-  return <video ref={ref} className={className} src={item.src} poster={item.poster} muted={!controls} loop={!controls} controls={controls} playsInline preload="metadata" aria-label={item.title || 'Portfolio video'} />;
+  return <video ref={ref} className={className} src={item.src} poster={item.poster} muted={!controls} loop={!controls} controls={controls} playsInline preload="metadata" aria-label={item.title || 'Portfolio video'} title={mediaDescription(item)} />;
 }
 
 function SiteNav({ current }) {
@@ -203,7 +189,7 @@ function Home({ lenisRef }) {
     <HomePanels lenisRef={lenisRef} />
     <ParallaxChapters />
 
-    <section className="home-about" aria-labelledby="home-about-title"><div className="experience-shell"><SectionTop number="02" label="THE PERSON" aside="A FEW WORDS BEFORE THE WORK" /><div className="home-about-grid"><div data-reveal><span className="experience-eyebrow">WHO I AM / WHY ME</span><h2 id="home-about-title">ONE IDEA.<br /><em>MANY WAYS</em><br />TO MAKE IT.</h2></div><div className="home-about-copy" data-reveal><span className="about-age">20 <small>YEARS OLD</small></span><p>I'm Aashish Mahato. I work across film, photography, design, and web development. I follow an idea into the format that gives it the most life.</p><p>I keep refining a project until it meets the client's expectations and my own standards.</p><a className="experience-text-link" href="/about/">MORE ABOUT ME <span>↗</span></a></div></div></div></section>
+    <section className="home-about" aria-labelledby="home-about-title"><div className="experience-shell"><SectionTop number="02" label="THE PERSON" aside="A FEW WORDS BEFORE THE WORK" /><div className="home-about-grid"><div data-reveal><span className="experience-eyebrow">WHO I AM / WHY ME</span><h2 id="home-about-title">ONE IDEA.<br /><em>MANY WAYS</em><br />TO MAKE IT.</h2></div><div className="home-about-copy" data-reveal><span className="about-age">20 <small>YEARS OLD</small></span><p>I'm Aashish Mahato, a filmmaker, photographer, designer, and web developer based in Nepal. I follow an idea into the format that gives it the most life.</p><p>I keep refining a project until it meets the client's expectations and my own standards.</p><p className="official-profile-links">{officialProfiles.map((profile) => <a href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">{profile.label} ↗</a>)}</p><a className="experience-text-link" href="/about/">MORE ABOUT ME <span>↗</span></a></div></div></div></section>
 
     <HomeSkills />
     <HomeCollaborators />
@@ -230,10 +216,10 @@ function WorkProjectCard({ project, index, skillId }) {
   const cover = photos[0]?.src || project.cover;
   const extraPhotos = photos.filter((item) => item.src !== cover);
   return <article className={`work-project-card ${['branding', 'graphic', 'digital'].includes(skillId) ? 'work-project-card--design' : ''} ${skillId === 'web' ? 'work-project-card--web' : ''}`} id={project.id} data-reveal>
-    <div className="work-project-visual">{skillId === 'web' ? <div className={`web-project-art web-project-art--${project.theme}`}><div className="web-project-browser"><span /><span /><span /><small>{new URL(project.liveUrl).hostname}</small></div><div className="web-project-art-content">{project.mark && <img src={project.mark} alt="" loading="lazy" />}<span>{project.category}</span><strong>{project.title}</strong><i>↗</i></div></div> : video ? <ReelVideo item={video} controls /> : <img src={cover} alt={project.title} loading="lazy" />}</div>
-    <div className="work-project-info"><span>{String(index + 1).padStart(2, '0')} / {project.category}</span><h3>{project.title}</h3><p>{project.description || project.category}</p></div>
+    <div className="work-project-visual">{skillId === 'web' ? <div className={`web-project-art web-project-art--${project.theme}`}><div className="web-project-browser"><span /><span /><span /><small>{new URL(project.liveUrl).hostname}</small></div><div className="web-project-art-content">{project.mark && <img src={project.mark} alt="" loading="lazy" />}<span>{project.category}</span><strong>{project.title}</strong><i>↗</i></div></div> : video ? <ReelVideo item={video} controls /> : <img src={cover} alt={mediaAlt({ ...project, src: cover })} loading="lazy" />}</div>
+    <div className="work-project-info"><span>{String(index + 1).padStart(2, '0')} / {project.category}</span><h3>{project.title}</h3><p>{mediaDescription(project) || project.category}</p></div>
     {skillId === 'web' && <div className="web-project-links"><a href={project.liveUrl} target="_blank" rel="noopener noreferrer">VISIT {project.title.toUpperCase()} ↗</a>{project.repoUrl && <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">{project.title.toUpperCase()} SOURCE CODE ↗</a>}</div>}
-    {extraPhotos.length > 0 && <div className="work-project-extras">{extraPhotos.map((item) => <figure key={item.src}><img src={item.src} alt={item.title} loading="lazy" /><figcaption>{item.title}</figcaption></figure>)}</div>}
+    {extraPhotos.length > 0 && <div className="work-project-extras">{extraPhotos.map((item) => <figure key={item.src}><img src={item.src} alt={mediaAlt(item)} loading="lazy" /><figcaption>{item.title}</figcaption></figure>)}</div>}
   </article>;
 }
 
@@ -338,6 +324,28 @@ function GalleryPage() {
   const filterBusyRef = useRef(false);
   const photoTriggerRef = useRef(null);
 
+  // Natural-ratio archive images change the page height as they load.
+  // Re-measure downstream animations without requiring a browser zoom/resize.
+  useLayoutEffect(() => {
+    const grid = gridRef.current;
+    let refreshTimer;
+    const refresh = () => {
+      window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 120);
+    };
+    const observer = new ResizeObserver(refresh);
+    observer.observe(grid);
+    grid.addEventListener('load', refresh, true);
+    grid.addEventListener('loadedmetadata', refresh, true);
+    refresh();
+    return () => {
+      observer.disconnect();
+      grid.removeEventListener('load', refresh, true);
+      grid.removeEventListener('loadedmetadata', refresh, true);
+      window.clearTimeout(refreshTimer);
+    };
+  }, []);
+
   useLayoutEffect(() => {
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
@@ -432,12 +440,12 @@ function GalleryPage() {
     <main>
       <section className="inner-intro gallery-intro experience-shell"><SectionTop number="01" label="GALLERY" aside="WATCH / VIEW / EXPLORE" /><GalleryLetterTitle /><p>Moving images and still frames across photography, film, branding, and graphic design.</p></section>
       <GalleryCinematic items={allMedia} />
-      <section className="gallery-content experience-shell" id="gallery-library"><div className="gallery-library-heading"><span>THE FULL ARCHIVE / PHOTOS & FILMS</span><h2>THE <em>ARCHIVE.</em></h2><p>Explore every frame. Open a photograph or play a film.</p></div><div className="gallery-controls"><span aria-live="polite">{String(items.length).padStart(2, '0')} PIECES</span><div role="group" aria-label="Gallery filter">{[['all','ALL'],['video','FILMS'],['photography','PHOTOS'],['design','DESIGN']].map(([value,label])=><button type="button" key={value} aria-pressed={filter===value} onClick={()=>changeFilter(value)}>{label}</button>)}</div></div><div className="gallery-grid" ref={gridRef}>{items.map((item, index)=><article className="gallery-piece" id={`gallery-item-${item.id}`} key={item.id}><div className="gallery-piece-media">{item.type==='video'?<ReelVideo item={item} controls />:<button type="button" onPointerEnter={(event)=>animateHover(event,true)} onPointerLeave={(event)=>animateHover(event,false)} onClick={(event)=>{photoTriggerRef.current=event.currentTarget;setPhoto(item)}} aria-label={`Open ${item.title}`}><img src={item.src} alt={item.title} loading="lazy" /><span>EXPAND ↗</span></button>}</div><div className="gallery-piece-caption"><span>{String(index+1).padStart(2,'0')} / {item.category || item.type.toUpperCase()}</span><h2>{item.title}</h2></div></article>)}</div></section>
+      <section className="gallery-content experience-shell" id="gallery-library"><div className="gallery-library-heading"><span>THE FULL ARCHIVE / PHOTOS & FILMS</span><h2>THE <em>ARCHIVE.</em></h2><p>Explore every frame. Open a photograph or play a film.</p></div><div className="gallery-controls"><span aria-live="polite">{String(items.length).padStart(2, '0')} PIECES</span><div role="group" aria-label="Gallery filter">{[['all','ALL'],['video','FILMS'],['photography','PHOTOS'],['design','DESIGN']].map(([value,label])=><button type="button" key={value} aria-pressed={filter===value} onClick={()=>changeFilter(value)}>{label}</button>)}</div></div><div className="gallery-grid" ref={gridRef}>{items.map((item, index)=><article className="gallery-piece" id={`gallery-item-${item.id}`} key={item.id}><div className="gallery-piece-media">{item.type==='video'?<ReelVideo item={item} controls />:<button type="button" onPointerEnter={(event)=>animateHover(event,true)} onPointerLeave={(event)=>animateHover(event,false)} onClick={(event)=>{photoTriggerRef.current=event.currentTarget;setPhoto(item)}} aria-label={`Open ${item.title}`}><img src={item.src} alt={mediaAlt(item)} loading="lazy" /><span>EXPAND ↗</span></button>}</div><div className="gallery-piece-caption"><span>{String(index+1).padStart(2,'0')} / {item.category || item.type.toUpperCase()}</span><h2>{item.title}</h2></div><p className="gallery-media-description">{mediaDescription(item)}</p></article>)}</div></section>
       <GalleryIsometricWave items={allMedia} />
       <GalleryFinalGrid photos={allPhotos} />
     </main>
     <SiteFooter />
-    {photo && <div className="gallery-lightbox" ref={lightboxRef} role="dialog" aria-modal="true" aria-label={photo.title} onMouseDown={(event)=>{if(event.target===event.currentTarget)closePhoto()}}><button type="button" onClick={closePhoto} aria-label="Close photo">CLOSE ×</button><img src={photo.src} alt={photo.title}/><div className="gallery-lightbox-meta"><span>{photo.category || 'VISUAL ARCHIVE'}</span><strong>{photo.title}</strong></div></div>}
+    {photo && <div className="gallery-lightbox" ref={lightboxRef} role="dialog" aria-modal="true" aria-label={photo.title} onMouseDown={(event)=>{if(event.target===event.currentTarget)closePhoto()}}><button type="button" onClick={closePhoto} aria-label="Close photo">CLOSE ×</button><img src={photo.src} alt={mediaAlt(photo)}/><div className="gallery-lightbox-meta"><span>{photo.category || 'VISUAL ARCHIVE'}</span><strong>{photo.title}</strong></div></div>}
   </div>;
 }
 

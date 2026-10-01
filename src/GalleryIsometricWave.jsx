@@ -1,3 +1,4 @@
+import { mediaAlt } from './media-text.js';
 import React, { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -128,7 +129,7 @@ export default function GalleryIsometricWave({ items }) {
   return <section className="gallery-iso" ref={rootRef} aria-labelledby="gallery-iso-title">
     <div className="gallery-iso-heading experience-shell"><span>THE ARCHIVE / ANOTHER ANGLE</span><h2 id="gallery-iso-title">TAKE IT<br /><em>FOR A SPIN.</em></h2><p>Drag across the frames. Scroll to watch them move.</p></div>
     <div className="gallery-iso-window" aria-label="Isometric gallery of photos and video previews">
-      <div className="gallery-iso-scene">{items.map((item, index) => <a className="gallery-iso-tile" href={`#gallery-item-${item.id}`} key={item.id} onPointerEnter={() => hover(index, true)} onPointerLeave={() => hover(index, false)} onClick={(event) => { if (draggedRef.current) { event.preventDefault(); draggedRef.current = false; } }} aria-label={`View ${item.title} in the archive`}><img src={item.type === 'video' ? item.poster : item.src} alt="" loading="lazy" draggable="false" /><span>{item.type === 'video' ? 'PLAY FILM ↗' : `${String(index + 1).padStart(2, '0')} / VIEW ↗`}</span></a>)}</div>
+      <div className="gallery-iso-scene">{items.map((item, index) => <a className="gallery-iso-tile" href={`#gallery-item-${item.id}`} key={item.id} onPointerEnter={() => hover(index, true)} onPointerLeave={() => hover(index, false)} onClick={(event) => { if (draggedRef.current) { event.preventDefault(); draggedRef.current = false; } }} aria-label={`View ${item.title} in the archive`}><img src={item.type === 'video' ? item.poster : item.src} alt={mediaAlt(item)} loading="lazy" draggable="false" /><span>{item.type === 'video' ? 'PLAY FILM ↗' : `${String(index + 1).padStart(2, '0')} / VIEW ↗`}</span></a>)}</div>
     </div>
     <div className="gallery-iso-foot experience-shell"><span>DRAG TO EXPLORE ↔</span><span>PHOTOS / FILMS / IDEAS</span></div>
   </section>;

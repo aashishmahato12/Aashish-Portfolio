@@ -3,10 +3,18 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { featuredProjects, galleryMedia, webProjects } from '../src/portfolio-data.js';
 
+import { mediaAlt, mediaDescription } from '../src/media-text.js';
+import { creativeBio, officialProfiles } from '../src/seo-data.js';
+
 const dist = resolve(dirname(fileURLToPath(import.meta.url)), '../dist');
 const escapeHtml = (value) => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const link = (href, label) => `<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>`;
-const project = (item, href) => `<li><h2>${link(href, item.title)}</h2><p>${escapeHtml(item.description || item.category)}</p></li>`;
+const profileLinks = () => officialProfiles.map((profile) => link(profile.url, `Aashish Mahato on ${profile.label}`)).join(' · ');
+const thumbnail = (item) => {
+  const src = item.type === 'video' ? item.poster : item.src || item.cover;
+  return src ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(mediaAlt(item))}" loading="lazy" width="320" style="max-width:100%;height:auto"/>` : '';
+};
+const project = (item, href) => `<li>${thumbnail(item)}<h2>${link(href, item.title)}</h2><p>${escapeHtml(mediaDescription(item) || item.category)}</p></li>`;
 const shell = (heading, intro, content) => `<main class="portfolio-fallback"><nav aria-label="Portfolio pages">${link('/', 'Home')}${link('/gallery/', 'Gallery')}${link('/about/', 'About')}</nav><h1>${escapeHtml(heading)}</h1><p class="portfolio-fallback-intro">${escapeHtml(intro)}</p>${content}</main>`;
 
 const groups = [
@@ -23,9 +31,9 @@ const combinedGallery = [...galleryMedia, ...featuredProjects.flatMap((project) 
 const uniqueGallery = combinedGallery.filter((item, index) => combinedGallery.findIndex((other) => other.src === item.src) === index);
 
 const routes = new Map([
-  ['index.html', shell('Aashish Mahato', 'Filmmaker, photographer, designer, and web developer based in Nepal. Explore my work across film, photography, motion graphics, branding, and websites.', `<section><h2>Explore my work</h2><ul>${groups.map(([slug, label]) => `<li>${link(`/work/${slug}/`, label)}</li>`).join('')}</ul></section><section><h2>Selected projects</h2><ul>${featuredProjects.map((item) => project(item, `/work/${item.category === 'Travel Film' ? 'film' : item.category === 'Motion Graphics' ? 'motion' : item.category === 'Graphic Design' ? 'graphic' : 'branding'}/#${item.id}`)).join('')}</ul></section>`)],
-  ['about/index.html', shell('About Aashish Mahato', 'I work across film, photography, design, motion, and web development. I follow an idea into the format that gives it the most life.', `<section><h2>My approach</h2><p>A film can become a photograph. A visual identity can become a digital experience. I refine each project until it meets the client's expectations and my own.</p><p>${link('/#my-work', 'See my skills and selected projects')} · ${link('https://github.com/aashishmahato12', 'View my GitHub projects')}</p></section>`)],
-  ['gallery/index.html', shell('Gallery of films, photography, and design', 'Explore the visual archive of Aashish Mahato.', `<section><h2>Films, photographs, and designs</h2><ul>${uniqueGallery.map((item) => `<li>${link(`/gallery/#gallery-item-${item.id}`, `${item.title} — ${item.category}`)}</li>`).join('')}</ul></section><p>${link('/work/graphic/', 'See graphic design projects')} · ${link('/work/branding/', 'See branding projects')}</p>`)],
+  ['index.html', shell('Aashish Mahato', creativeBio, `<p>${profileLinks()}</p><section><h2>Explore my work</h2><ul>${groups.map(([slug, label]) => `<li>${link(`/work/${slug}/`, label)}</li>`).join('')}</ul></section><section><h2>Selected projects</h2><ul>${featuredProjects.map((item) => project(item, `/work/${item.category === 'Travel Film' ? 'film' : item.category === 'Motion Graphics' ? 'motion' : item.category === 'Graphic Design' ? 'graphic' : 'branding'}/#${item.id}`)).join('')}</ul></section>`)],
+  ['about/index.html', shell('About Aashish Mahato', creativeBio, `<section><h2>My approach</h2><p>A film can become a photograph. A visual identity can become a digital experience. I refine each project until it meets the client's expectations and my own.</p><p>${link('/#my-work', 'See my skills and selected projects')}</p><p>${profileLinks()}</p></section>`)],
+  ['gallery/index.html', shell('Gallery of films, photography, and design', 'Explore the visual archive of Aashish Mahato.', `<section><h2>Films, photographs, and designs</h2><ul>${uniqueGallery.map((item) => `<li>${thumbnail(item)}${link(`/gallery/#gallery-item-${item.id}`, `${item.title} — ${item.category}`)}<p>${escapeHtml(mediaDescription(item))}</p></li>`).join('')}</ul></section><p>${link('/work/graphic/', 'See graphic design projects')} · ${link('/work/branding/', 'See branding projects')}</p>`)],
 ]);
 
 for (const [slug, label, intro, items] of groups) {

@@ -2,11 +2,28 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
+import { searchMeta, structuredData } from './src/seo-data.js';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [tailwindcss()],
+  plugins: [tailwindcss(), {
+    name: 'portfolio-identity',
+    transformIndexHtml(html, context) {
+      const relativeFile = path.relative(root, context.filename).split(path.sep).join('/');
+      const route = Object.keys(searchMeta).find((key) => {
+        const pagePath = searchMeta[key][2];
+        return relativeFile === (pagePath === '/' ? 'index.html' : `${pagePath.slice(1)}index.html`);
+      });
+      if (!route) return html;
+      const clean = html.replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
+      return { html: clean, tags: [
+        { tag: 'script', attrs: { id: 'portfolio-structured-data', type: 'application/ld+json' },
+          children: JSON.stringify(structuredData(route)).replaceAll('<', '\\u003c'), injectTo: 'head' },
+        { tag: 'meta', attrs: { property: 'og:site_name', content: 'Aashish Mahato' }, injectTo: 'head' },
+      ] };
+    },
+  }],
   build: {
     rollupOptions: {
       input: {
