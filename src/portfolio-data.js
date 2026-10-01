@@ -13,6 +13,7 @@ export const heroReel = {
   title: 'Current showreel',
   category: 'Film',
   src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/q_auto:best/f_auto/v1790583244/reel_3.mp4',
+  mobileSrc: 'https://res.cloudinary.com/ghmgpvvn/video/upload/w_960,q_auto:eco,f_mp4/v1790583244/reel_3.mp4',
   poster: '/videos/hero-poster.jpg',
 };
 

@@ -22,14 +22,7 @@ function Header() {
 
 function Hero() {
   const heroRef = useRef(null);
-  const videoRef = useRef(null);
   const [videoReady, setVideoReady] = useState(false);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.play().catch(() => setVideoReady(false));
-  }, []);
 
   useLayoutEffect(() => {
     const hero = heroRef.current;
@@ -142,7 +135,10 @@ function Hero() {
   return (
     <section ref={heroRef} className="hero" id="top" aria-labelledby="hero-title">
       <div className="hero-fallback" aria-hidden="true"><div className="fallback-light" /></div>
-      <video ref={videoRef} className={`hero-video ${videoReady ? 'is-ready' : ''}`} autoPlay muted loop playsInline preload="metadata" poster={heroReel.poster} src={heroReel.src} aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)} />
+      <video className={`hero-video ${videoReady ? 'is-ready' : ''}`} autoPlay muted loop playsInline preload="metadata" poster={heroReel.poster} aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)}>
+        <source src={heroReel.mobileSrc} media="(max-width: 700px)" type="video/mp4" />
+        <source src={heroReel.src} type="video/mp4" />
+      </video>
       <div className="hero-shade" aria-hidden="true" />
       <div className="site-intro" aria-hidden="true"><span className="site-intro-mark">A/M<span>®</span></span><span className="site-intro-rule" /><span className="site-intro-caption">CREATIVE PORTFOLIO / 2026</span></div>
       <Header />

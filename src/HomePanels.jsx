@@ -23,7 +23,7 @@ function PanelVideo({ item, play }) {
     preference.addEventListener('change', sync);
     return () => { video.pause(); document.removeEventListener('visibilitychange', sync); preference.removeEventListener('change', sync); };
   }, [play]);
-  return <video ref={ref} src={item.src} poster={item.poster} muted loop playsInline preload="metadata" aria-label={item.title} />;
+  return <video ref={ref} src={play ? (window.matchMedia('(max-width: 700px)').matches && item.mobileSrc ? item.mobileSrc : item.src) : undefined} poster={item.poster} muted loop playsInline preload="none" aria-label={item.title} />;
 }
 
 export default function HomePanels({ lenisRef }) {

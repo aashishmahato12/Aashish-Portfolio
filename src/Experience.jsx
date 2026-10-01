@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -7,17 +7,19 @@ import { animate, stagger } from 'animejs';
 import App from './App.jsx';
 import HomePanels from './HomePanels.jsx';
 import ParallaxChapters from './ParallaxChapters.jsx';
-import AboutTimeline from './AboutTimeline.jsx';
-import { AboutOpening, AboutAfterTimeline } from './AboutSections.jsx';
-import { GalleryFinalGrid } from './GalleryEffects.jsx';
-import GalleryLetterTitle from './GalleryLetterTitle.jsx';
-import GalleryIsometricWave from './GalleryIsometricWave.jsx';
-import GalleryCinematic from './GalleryCinematic.jsx';
 import { Cursor, CursorFollow, CursorProvider } from './components/animate-ui/components/animate/cursor.jsx';
 import { PreviewLinkCard, PreviewLinkCardContent, PreviewLinkCardImage, PreviewLinkCardPortal, PreviewLinkCardTrigger } from './components/animate-ui/primitives/radix/preview-link-card.jsx';
 import { collaborators, featuredProjects, galleryMedia, heroReel, webProjects } from './portfolio-data.js';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const AboutTimeline = React.lazy(() => import('./AboutTimeline.jsx'));
+const AboutOpening = React.lazy(() => import('./AboutSections.jsx').then((module) => ({ default: module.AboutOpening })));
+const AboutAfterTimeline = React.lazy(() => import('./AboutSections.jsx').then((module) => ({ default: module.AboutAfterTimeline })));
+const GalleryFinalGrid = React.lazy(() => import('./GalleryEffects.jsx').then((module) => ({ default: module.GalleryFinalGrid })));
+const GalleryLetterTitle = React.lazy(() => import('./GalleryLetterTitle.jsx'));
+const GalleryIsometricWave = React.lazy(() => import('./GalleryIsometricWave.jsx'));
+const GalleryCinematic = React.lazy(() => import('./GalleryCinematic.jsx'));
 
 const routeFor = (path) => {
   const skill = path.match(/^\/work\/(film|photography|motion|branding|graphic|digital|web)\/?$/);
@@ -519,5 +521,5 @@ export default function Experience() {
   }, []);
 
   const Page = route.startsWith('skill-') ? SkillPage : { home: Home, gallery: GalleryPage, about: AboutPage }[route];
-  return <><div key={route}><Page skillId={route.startsWith('skill-') ? route.slice(6) : undefined} lenisRef={lenisRef} /></div><div className="experience-transition" ref={overlay} aria-hidden="true"><span>A/M<small>®</small></span><i /><p>IMAGE · MOTION · DESIGN · CODE</p></div></>;
+  return <><Suspense fallback={<div role="status" style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#0d1210', color: '#f5f2eb' }}>Opening {route === 'gallery' ? 'gallery' : 'about'}…</div>}><div key={route}><Page skillId={route.startsWith('skill-') ? route.slice(6) : undefined} lenisRef={lenisRef} /></div></Suspense><div className="experience-transition" ref={overlay} aria-hidden="true"><span>A/M<small>®</small></span><i /><p>IMAGE · MOTION · DESIGN · CODE</p></div></>;
 }
