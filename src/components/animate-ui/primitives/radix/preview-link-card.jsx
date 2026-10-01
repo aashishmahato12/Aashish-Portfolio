@@ -36,17 +36,6 @@ function PreviewLinkCard({
       'viewport.height': height * 3,
     })}`;
 
-  React.useEffect(() => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'image';
-    link.href = imageSrc;
-    document.head.appendChild(link);
-    return () => {
-      document.head.removeChild(link);
-    };
-  }, [imageSrc]);
-
   return (
     <PreviewLinkCardProvider value={{ href, src: imageSrc, width, height }}>
       <HoverCardPrimitive data-slot="preview-link-card" {...props} />
