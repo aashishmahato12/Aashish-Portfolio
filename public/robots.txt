@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.aashish-mahato.com.np/sitemap.xml
+Sitemap: https://aashish-mahato.com.np/sitemap.xml
