@@ -25,7 +25,7 @@ const routeFor = (path) => {
   return path.startsWith('/gallery') ? 'gallery' : path.startsWith('/about') ? 'about' : 'home';
 };
 const searchMeta = {
-  home: ['Aashish Mahato | Filmmaker, Photographer & Designer', 'Explore the films, photography, motion graphics, branding, graphic design, and websites of Aashish Mahato, a multidisciplinary creative based in Nepal.', '/'],
+  home: ['Aashish Mahato — Film, Photography & Design', 'Explore the films, photography, motion graphics, branding, graphic design, and websites of Aashish Mahato, a multidisciplinary creative based in Nepal.', '/'],
   about: ['About Aashish Mahato | Film, Design & Code', 'Meet Aashish Mahato, a Nepal-based creative working across film, photography, design, motion, and web development.', '/about/'],
   gallery: ['Gallery | Films, Photography & Design by Aashish Mahato', 'Browse Aashish Mahato’s visual archive of films, photography, branding, and graphic design projects.', '/gallery/'],
   'skill-film': ['Film Projects | Aashish Mahato', 'Watch selected films and visual storytelling projects by filmmaker Aashish Mahato.', '/work/film/'],
