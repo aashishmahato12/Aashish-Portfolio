@@ -40,6 +40,22 @@ function Hero() {
           gsap.set(intro, { display: 'none' });
           return;
         }
+        if (window.matchMedia('(max-width: 640px)').matches) {
+          gsap.set(intro, { display: 'none' });
+          gsap.from([...first, ...second], {
+            autoAlpha: 0, yPercent: 55, duration: .48, stagger: .025,
+            ease: 'power3.out', clearProps: 'opacity,visibility,transform',
+          });
+          gsap.from(period, {
+            autoAlpha: 0, scale: 0, duration: .35, delay: .3,
+            ease: 'back.out(2)', clearProps: 'opacity,visibility,transform',
+          });
+          gsap.to(hero.querySelector('h1'), {
+            scale: 1.16, autoAlpha: 0, ease: 'none',
+            scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: .8 },
+          });
+          return;
+        }
         const timeline = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
         gsap.set(intro, { display: 'grid', yPercent: 0 });
