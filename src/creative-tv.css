@@ -1,0 +1,17 @@
+.creative-tv{padding:20px 20px 0;background:var(--about-paper);border-bottom:1px solid var(--about-rule)}
+.creative-tv-status{display:flex;justify-content:space-between;gap:10px;color:var(--about-muted);font:600 9px/1.5 'Manrope',sans-serif;letter-spacing:.08em}
+.creative-tv-status>span:first-child{display:flex;align-items:center;gap:7px}.creative-tv-status i{width:5px;height:5px;border-radius:50%;background:#80665a}.creative-tv-status i.is-on{background:#6e8657}
+.creative-tv-stage{position:relative;width:100%;aspect-ratio:1.25;background:radial-gradient(ellipse at 50% 65%,#f7f4eb 0%,transparent 70%)}
+.creative-tv-stage canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:pan-y}.creative-tv-stage canvas:active{cursor:grabbing}
+.creative-tv-fallback{position:absolute;inset:12% 8% 14%;display:grid;place-items:center;background:#101410;border:15px solid #d6cbb7;border-radius:24px;overflow:hidden}.creative-tv-fallback img{width:100%;height:100%;object-fit:contain}
+.creative-tv-remote{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px;margin:0 auto;max-width:390px;background:#262a25;border:1px solid #ffffff20;border-radius:13px;box-shadow:0 5px 12px #1b1d1a15;color:#eae7df}
+.creative-tv-remote button{display:grid;place-items:center;flex-shrink:0;width:34px;height:34px;border:1px solid #ffffff15;border-radius:7px;background:#343930;color:inherit;cursor:pointer}.creative-tv-remote button:hover{background:#4a5143}.creative-tv-remote button:first-child{color:#d69a78}.creative-tv-remote>span{flex:1;text-align:center;font:600 10px/1.4 'Manrope',sans-serif;min-width:0}.creative-tv-hint{margin:14px 0 17px;text-align:center;font-size:10px;line-height:1.6;color:var(--about-muted)}
+.about-page .kinetic-playground{grid-template-columns:.85fr 1.15fr}.kinetic-preview{min-width:0}
+@media(max-width:700px){.about-page .kinetic-playground{grid-template-columns:1fr}.creative-tv{padding:16px 12px 0}.creative-tv-status{font-size:8px}.creative-tv-remote{gap:3px;padding:6px}.creative-tv-remote button{width:30px;height:32px}.creative-tv-remote>span{font-size:9px}.creative-tv-hint{font-size:9px}}
+.creative-tv-drive{position:absolute;bottom:10%;left:31%;width:38%;height:20px;display:flex;flex-direction:column;align-items:center;gap:5px;pointer-events:none}.creative-tv-drive>span{display:block;width:100%;height:5px;border:1px solid #71694f;background:#181f18;box-shadow:0 1px 0 #fff8;border-radius:2px}.creative-tv-drive small{font:600 6px/1 monospace;letter-spacing:.15em;color:#6c715f}.creative-tv-drive.is-loading-disk>span{box-shadow:0 0 10px #b98251;background:#c19a5b}
+.creative-tv-drive{bottom:19%;left:52%;width:23%;height:12px}.creative-tv-drive>span,.creative-tv-drive small{opacity:0}.creative-tv-drive.is-loading-disk>span{opacity:.5}
+
+.creative-tv-remote button:last-child {
+  font-size: 9px;
+  white-space: nowrap;
+}

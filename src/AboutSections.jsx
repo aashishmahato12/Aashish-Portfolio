@@ -1,16 +1,18 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animate } from 'animejs';
+import CreativeTV from './CreativeTV.jsx';
+import FloppyLibrary from './FloppyLibrary.jsx';
+import { MapPin, GraduationCap, Monitor, Clapperboard, Camera, Sparkles, PenTool, Palette, PanelsTopLeft, Code2, ArrowUpRight } from 'lucide-react';
 import { collaborators, featuredProjects, galleryMedia } from './portfolio-data.js';
-import { creativeBio, officialProfiles } from './seo-data.js';
+import { officialProfiles } from './seo-data.js';
 import './about-sections.css';
 
 gsap.registerPlugin(ScrollTrigger);
 const disciplines = [
-  { name: 'Film', description: 'Stories with a sense of place. Travel films through Mustang and Manang.', href: '/work/film/', image: featuredProjects[0].cover, caption: 'Mustang / Travel film' },
+  { name: 'Film', description: 'Stories with a sense of place. Travel films through Mustang and Manang.', href: '/work/film/', image: featuredProjects[0].cover, video: '/media/videos/mustang.mp4', caption: 'Mustang / Travel film' },
   { name: 'Photography', description: 'People, places, and the little things that deserve a second look.', href: '/work/photography/', image: galleryMedia.find(item => item.id === 'street-portrait').src, caption: 'Street portrait / Photography' },
-  { name: 'Motion', description: 'Turning a static idea into something you can feel in motion.', href: '/work/motion/', image: featuredProjects[2].cover, caption: 'Product Motion / Digital licence' },
+  { name: 'Motion', description: 'Turning a static idea into something you can feel in motion.', href: '/work/motion/', image: featuredProjects[2].cover, video: '/media/videos/product-motion.mp4', caption: 'Product Motion / Digital licence' },
   { name: 'Branding', description: 'A visual identity that carries an idea from the page into the world.', href: '/work/branding/', image: featuredProjects[3].cover, caption: 'CIC Nepal / Brand presentation' },
   { name: 'Graphic design', description: 'Campaigns, layouts, and graphics with a clear point of view.', href: '/work/graphic/', image: featuredProjects[5].cover, caption: 'Cosmic Group / Campaign graphics' },
   { name: 'Digital', description: 'Thoughtful interfaces that connect visual design with everyday use.', href: '/work/digital/', image: featuredProjects[4].cover, caption: 'Decora / Digital presentation' },
@@ -67,29 +69,35 @@ export function AboutOpening() {
     </section>
     <section className="kinetic-intro" id="kinetic-intro" aria-labelledby="kinetic-intro-title">
       <div className="kinetic-section-label"><span>01 / THE PERSON</span><span>A LITTLE CONTEXT</span></div>
-      <div className="kinetic-intro-grid"><h2 id="kinetic-intro-title" data-reveal>Behind<br />the work.<br /><em>Beyond a title.</em></h2><div data-reveal><p className="kinetic-bio">{creativeBio.replace('Aashish Mahato is', 'I’m').replace('His portfolio', 'My portfolio')}</p><p>I move between mediums to make the idea feel right. From a frame in the mountains to an identity on a screen, I care about how the work feels—and how it works.</p><div className="kinetic-socials">{officialProfiles.map(profile => <a key={profile.url} href={profile.url} target="_blank" rel="noopener noreferrer">{profile.label} ↗</a>)}</div></div></div>
-      <div className="kinetic-fieldwork"><figure><img src="/media/posters/manang.jpg" alt="Himalayan landscape from Aashish Mahato’s Manang travel film" loading="lazy" /><figcaption>IN THE FIELD / MANANG</figcaption></figure><div><span>MY WORK STARTS WITH LOOKING.</span><p>At people. At places.<br />At how things move.</p><a href="/gallery/">See my perspective ↗</a></div><figure><img src="/media/branding/document.webp" alt="CIC Nepal brand presentation designed by Aashish Mahato" loading="lazy" /><figcaption>AT THE DESK / CIC NEPAL</figcaption></figure></div>
+      <div className="kinetic-intro-grid">
+        <h2 id="kinetic-intro-title" data-reveal>Behind the work.<br /><em>A little about me.</em></h2>
+        <div className="about-person-summary" data-reveal>
+          <p className="kinetic-bio">I’m Aashish Mahato. I bring ideas to life through film, photography, design, and code.</p>
+          <div className="about-fact-chips"><span><MapPin size={16} aria-hidden="true" />Kathmandu, Nepal</span><span><GraduationCap size={16} aria-hidden="true" />Herald College Kathmandu</span></div>
+        </div>
+      </div>
+      <div className="about-story-cards">
+        <article className="about-story-card" data-reveal><div className="about-card-icon"><Monitor aria-hidden="true" /></div><span>THE START / 2020</span><h3>Curiosity came first.</h3><p>Getting hands-on with a computer sparked my interest in IT, graphic design, and video editing. I started exploring, experimenting, and learning by making.</p></article>
+        <article className="about-story-card" data-reveal><div className="about-card-icon"><Palette aria-hidden="true" /></div><span>THE PRACTICE / SINCE 2023</span><h3>From small to meaningful.</h3><p>LinkedIn banners grew into social media posters and real design briefs. My time with Cosmic Electrical sharpened my eye for layout and visual communication.</p><a href="/work/graphic/">See my design work <ArrowUpRight size={16} aria-hidden="true" /></a></article>
+        <article className="about-story-card" data-reveal><div className="about-card-icon"><GraduationCap aria-hidden="true" /></div><span>THE NEXT CHAPTER / 2026</span><h3>Still learning. Still making.</h3><p>Travel brought me into filmmaking and photography. At Herald College Kathmandu, I’m building web applications and exploring motion graphics through college projects.</p><a href="/work/">Explore my work <ArrowUpRight size={16} aria-hidden="true" /></a></article>
+      </div>
+      <div className="kinetic-socials about-profile-row">{officialProfiles.map(profile => <a key={profile.url} href={profile.url} target="_blank" rel="noopener noreferrer">{profile.label}<ArrowUpRight size={14} aria-hidden="true" /></a>)}</div>
+      <div className="kinetic-fieldwork"><figure><div className="kinetic-fieldwork-image"><img src="/media/posters/manang.jpg" alt="Himalayan landscape from Aashish Mahato’s Manang travel film" loading="lazy" /></div><figcaption>IN THE FIELD / MANANG</figcaption></figure><figure><div className="kinetic-fieldwork-image"><img src="/media/branding/document.webp" alt="CIC Nepal brand presentation designed by Aashish Mahato" loading="lazy" /></div><figcaption>AT THE DESK / CIC NEPAL</figcaption></figure></div>
     </section>
-    <section className="kinetic-manifesto" aria-labelledby="kinetic-quote-title"><span>MY POINT OF VIEW</span><h2 id="kinetic-quote-title">{'The idea comes first. I find its form.'.split(' ').map((word, index) => <span className="kinetic-quote-word" key={index}>{word} </span>)}</h2><p>A film can become a photograph. A visual identity can become a digital experience. Each project gets the form it deserves.</p><span className="kinetic-drawing-line" aria-hidden="true" /></section>
+    <section className="kinetic-manifesto" aria-labelledby="kinetic-quote-title"><div className="kinetic-manifesto-inner"><h2 id="kinetic-quote-title">{'The idea comes first. I find its form.'.split(' ').map((word, index) => <span className="kinetic-quote-word" key={index}>{word} </span>)}</h2><div><p>A film can become a photograph. A visual identity can become a digital experience. Each project gets the form it deserves.</p><a href="/gallery/">See my perspective <ArrowUpRight size={16} aria-hidden="true" /></a></div></div></section>
   </div>;
 }
 
 export function AboutAfterTimeline() {
   const ref = useRef(null);
-  const previewRef = useRef(null);
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(null);
   useMotion(ref);
-  useLayoutEffect(() => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const animation = animate(previewRef.current, { opacity: [0, 1], translateY: [30, 0], rotate: [-2, 0], duration: 600, ease: 'out(3)' });
-    return () => animation.revert();
-  }, [active]);
-  const selected = disciplines[active];
+  const selected = active === null ? null : disciplines[active];
   return <div className="kinetic-about" ref={ref}>
     <section className="kinetic-practice" aria-labelledby="kinetic-practice-title"><div className="kinetic-section-label"><span>03 / THE PRACTICE</span><span>CHOOSE A CREATIVE DIRECTION</span></div><h2 id="kinetic-practice-title" data-reveal>One creative.<br /><em>Multiple disciplines.</em></h2>
-      <div className="kinetic-playground"><div className="kinetic-discipline-list" role="group" aria-label="Choose a discipline to preview">{disciplines.map((item, index) => <button type="button" aria-pressed={active === index} onClick={() => setActive(index)} key={item.name}><span>0{index + 1}</span><strong>{item.name}</strong><span aria-hidden="true">↗</span></button>)}</div><div className="kinetic-preview" ref={previewRef}><div className="kinetic-preview-image"><img src={selected.image} alt={selected.caption} loading="lazy" /></div><div className="kinetic-preview-caption" aria-live="polite"><span>{selected.caption}</span><p>{selected.description}</p><a href={selected.href}>Explore {selected.name.toLowerCase()} <span aria-hidden="true">↗</span></a></div></div></div>
+      <div className="kinetic-playground"><FloppyLibrary items={disciplines} active={active} onSelect={setActive} /><div className="kinetic-preview"><CreativeTV item={selected} channel={active} count={disciplines.length} onChannel={setActive} /><div className="kinetic-preview-caption" aria-live="polite">{selected ? <><span>{selected.caption}</span><p>{selected.description}</p><a href={selected.href}>Explore {selected.name.toLowerCase()} <span aria-hidden="true">↗</span></a></> : <><span>CRT / WAITING FOR A DISK</span><p>Open the toolkit and choose a disk to see what I make.</p></>}</div></div></div>
     </section>
     <section className="kinetic-partners" aria-labelledby="kinetic-partner-title"><div className="kinetic-section-label"><span>04 / COLLABORATIONS</span><span>GOOD PEOPLE. GOOD WORK.</span></div><h2 id="kinetic-partner-title" data-reveal>Better <em>together.</em></h2><div className="kinetic-logos">{collaborators.map(company => <div key={company.name}><img src={company.logo} alt={company.name} loading="lazy" /></div>)}</div></section>
-    <section className="about-conversation" aria-labelledby="about-conversation-title"><span>YOUR PROJECT. ONE ACCOUNTABLE PARTNER.</span><h2 id="about-conversation-title" data-reveal>Let’s connect the scope and build the delivery plan.</h2><p>Tell me what you want to make, who it’s for, and when you need it.</p><a href="/contact/">Start a conversation <span aria-hidden="true">↗</span></a></section>
+    <section className="about-conversation" aria-labelledby="about-conversation-title"><span>YOUR PROJECT. ONE ACCOUNTABLE PARTNER.</span><h2 id="about-conversation-title" data-reveal>Let’s connect the scope and build the delivery plan.</h2><div className="about-conversation-copy"><p>Tell me what you want to make, who it’s for, and when you need it.</p><a href="/contact/">Start a conversation <ArrowUpRight size={16} aria-hidden="true" /></a></div></section>
   </div>;
 }

@@ -4,15 +4,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 import './about-timeline.css';
+import { Monitor, Clapperboard, Palette, Camera, GraduationCap, ArrowUpRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin);
 const milestones = [
-  { year: '01', title: 'PLACES IN MOTION', detail: 'Mustang and Manang: travel films exploring landscapes in Nepal.' },
-  { year: '02', title: 'PEOPLE AND PLACES', detail: 'Street portraits, Boudhanath, prayer flags, and nature photography.' },
-  { year: '03', title: 'IDENTITY AND DESIGN', detail: 'CIC Nepal booklet presentations, Decora identity cards, and Cosmic Group campaign graphics.' },
-  { year: '04', title: 'IDEAS IN MOVEMENT', detail: 'Product Motion: an animated presentation of a digital driving licence experience.' },
-  { year: '05', title: 'DESIGN INTO CODE', detail: 'Cosmic Electrical, UniSync, and this portfolio: websites and React interfaces with public project links.' },
+  { year: '2020', title: 'WHERE IT STARTED', detail: 'Getting hands-on with a computer opened a new world for me. I became curious about IT, design, and video editing, and started exploring what I could make.' },
+  { year: '2023', title: 'MY FIRST COMPLETE VIDEO', detail: 'I finished my first complete video. It was an early step in learning how to put footage, edits, and ideas together into something of my own.', href: 'https://www.youtube.com/watch?v=Bd_L1rkCnG4', link: 'Watch my first video' },
+  { year: '2023 ONWARD', title: 'SMALL DESIGNS, BIGGER IDEAS', detail: 'I started with small graphic design projects: LinkedIn banners, then social media posters. Working with Cosmic Electrical later helped me sharpen my layouts, visual communication, and approach to real design briefs.', href: '/work/graphic/', link: 'Explore my graphic design' },
+  { year: '24 OCT 2024', title: 'TAKING THE CAMERA OUT', detail: 'My Mustang travel film brought my interest in editing into the outdoors. Around the same time, I began exploring photography too—finding stories in landscapes, people, and everyday moments.', href: 'https://www.instagram.com/reel/DBfY2XxoWRX/', link: 'Watch the Mustang reel' },
+  { year: '17 JUN 2026', title: 'CONNECTING DESIGN AND CODE', detail: 'I joined Herald College Kathmandu and started building web applications. A college project also led me into motion graphics when I needed to create a video. Film, photography, design, animation, and code began to connect as different ways to bring an idea to life.', href: '/work/', link: 'See where the journey has led' },
 ];
+const milestoneIcons = [Monitor, Clapperboard, Palette, Camera, GraduationCap];
 const path = 'M 72 0 C 540 125 55 210 328 320 S 550 470 294 600 S 52 750 322 850 S 535 1000 300 1120';
 
 export default function AboutTimeline() {
@@ -48,10 +50,10 @@ export default function AboutTimeline() {
     return () => media.revert();
   }, []);
   return <section className="about-timeline experience-shell" ref={ref} aria-labelledby="about-timeline-title">
-    <div className="experience-section-top"><span>02 / SELECTED WORK</span><span>FILM / IMAGE / DESIGN / CODE</span></div>
-    <div className="about-timeline-heading"><span>WAYS I MAKE</span><h2 id="about-timeline-title">ALWAYS<br /><em>IN MOTION.</em></h2><p>A selection of the films, photographs, designs, and websites in my portfolio.</p></div>
-    <div className="about-timeline-stage"><svg viewBox="0 0 600 1200" aria-hidden="true" preserveAspectRatio="none"><path className="about-timeline-guide" d={path} /><path className="about-timeline-path" d={path} /><circle className="about-timeline-ball" r="15" cx="0" cy="0" />{milestones.map((item, index) => <circle className="about-timeline-marker" key={item.year} cx={[280,315,295,310,310][index]} cy={155 + index * 220} r="11" />)}</svg>
-      <div className="about-timeline-list">{milestones.map((item) => <article className="about-timeline-entry" key={item.year}><span>{item.year} / PORTFOLIO</span><h3>{item.title}</h3><p>{item.detail}</p></article>)}</div>
+    <div className="experience-section-top"><span>02 / MY JOURNEY</span><span>2020 / STILL EXPLORING</span></div>
+    <div className="about-timeline-heading"><span>HOW I GOT HERE</span><h2 id="about-timeline-title">ALWAYS<br /><em>IN MOTION.</em></h2><p>It started with a computer and curiosity. Every new thing I tried gave me another way to create.</p></div>
+    <div className="about-timeline-stage"><svg className="about-journey-path" viewBox="0 0 600 1200" aria-hidden="true" preserveAspectRatio="none"><path className="about-timeline-guide" d={path} /><path className="about-timeline-path" d={path} /><circle className="about-timeline-ball" r="15" cx="0" cy="0" />{milestones.map((item, index) => <circle className="about-timeline-marker" key={item.year} cx={[280,315,295,310,310][index]} cy={155 + index * 220} r="11" />)}</svg>
+      <div className="about-timeline-list">{milestones.map((item, index) => <article className="about-timeline-entry" key={`${item.year}-${index}`}><div className="about-milestone-top"><div className="about-milestone-icon">{React.createElement(milestoneIcons[index], { size: 23, 'aria-hidden': true })}</div><span>{item.year}</span></div><h3>{item.title}</h3><p>{item.detail}</p>{item.href && <a className="about-timeline-link" href={item.href} {...(item.href.startsWith('https://') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{item.link}<ArrowUpRight size={15} aria-hidden="true" /></a>}</article>)}</div>
     </div>
   </section>;
 }
