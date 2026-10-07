@@ -30,3 +30,9 @@
 .floppy-flying-disk .floppy-label strong{font-size:13px}.floppy-flying-disk .floppy-label>span:first-child,.floppy-flying-disk .floppy-label small{font-size:6px}
 .floppy-choice:disabled{cursor:wait}
 .is-open .floppy-mini{opacity:0;transition:transform .6s,opacity .2s .15s}.is-closing .floppy-mini{opacity:1;transition:opacity .3s .6s}
+#discipline-disks:not([hidden]){display:flow-root}
+.floppy-library.is-closing #discipline-disks{overflow:hidden}
+.floppy-box-lid{transition:transform .65s cubic-bezier(.65,0,.25,1),opacity .65s;transform-style:preserve-3d}
+.is-open .floppy-box-lid{transform:translateY(-48px) rotateX(100deg);opacity:.8}
+.is-closing .floppy-box-lid{transform:rotateX(-12deg);opacity:1;transition-delay:.55s}
+.is-closing .floppy-box-title svg{transform:rotate(0deg)}

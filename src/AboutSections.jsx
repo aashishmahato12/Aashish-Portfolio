@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CreativeTV from './CreativeTV.jsx';
@@ -18,6 +18,14 @@ const disciplines = [
   { name: 'Digital', description: 'Thoughtful interfaces that connect visual design with everyday use.', href: '/work/digital/', image: featuredProjects[4].cover, caption: 'Decora / Digital presentation' },
   { name: 'Web', description: 'Bringing the design to life in a working website.', href: '/work/web/', image: '/media/branding/macbook-mockup-3.webp', caption: 'CIC Nepal / Website mockup' },
 ];
+const stillWork = featuredProjects.flatMap(project => project.media).filter(media => media.type === 'photo');
+disciplines.forEach(discipline => {
+  if (discipline.video) return;
+  const category = { Photography: 'Photography', Branding: 'Branding', 'Graphic design': 'Graphic Design', Digital: 'Digital', Web: 'Digital' }[discipline.name];
+  const media = discipline.name === 'Photography' ? galleryMedia : stillWork;
+  const slides = media.filter(item => item.type === 'photo' && item.category === category);
+  discipline.slides = [...slides.filter(item => item.src === discipline.image), ...slides.filter(item => item.src !== discipline.image)];
+});
 
 function useMotion(ref) {
   useLayoutEffect(() => {
@@ -91,11 +99,20 @@ export function AboutOpening() {
 export function AboutAfterTimeline() {
   const ref = useRef(null);
   const [active, setActive] = useState(null);
+  const toolkitRef = useRef(null);
+  const [filmIndex, setFilmIndex] = useState(() => Math.floor(Math.random() * 2));
+  const selectChannel = index => { if (index === 0) setFilmIndex(Math.floor(Math.random() * 2)); setActive(index); };
+  const nextFilm = () => setFilmIndex(index => (index + 1) % 2);
   useMotion(ref);
-  const selected = active === null ? null : disciplines[active];
+  const selected = useMemo(() => {
+    if (active === null) return null;
+    if (active !== 0) return disciplines[active];
+    const film = featuredProjects[filmIndex];
+    return { ...disciplines[0], image: film.cover, video: film.media[0].src, caption: `${film.title} / Travel film`, rotateFilms: true };
+  }, [active, filmIndex]);
   return <div className="kinetic-about" ref={ref}>
     <section className="kinetic-practice" aria-labelledby="kinetic-practice-title"><div className="kinetic-section-label"><span>03 / THE PRACTICE</span><span>CHOOSE A CREATIVE DIRECTION</span></div><h2 id="kinetic-practice-title" data-reveal>One creative.<br /><em>Multiple disciplines.</em></h2>
-      <div className="kinetic-playground"><FloppyLibrary items={disciplines} active={active} onSelect={setActive} /><div className="kinetic-preview"><CreativeTV item={selected} channel={active} count={disciplines.length} onChannel={setActive} /><div className="kinetic-preview-caption" aria-live="polite">{selected ? <><span>{selected.caption}</span><p>{selected.description}</p><a href={selected.href}>Explore {selected.name.toLowerCase()} <span aria-hidden="true">↗</span></a></> : <><span>CRT / WAITING FOR A DISK</span><p>Open the toolkit and choose a disk to see what I make.</p></>}</div></div></div>
+      <div className="kinetic-playground"><FloppyLibrary controlRef={toolkitRef} items={disciplines} active={active} onSelect={selectChannel} /><div className="kinetic-preview"><CreativeTV item={selected} channel={active} count={disciplines.length} onChannel={selectChannel} onVideoEnd={nextFilm} onEject={origin => toolkitRef.current?.eject(origin)} /><div className="kinetic-preview-caption" aria-live="polite">{selected ? <><span>{selected.caption}</span><p>{selected.description}</p><a href={selected.href}>Explore {selected.name.toLowerCase()} <span aria-hidden="true">↗</span></a></> : <><span>CRT / WAITING FOR A DISK</span><p>Open the toolkit and choose a disk to see what I make.</p></>}</div></div></div>
     </section>
     <section className="kinetic-partners" aria-labelledby="kinetic-partner-title"><div className="kinetic-section-label"><span>04 / COLLABORATIONS</span><span>GOOD PEOPLE. GOOD WORK.</span></div><h2 id="kinetic-partner-title" data-reveal>Better <em>together.</em></h2><div className="kinetic-logos">{collaborators.map(company => <div key={company.name}><img src={company.logo} alt={company.name} loading="lazy" /></div>)}</div></section>
     <section className="about-conversation" aria-labelledby="about-conversation-title"><span>YOUR PROJECT. ONE ACCOUNTABLE PARTNER.</span><h2 id="about-conversation-title" data-reveal>Let’s connect the scope and build the delivery plan.</h2><div className="about-conversation-copy"><p>Tell me what you want to make, who it’s for, and when you need it.</p><a href="/contact/">Start a conversation <ArrowUpRight size={16} aria-hidden="true" /></a></div></section>

@@ -3,7 +3,7 @@
 .creative-tv-status>span:first-child{display:flex;align-items:center;gap:7px}.creative-tv-status i{width:5px;height:5px;border-radius:50%;background:#80665a}.creative-tv-status i.is-on{background:#6e8657}
 .creative-tv-stage{position:relative;width:100%;aspect-ratio:1.25;background:radial-gradient(ellipse at 50% 65%,#f7f4eb 0%,transparent 70%)}
 .creative-tv-stage canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:pan-y}.creative-tv-stage canvas:active{cursor:grabbing}
-.creative-tv-fallback{position:absolute;inset:12% 8% 14%;display:grid;place-items:center;background:#101410;border:15px solid #d6cbb7;border-radius:24px;overflow:hidden}.creative-tv-fallback img{width:100%;height:100%;object-fit:contain}
+.creative-tv-fallback{position:absolute;inset:12% 8% 14%;display:grid;place-items:center;background:#101410;border:15px solid #d6cbb7;border-radius:24px;overflow:hidden}.creative-tv-fallback img{width:100%;height:100%;object-fit:cover}
 .creative-tv-remote{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px;margin:0 auto;max-width:390px;background:#262a25;border:1px solid #ffffff20;border-radius:13px;box-shadow:0 5px 12px #1b1d1a15;color:#eae7df}
 .creative-tv-remote button{display:grid;place-items:center;flex-shrink:0;width:34px;height:34px;border:1px solid #ffffff15;border-radius:7px;background:#343930;color:inherit;cursor:pointer}.creative-tv-remote button:hover{background:#4a5143}.creative-tv-remote button:first-child{color:#d69a78}.creative-tv-remote>span{flex:1;text-align:center;font:600 10px/1.4 'Manrope',sans-serif;min-width:0}.creative-tv-hint{margin:14px 0 17px;text-align:center;font-size:10px;line-height:1.6;color:var(--about-muted)}
 .about-page .kinetic-playground{grid-template-columns:.85fr 1.15fr}.kinetic-preview{min-width:0}
@@ -15,3 +15,28 @@
   font-size: 9px;
   white-space: nowrap;
 }
+.creative-tv-preview-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px auto 0;max-width:390px;font:600 9px/1.4 'Manrope',sans-serif;letter-spacing:.04em;color:var(--about-muted)}
+.creative-tv-preview-tools button{display:flex;align-items:center;gap:7px;padding:8px 10px;background:transparent;border:1px solid var(--about-rule);border-radius:6px;color:var(--about-ink);cursor:pointer;font:inherit}
+.tv-expanded{position:fixed;inset:0;width:100vw;max-width:none;height:100dvh;max-height:none;padding:0;margin:0;border:0;background:#0b0e0c;color:#f4efdf;overflow-y:auto;overscroll-behavior:contain}
+.tv-expanded::backdrop{background:#0b0e0c}
+.tv-expanded-close{position:fixed;z-index:3;right:24px;top:20px;display:flex;align-items:center;gap:8px;padding:10px 15px;background:#171c18dc;color:#fff;border:1px solid #ffffff40;border-radius:30px;cursor:pointer}
+.tv-expanded-scroll{height:190dvh}
+.tv-expanded-sticky{position:sticky;top:0;height:100dvh;display:grid;place-items:center}
+.tv-expanded-frame{width:78%;height:72%;border-radius:12px;overflow:hidden;background:#101410}
+.tv-expanded-frame img,.tv-expanded-frame video{display:block;width:100%;height:100%;object-fit:cover}
+.tv-expanded-instruction{position:absolute;bottom:22px;left:0;right:0;text-align:center;font-size:12px;pointer-events:none;text-shadow:0 1px 6px #000}
+@media(prefers-reduced-motion:reduce){.tv-expanded-frame{width:100%;height:100%;border-radius:0}.tv-expanded-scroll{height:100dvh}.tv-expanded-instruction{display:none}}
+.tv-expanded-frame video{object-fit:cover}
+.tv-expanded-rail{display:flex;width:100%;height:100%;will-change:transform}
+.tv-expanded-rail img{flex:0 0 100%;min-width:100%;height:100%;object-fit:cover}
+.tv-expanded-frame{width:100%;height:100%;transform-origin:center;will-change:transform}
+
+.has-3d-controls .creative-tv-remote{position:absolute;inset:0;max-width:none;padding:0;margin:0;background:none;border:0;box-shadow:none;border-radius:0;pointer-events:none}
+.has-3d-controls .creative-tv-remote button{position:absolute;padding:0;pointer-events:auto;opacity:0;border-radius:4px;min-width:0;cursor:pointer}
+.has-3d-controls .creative-tv-remote button:focus-visible{opacity:1;background:#343930;outline:2px solid #d69a78;outline-offset:2px}
+.has-3d-controls .creative-tv-remote button:disabled{cursor:default}
+.creative-tv-preview-tools{justify-content:center}
+.tv-expanded{--preview-shade:1;background:rgba(11,14,12,var(--preview-shade))}
+.tv-expanded::backdrop{background:transparent}
+.creative-tv-stage>canvas{position:absolute;inset:0;width:100%;height:100%}
+.has-3d-controls .creative-tv-remote{z-index:2}
