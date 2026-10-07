@@ -7,3 +7,11 @@
 .parallax-chapter-content p{font:400 clamp(16px,2vw,25px) 'DM Sans',sans-serif;color:#f0eee8}
 @media(max-width:700px){.parallax-chapter-content h2{font-size:clamp(45px,12vw,80px)}}
 @media(prefers-reduced-motion:reduce){.parallax-chapter-image{will-change:auto}}
+
+.parallax-chapter-link{display:inline-flex;align-items:center;justify-content:center;margin-top:22px;padding:15px 23px;border:1px solid #f5f1e870;border-radius:40px;color:#f5f1e8;text-decoration:none;font:600 11px 'DM Sans',sans-serif;letter-spacing:.1em;background:#07100b30;transition:background .2s}
+.parallax-chapter-link:hover,.parallax-chapter-link:focus-visible{background:#f5f1e8;color:#17221c}
+.work-parallax-skills .parallax-chapter-content{width:min(100%,1200px);box-sizing:border-box}
+.work-parallax-skills .parallax-chapter-content h2{font-size:clamp(45px,8vw,125px);overflow-wrap:normal}
+.work-parallax-skills .parallax-chapter-content p{line-height:1.5;max-width:650px;margin-inline:auto}
+.work-parallax-skills .parallax-chapter-shade{background:linear-gradient(0deg,#07100bbb,#07100b75 50%,#07100bbb)}
+@media(max-width:700px){.work-parallax-skills .parallax-chapter-content{padding:24px}.work-parallax-skills .parallax-chapter-content h2{font-size:clamp(35px,8.5vw,60px);letter-spacing:-.065em}}

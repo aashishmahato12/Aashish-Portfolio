@@ -14,6 +14,8 @@ const escapeXml = (value) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt
 
 const pages = [
   ['/', [heroReel.poster, ...featuredProjects.map((project) => project.cover)]],
+  ['/work/', featuredProjects.map(project => project.cover)],
+  ['/contact/', []],
   ['/about/', ['/media/photos/tree-final-18.webp']],
   ['/gallery/', [...galleryMedia, ...projectMedia].map(mediaImage)],
   ['/work/film/', [heroReel.poster, ...featuredProjects.filter((project) => project.category === 'Travel Film').map((project) => project.cover)]],

@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { heroReel } from './portfolio-data.js';
+import { SiteHeader } from './SiteChrome.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,15 +10,6 @@ function HeroLetters({ text }) {
   return [...text].map((letter, index) => (
     <span className={`hero-letter ${letter === '.' ? 'hero-period' : ''}`} key={`${letter}-${index}`}>{letter}</span>
   ));
-}
-
-function Header() {
-  return (
-    <header className="site-header">
-      <a className="wordmark" href="#top" aria-label="Aashish Mahato, back to top">A/M<span>®</span></a>
-      <nav className="hero-nav" aria-label="Main navigation"><a href="/#my-work">My Work</a><a href="/gallery/">Gallery</a><a href="/about/">About</a></nav>
-    </header>
-  );
 }
 
 function Hero() {
@@ -134,7 +126,7 @@ function Hero() {
         <source src={heroReel.src} type="video/mp4" />
       </video>
       <div className="hero-shade" aria-hidden="true" />
-      <Header />
+      <SiteHeader current="home" />
       <div className="hero-content">
         <span className="hero-reveal-accent" aria-hidden="true" />
         <span className="hero-kicker">AASHISH MAHATO <span>—</span> MULTIDISCIPLINARY CREATIVE</span>

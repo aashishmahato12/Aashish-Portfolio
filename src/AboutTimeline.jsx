@@ -7,11 +7,11 @@ import './about-timeline.css';
 
 gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, MotionPathPlugin);
 const milestones = [
-  { year: '2022', title: 'THE FIRST FRAME', detail: 'Early creative exploration. Replace with your real milestone.' },
-  { year: '2023', title: 'FINDING A VOICE', detail: 'A placeholder for the work that shaped your direction.' },
-  { year: '2024', title: 'MORE MEDIUMS', detail: 'A placeholder for film, photography, design, or digital work.' },
-  { year: '2025', title: 'NEW CONNECTIONS', detail: 'A placeholder for a meaningful project or collaboration.' },
-  { year: '2026', title: 'STILL MAKING', detail: 'A placeholder for what you are building now.' },
+  { year: '01', title: 'PLACES IN MOTION', detail: 'Mustang and Manang: travel films exploring landscapes in Nepal.' },
+  { year: '02', title: 'PEOPLE AND PLACES', detail: 'Street portraits, Boudhanath, prayer flags, and nature photography.' },
+  { year: '03', title: 'IDENTITY AND DESIGN', detail: 'CIC Nepal booklet presentations, Decora identity cards, and Cosmic Group campaign graphics.' },
+  { year: '04', title: 'IDEAS IN MOVEMENT', detail: 'Product Motion: an animated presentation of a digital driving licence experience.' },
+  { year: '05', title: 'DESIGN INTO CODE', detail: 'Cosmic Electrical, UniSync, and this portfolio: websites and React interfaces with public project links.' },
 ];
 const path = 'M 72 0 C 540 125 55 210 328 320 S 550 470 294 600 S 52 750 322 850 S 535 1000 300 1120';
 
@@ -48,10 +48,10 @@ export default function AboutTimeline() {
     return () => media.revert();
   }, []);
   return <section className="about-timeline experience-shell" ref={ref} aria-labelledby="about-timeline-title">
-    <div className="experience-section-top"><span>02 / THE JOURNEY</span><span>MILESTONES / EDITABLE EXAMPLES</span></div>
-    <div className="about-timeline-heading"><span>THE PATH SO FAR</span><h2 id="about-timeline-title">ALWAYS<br /><em>IN MOTION.</em></h2><p>Sample milestones for now. The dates and details can be replaced with your story.</p></div>
+    <div className="experience-section-top"><span>02 / SELECTED WORK</span><span>FILM / IMAGE / DESIGN / CODE</span></div>
+    <div className="about-timeline-heading"><span>WAYS I MAKE</span><h2 id="about-timeline-title">ALWAYS<br /><em>IN MOTION.</em></h2><p>A selection of the films, photographs, designs, and websites in my portfolio.</p></div>
     <div className="about-timeline-stage"><svg viewBox="0 0 600 1200" aria-hidden="true" preserveAspectRatio="none"><path className="about-timeline-guide" d={path} /><path className="about-timeline-path" d={path} /><circle className="about-timeline-ball" r="15" cx="0" cy="0" />{milestones.map((item, index) => <circle className="about-timeline-marker" key={item.year} cx={[280,315,295,310,310][index]} cy={155 + index * 220} r="11" />)}</svg>
-      <div className="about-timeline-list">{milestones.map((item) => <article className="about-timeline-entry" key={item.year}><span>{item.year} / PLACEHOLDER</span><h3>{item.title}</h3><p>{item.detail}</p></article>)}</div>
+      <div className="about-timeline-list">{milestones.map((item) => <article className="about-timeline-entry" key={item.year}><span>{item.year} / PORTFOLIO</span><h3>{item.title}</h3><p>{item.detail}</p></article>)}</div>
     </div>
   </section>;
 }

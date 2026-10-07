@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "node scripts/generate-sitemap.mjs && vite build && node scripts/render-page-fallbacks.mjs",
-    "preview": "vite preview --host 0.0.0.0"
+    "build": "node scripts/generate-sitemap.mjs && vite build && node scripts/render-page-fallbacks.mjs && node scripts/check-seo.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "check:seo": "node scripts/check-seo.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

@@ -11,7 +11,7 @@ const chapters = [
   { title: 'POSSIBILITIES.', line: 'Every idea asks for its own form.', image: featuredProjects[3].cover },
 ];
 
-export default function ParallaxChapters() {
+export default function ParallaxChapters({ items = chapters, label = 'CREATIVE PERSPECTIVES', className = '' }) {
   const ref = useRef(null);
   useLayoutEffect(() => {
     const media = gsap.matchMedia();
@@ -31,9 +31,9 @@ export default function ParallaxChapters() {
     });
     return () => media.revert();
   }, []);
-  return <div className="parallax-chapters" ref={ref}>{chapters.map((chapter, index) => <section className="parallax-chapter" key={chapter.title} aria-label={chapter.title}>
+  return <div className={`parallax-chapters ${className}`} ref={ref}>{items.map((chapter, index) => <section className="parallax-chapter" key={chapter.title} id={chapter.id} aria-label={chapter.title}>
     <div className="parallax-chapter-image" style={{ backgroundImage: `url(${chapter.image})` }} />
     <div className="parallax-chapter-shade" />
-    <div className="parallax-chapter-content"><span>{String(index + 1).padStart(2, '0')} / CREATIVE PERSPECTIVES</span><h2>{chapter.title}</h2><p>{chapter.line}</p></div>
+    <div className="parallax-chapter-content"><span>{String(index + 1).padStart(2, '0')} / {label}</span><h2>{chapter.title}</h2><p>{chapter.line}</p>{chapter.href && <a className="parallax-chapter-link" href={chapter.href}>EXPLORE THE WORK ↗</a>}</div>
   </section>)}</div>;
 }

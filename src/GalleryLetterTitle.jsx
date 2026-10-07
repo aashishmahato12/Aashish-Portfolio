@@ -13,12 +13,12 @@ const letterImages = [
   galleryMedia.find((item) => item.id === 'boudhanath').src,
 ];
 
-export default function GalleryLetterTitle() {
+export default function GalleryLetterTitle({ text = 'GALLERY', prefix = 'THE', as: Tag = 'h1', className = '', paused = false, onCycle }) {
   const ref = useRef(null);
   const autoControllerRef = useRef(null);
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
     const letters = Array.from(ref.current.querySelectorAll('.gallery-hover-letter'));
     let timeline;
     let delay;
@@ -41,14 +41,14 @@ export default function GalleryLetterTitle() {
       if (stopped) return;
       const widths = letters.map((letter) => letter.querySelector('.gallery-hover-glyph').getBoundingClientRect().width);
       const order = gsap.utils.shuffle(letters.map((_, index) => index));
-      timeline = gsap.timeline({ onComplete: () => { reset(); delay = gsap.delayedCall(1.05, play); } });
+      timeline = gsap.timeline({ onComplete: () => { reset(); if (onCycle) onCycle(); else delay = gsap.delayedCall(1.05, play); } });
       order.forEach((index, position) => {
         const letter = letters[index];
         const glyph = letter.querySelector('.gallery-hover-glyph');
         const image = letter.querySelector('.gallery-hover-image');
         const width = widths[index];
         const desired = Math.max(width * 1.45, Math.min(window.innerWidth * .14, 190));
-        const expanded = Math.min(desired, width + Math.max(12, window.innerWidth - 40 - widths.reduce((sum, value) => sum + value, 0)));
+        const expanded = Math.min(desired, width + Math.max(12, (className.includes("identity-gallery-title") ? ref.current.clientWidth - 30 : window.innerWidth - 40) - widths.reduce((sum, value) => sum + value, 0)));
         const at = Math.max(0, position * gsap.utils.random(.68, .82) + gsap.utils.random(-.07, .07));
         const direction = gsap.utils.random([-1, 1]);
         const tilt = gsap.utils.random(4, 10) * direction;
@@ -78,7 +78,7 @@ export default function GalleryLetterTitle() {
       stop();
       autoControllerRef.current = null;
     };
-  }, []);
+  }, [text, paused]);
 
   const show = (event) => {
     autoControllerRef.current?.stop();
@@ -118,8 +118,8 @@ export default function GalleryLetterTitle() {
     autoControllerRef.current?.schedule(1.5);
   };
 
-  return <h1 className="gallery-intro-title" aria-label="The Gallery." ref={ref}>
-    <span className="gallery-title-line" aria-hidden="true"><span>{Array.from('THE').map((character, index) => <span className="masked-title-char" key={`${character}-${index}`}>{character}</span>)}</span></span>
-    <span className="gallery-title-line" aria-hidden="true"><span className="gallery-hover-word">{Array.from('GALLERY').map((character, index) => <span className="gallery-hover-letter" key={`${character}-${index}`} onPointerEnter={show} onPointerMove={move} onPointerLeave={hide}><span className="masked-title-char gallery-hover-glyph">{character}</span><span className="gallery-hover-image"><img src={letterImages[index]} alt="" loading="eager" draggable="false" /></span></span>)}<i className="masked-title-dot">.</i></span></span>
-  </h1>;
+  return <Tag className={`gallery-intro-title ${className}`} aria-label={`${prefix ? prefix + " " : ""}${text}.`} ref={ref}>
+    <span className="gallery-title-line" aria-hidden="true"><span>{Array.from(prefix || '').map((character, index) => <span className="masked-title-char" key={`${character}-${index}`}>{character}</span>)}</span></span>
+    <span className="gallery-title-line" aria-hidden="true"><span className="gallery-hover-word">{Array.from(text).map((character, index) => character === ' ' ? <span className="gallery-hover-space" key={index}> </span> : <span className="gallery-hover-letter" key={`${character}-${index}`} onPointerEnter={show} onPointerMove={move} onPointerLeave={hide}><span className="masked-title-char gallery-hover-glyph">{character}</span><span className="gallery-hover-image"><img src={letterImages[index % letterImages.length]} alt="" loading="eager" draggable="false" /></span></span>)}<i className="masked-title-dot">.</i></span></span>
+  </Tag>;
 }
