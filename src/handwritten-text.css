@@ -1,1 +1,5 @@
-.handwritten-ink{display:inline-block;white-space:nowrap}
+.handwriting-word{position:relative}
+.handwritten-ink{position:relative;display:inline-block;white-space:nowrap}
+.handwriting-strokes{position:absolute;overflow:visible;opacity:0;pointer-events:none;font-family:inherit}
+
+.handwriting-baseline{display:inline-block;width:0;height:0;vertical-align:baseline}

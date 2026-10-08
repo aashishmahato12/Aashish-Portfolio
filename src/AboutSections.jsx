@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CreativeTV from './CreativeTV.jsx';
@@ -61,6 +61,8 @@ function useMotion(ref) {
 
 export function AboutOpening() {
   const ref = useRef(null);
+  const [firstNameWritten, setFirstNameWritten] = useState(false);
+  const finishFirstName = useCallback(() => setFirstNameWritten(true), []);
   useMotion(ref);
   return <div className="kinetic-about" ref={ref}>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" />
@@ -69,7 +71,7 @@ export function AboutOpening() {
       <div className="about-cover-top"><span>THE PERSON BEHIND THE WORK</span><span>KATHMANDU, NEPAL</span></div>
       <div className="about-cover-name">
         <div className="about-cover-handwriting" aria-hidden="true"><HandwrittenText>Creative</HandwrittenText></div>
-        <h1 className="kinetic-title" id="kinetic-title" aria-label="Aashish Mahato"><span className="kinetic-full-name" aria-hidden="true">{['AASHISH', 'MAHATO'].map(name => <span className="kinetic-name-word" key={name}>{Array.from(name).map((letter, index) => <span className="kinetic-char" key={index}>{letter}</span>)}</span>)}</span></h1>
+        <h1 className="kinetic-title" id="kinetic-title" aria-label="Aashish Mahato"><span className="kinetic-full-name" aria-hidden="true">{['AASHISH', 'MAHATO'].map((name, index) => <HandwrittenText className="kinetic-name-word" key={name} speed={2.3} delay={index ? .08 : .5} play={index === 0 || firstNameWritten} onComplete={index === 0 ? finishFirstName : undefined}>{name}</HandwrittenText>)}</span></h1>
         <div className="about-cover-footer"><p>Film. Photography. Design. Code.</p><a href="#kinetic-intro">MEET ME <span>↓</span></a></div>
       </div>
     </section>
