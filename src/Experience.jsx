@@ -11,6 +11,7 @@ import App from './App.jsx';
 import { SiteHeader as SiteNav, SiteFooter } from './SiteChrome.jsx';
 import { searchMeta, searchImages, structuredData, officialProfiles } from './seo-data.js';
 import HomePanels from './HomePanels.jsx';
+import HandwrittenText from './HandwrittenText.jsx';
 import ParallaxChapters from './ParallaxChapters.jsx';
 import { PreviewLinkCard, PreviewLinkCardContent, PreviewLinkCardImage, PreviewLinkCardPortal, PreviewLinkCardTrigger } from './components/animate-ui/primitives/radix/preview-link-card.jsx';
 import { collaborators, featuredProjects, galleryMedia, heroReel, webProjects } from './portfolio-data.js';
@@ -51,6 +52,10 @@ function updateSearchMeta(route) {
   document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
   document.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
   document.querySelector('meta[property="og:image"]')?.setAttribute('content', `https://aashish-mahato.com.np${searchImages[route]}`);
+  document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', `https://aashish-mahato.com.np${searchImages[route]}`);
+  document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', title);
+  document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', description);
+  document.querySelector('meta[property="og:image:alt"]')?.setAttribute('content', route.startsWith('skill-') ? title : 'Aashish Mahato — creative in film, photography, design, and code');
 }
 
 function usePageMotion(dependency) {
@@ -127,10 +132,15 @@ function HomeCollaborators() {
   </section>;
 }
 
-const savariTestimonials = [
+const clientTestimonials = [
   { discipline: 'Graphic design', emphasis: ['clean and thoughtful visuals', 'strong and professional visual identity'], quote: 'Aashish brought our ideas to life through clean and thoughtful visuals. His attention to detail and creative approach gave Savari a strong and professional visual identity.' },
   { discipline: 'Web', emphasis: ['clean, user-friendly website', 'overall user experience', 'polished final product'], quote: 'Aashish transformed our ideas into a clean, user-friendly website for Savari. He paid close attention to both the visual details and the overall user experience, resulting in a polished final product.' },
   { discipline: 'Videos', emphasis: ['creativity and strong storytelling', 'framing, editing, and detail'], quote: 'Aashish brought creativity and strong storytelling to Savari’s visual content. His attention to framing, editing, and detail helped create videos that effectively represented our project.' },
+  {
+    discipline: 'Web development & design', author: 'Hardik Maharjan', wide: true,
+    emphasis: ['technical expertise, creativity, and design skills', 'dedicated, creative, and willing to go the extra mile', 'bright future ahead of him'],
+    quote: 'Aashish has helped me on several of my projects, including Dream Chasers and the “Will You Go on a Date With Me?” website, and his contribution has been exceptional.\n\nAashish has a strong combination of technical expertise, creativity, and design skills. His ability to bring ideas to life through web development and thoughtful design has helped me tremendously across these projects. He is not only highly skilled but also dedicated, creative, and willing to go the extra mile to make sure the final result is something to be proud of.\n\nI genuinely appreciate all the support and hard work he has put into the projects we’ve worked on together. I have no doubt that Aashish has a bright future ahead of him, and with his talent and passion for technology, I believe he will go very far.',
+  },
 ];
 
 function HomeTestimonials({ number = "05" }) {
@@ -141,7 +151,7 @@ function HomeTestimonials({ number = "05" }) {
       const context = gsap.context(() => {
         gsap.utils.toArray('.testimonial-card').forEach((card) => {
           gsap.from(card.querySelectorAll('.testimonial-word'), {
-            opacity: 0, y: 4, duration: .24, stagger: .065, ease: 'power1.out',
+            opacity: 0, y: 4, duration: .24, stagger: Math.min(.065, 2.4 / card.querySelectorAll('.testimonial-word').length), ease: 'power1.out',
             scrollTrigger: { trigger: card, start: 'top 85%', once: true },
           });
         });
@@ -152,33 +162,19 @@ function HomeTestimonials({ number = "05" }) {
   }, []);
   return <section ref={sectionRef} className="home-testimonials" id="client-voices" aria-labelledby="testimonials-title">
     <div className="experience-shell">
-      <SectionTop number={number} label="CLIENT VOICES" aside="SAVARI / THE CYBERIANS" />
-      <div className="testimonials-heading"><h2 id="testimonials-title">From idea<br />to <em>impact.</em></h2><p>One project. Three creative disciplines.<br />In the words of the project manager.</p></div>
-      <div className="testimonials-grid">{savariTestimonials.map((item, index) => <figure className="testimonial-card" key={item.discipline}>
+      <SectionTop number={number} label="CLIENT VOICES" aside="CLIENTS & COLLABORATORS" />
+      <div className="testimonials-heading"><div className="signature-heading"><HandwrittenText className="signature-accent">Feedback</HandwrittenText><h2 id="testimonials-title">From idea<br />to <em>impact.</em></h2></div><p>Creative work. Shared experiences.<br />In the words of the people I work with.</p></div>
+      <div className="testimonials-grid">{clientTestimonials.map((item, index) => <figure className={`testimonial-card${item.wide ? " testimonial-card--wide" : ""}`} key={item.discipline}>
         <div className="testimonial-category"><span>{item.discipline}</span><span aria-hidden="true">0{index + 1}</span></div>
         <span className="testimonial-quote-mark" aria-hidden="true">“</span>
-        <blockquote><p aria-label={item.quote}>{item.quote.split(new RegExp(`(${item.emphasis.join('|')})`, 'g')).map((part, partIndex) => {
+        <blockquote>{item.quote.split("\n\n").map((paragraph, paragraphIndex) => <p key={paragraphIndex} aria-label={paragraph}>{paragraph.split(new RegExp(`(${item.emphasis.join('|')})`, 'g')).map((part, partIndex) => {
           const words = part.split(/(\s+)/).map((word, wordIndex) => /\s+/.test(word) ? word : <span className="testimonial-word" aria-hidden="true" key={wordIndex}>{word}</span>);
           return item.emphasis.includes(part) ? <strong key={partIndex}>{words}</strong> : <React.Fragment key={partIndex}>{words}</React.Fragment>;
-        })}</p></blockquote>
-        <figcaption><div className="testimonial-author"><img className="testimonial-avatar" src="/media/photos/biraj-sharma.png" alt="Biraj Sharma" width="40" height="40" loading="lazy" /><div><strong>Biraj Sharma</strong><span>Project Manager, The Cyberians</span></div></div><img className="testimonial-company-logo" src="/media/logos/savari.webp" alt="Savari" width="72" height="40" loading="lazy" /></figcaption>
+        })}</p>)}</blockquote>
+        <figcaption><div className="testimonial-author">{item.author ? <span className="testimonial-avatar testimonial-initials" aria-hidden="true">HM</span> : <img className="testimonial-avatar" src="/media/photos/biraj-sharma.png" alt="Biraj Sharma" width="40" height="40" loading="lazy" />}<div><strong>{item.author || "Biraj Sharma"}</strong><span>{item.author ? "Developer, Dream Chasers" : "Project Manager, The Cyberians"}</span></div></div>{!item.author && <img className="testimonial-company-logo" src="/media/logos/savari.webp" alt="Savari" width="72" height="40" loading="lazy" />}</figcaption>
       </figure>)}</div>
     </div>
   </section>;
-}
-
-function HomeProof() {
-  const sectionRef = useRef(null);
-  const mosaic = [galleryMedia[1], featuredProjects[3], galleryMedia[3], featuredProjects[0], galleryMedia[7], featuredProjects[5], featuredProjects[1], galleryMedia[5], featuredProjects[4], galleryMedia[8], featuredProjects[2], galleryMedia[9]];
-  const projects = [featuredProjects[3], featuredProjects[4], featuredProjects[5]];
-  useLayoutEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
-    const context = gsap.context(() => {
-      gsap.from('.home-proof-tile', { autoAlpha: 0, y: 28, scale: .92, duration: .65, stagger: .055, ease: 'power3.out', scrollTrigger: { trigger: '.home-proof-mosaic', start: 'top 85%', once: true } });
-    }, sectionRef);
-    return () => context.revert();
-  }, []);
-  return <section className="home-proof" ref={sectionRef} aria-label="Selected collaborations"><div className="home-proof-inner"><div className="home-proof-mosaic" aria-hidden="true">{mosaic.map((item, index) => <div className="home-proof-tile" key={`${item.id}-${index}`}><img src={item.cover || item.src} alt="" loading="lazy" /></div>)}</div><div className="home-proof-cards">{projects.map((project, index) => { const company = collaborators.find((item) => item.name === project.company); return <a className="home-proof-card" href={projectHref(project)} key={project.id} data-reveal><div className="home-proof-card-head"><span className="home-proof-card-logo">{company && <img src={company.logo} alt="" loading="lazy" />}</span><div><strong>{project.company}</strong><small>{project.category}</small></div><span aria-hidden="true">↗</span></div><span className="home-proof-card-index">{String(index + 1).padStart(2, '0')} / SELECTED PROJECT</span><h3>{project.title}</h3><p>{project.description}</p></a>; })}</div></div></section>;
 }
 
 const homeRoles = ['FILMMAKER', 'PHOTOGRAPHER', 'MOTION DESIGNER', 'BRAND DESIGNER', 'GRAPHIC DESIGNER', 'UI DESIGNER', 'WEB DEVELOPER'];
@@ -243,7 +239,6 @@ function Home({ lenisRef }) {
     <HomeSkills />
     <HomeCollaborators />
     <HomeTestimonials />
-    <HomeProof />
     <ProjectGuide />
     <SiteFooter />
   </main></>;
@@ -597,7 +592,7 @@ function GalleryPage() {
   return <div className="inner-page gallery-page" ref={pageRef}>
     <SiteNav current="gallery" />
     <main>
-      <section className="inner-intro gallery-intro experience-shell"><SectionTop number="01" label="GALLERY" aside="WATCH / VIEW / EXPLORE" /><GalleryLetterTitle /><p>Moving images and still frames across photography, film, branding, and graphic design.</p></section>
+      <section className="inner-intro gallery-intro experience-shell"><SectionTop number="01" label="GALLERY" aside="WATCH / VIEW / EXPLORE" /><div className="signature-heading signature-page-title"><HandwrittenText className="signature-accent">Explore</HandwrittenText><GalleryLetterTitle /></div><p>Moving images and still frames across photography, film, branding, and graphic design.</p></section>
       <GalleryCinematic items={allMedia} />
       <section className="gallery-content experience-shell" id="gallery-library"><div className="gallery-library-heading"><span>THE FULL ARCHIVE / PHOTOS & FILMS</span><h2>THE <em>ARCHIVE.</em></h2><p>Explore every frame. Open a photograph or play a film.</p></div><div className="gallery-controls"><span aria-live="polite">{String(items.length).padStart(2, '0')} PIECES</span><div role="group" aria-label="Gallery filter">{[['all','ALL'],['video','FILMS'],['photography','PHOTOS'],['design','DESIGN']].map(([value,label])=><button type="button" key={value} aria-pressed={filter===value} onClick={()=>changeFilter(value)}>{label}</button>)}</div></div><div className="gallery-grid" ref={gridRef}>{items.map((item, index)=><article className="gallery-piece" id={`gallery-item-${item.id}`} key={item.id}><div className="gallery-piece-media">{item.type==='video'?<ReelVideo item={item} controls />:<button type="button" onPointerEnter={(event)=>animateHover(event,true)} onPointerLeave={(event)=>animateHover(event,false)} onClick={(event)=>{photoTriggerRef.current=event.currentTarget;setPhoto(item)}} aria-label={`Open ${item.title}`}><img src={item.src} alt={mediaAlt(item)} loading="lazy" /><span>EXPAND ↗</span></button>}</div><div className="gallery-piece-caption"><span>{String(index+1).padStart(2,'0')} / {item.category || item.type.toUpperCase()}</span><h2>{item.title}</h2></div><p className="gallery-media-description">{mediaDescription(item)}</p></article>)}</div></section>
       <GalleryIsometricWave items={allMedia} />
@@ -610,7 +605,7 @@ function GalleryPage() {
 
 function WorkPage() {
   usePageMotion('work');
-  return <div className="inner-page work-page"><SiteNav current="work" /><main><section className="inner-intro experience-shell"><SectionTop number="01" label="WORK" aside="SELECTED PROJECTS / KATHMANDU, NEPAL" /><h1>MY WORK<span>.</span></h1><p>Film, photography, motion, branding, graphic design, digital experiences, and websites by Aashish Mahato.</p></section><ParallaxChapters className="work-parallax-skills" label="CREATIVE DISCIPLINES" items={workSkills.map(skill => ({ title: `${skill.name}.`, line: skill.line, image: skill.cover, id: `practice-${skill.id}`, href: `/work/${skill.id}/` }))} /><section className="work-service-context experience-shell"><div><h2>Explore the visual archive</h2><p>Browse photographs, film frames, and design projects in the <a href="/gallery/">Gallery</a>, or <a href="/about/">learn about Aashish</a> and his approach.</p></div><div><h2>Have a project in mind?</h2><p><a href="/contact/">Contact Aashish Mahato</a> to discuss the scope and delivery plan.</p></div></section></main><SiteFooter /></div>;
+  return <div className="inner-page work-page"><SiteNav current="work" /><main><section className="inner-intro experience-shell"><SectionTop number="01" label="WORK" aside="SELECTED PROJECTS / KATHMANDU, NEPAL" /><div className="signature-heading signature-page-title"><HandwrittenText className="signature-accent">Selected</HandwrittenText><h1>MY WORK<span>.</span></h1></div><p>Film, photography, motion, branding, graphic design, digital experiences, and websites by Aashish Mahato.</p></section><ParallaxChapters className="work-parallax-skills" label="CREATIVE DISCIPLINES" items={workSkills.map(skill => ({ title: `${skill.name}.`, line: skill.line, image: skill.cover, id: `practice-${skill.id}`, href: `/work/${skill.id}/` }))} /><section className="work-service-context experience-shell"><div><h2>Explore the visual archive</h2><p>Browse photographs, film frames, and design projects in the <a href="/gallery/">Gallery</a>, or <a href="/about/">learn about Aashish</a> and his approach.</p></div><div><h2>Have a project in mind?</h2><p><a href="/contact/">Contact Aashish Mahato</a> to discuss the scope and delivery plan.</p></div></section></main><SiteFooter /></div>;
 }
 
 function ContactPage() {
@@ -623,7 +618,7 @@ function ContactPage() {
     font.href = 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap';
     document.head.append(font);
   }, []);
-  return <div className="inner-page contact-page"><SiteNav current="contact" /><main><section className="inner-intro experience-shell"><SectionTop number="01" label="CONTACT" aside="KATHMANDU, NEPAL" /><h1>LET’S TALK<span>.</span></h1><p>Contact Aashish Mahato about film, photography, branding, graphic design, motion graphics, and web projects.</p></section><section className="contact-content experience-shell" aria-labelledby="contact-options-title"><div><span className="experience-eyebrow">YOUR PROJECT. ONE ACCOUNTABLE PARTNER.</span><h2 id="contact-options-title">Start a conversation.</h2><p>I’m based in Kathmandu, Nepal. Send me a message through Instagram or LinkedIn with what you want to make, who it’s for, and your timeline.</p><div className="contact-profile-links">{officialProfiles.filter(profile => ['Instagram', 'LinkedIn'].includes(profile.label)).map(profile => <a className="experience-text-link" href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">Message Aashish on {profile.label} ↗</a>)}</div></div><div><h2>Before we start</h2><ul><li>What you need: a film, photographs, a visual identity, graphics, or a website.</li><li>Your audience, project scope, timeline, and budget.</li><li>Examples or references that explain your direction.</li></ul><p>Explore my <a href="/work/">Work</a>, browse the <a href="/gallery/">Gallery</a>, or read <a href="/about/">About me</a> before getting in touch.</p></div></section><HomeTestimonials number="02" /></main><SiteFooter /></div>;
+  return <div className="inner-page contact-page"><SiteNav current="contact" /><main><section className="inner-intro experience-shell"><SectionTop number="01" label="CONTACT" aside="KATHMANDU, NEPAL" /><div className="signature-heading signature-page-title"><HandwrittenText className="signature-accent">Connect</HandwrittenText><h1>LET’S TALK<span>.</span></h1></div><p>Contact Aashish Mahato about film, photography, branding, graphic design, motion graphics, and web projects.</p></section><section className="contact-content experience-shell" aria-labelledby="contact-options-title"><div><span className="experience-eyebrow">YOUR PROJECT. ONE ACCOUNTABLE PARTNER.</span><h2 id="contact-options-title">Start a conversation.</h2><p>I’m based in Kathmandu, Nepal. Send me a message through Instagram or LinkedIn with what you want to make, who it’s for, and your timeline.</p><div className="contact-profile-links">{officialProfiles.filter(profile => ['Instagram', 'LinkedIn'].includes(profile.label)).map(profile => <a className="experience-text-link" href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">Message Aashish on {profile.label} ↗</a>)}</div></div><div><h2>Before we start</h2><ul><li>What you need: a film, photographs, a visual identity, graphics, or a website.</li><li>Your audience, project scope, timeline, and budget.</li><li>Examples or references that explain your direction.</li></ul><p>Explore my <a href="/work/">Work</a>, browse the <a href="/gallery/">Gallery</a>, or read <a href="/about/">About me</a> before getting in touch.</p></div></section><HomeTestimonials number="02" /></main><SiteFooter /></div>;
 }
 
 function AboutPage() {

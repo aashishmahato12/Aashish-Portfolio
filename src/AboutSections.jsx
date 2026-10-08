@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CreativeTV from './CreativeTV.jsx';
+import HandwrittenText from './HandwrittenText.jsx';
 import FloppyLibrary from './FloppyLibrary.jsx';
 import { MapPin, GraduationCap, Monitor, Clapperboard, Camera, Sparkles, PenTool, Palette, PanelsTopLeft, Code2, ArrowUpRight } from 'lucide-react';
 import { collaborators, featuredProjects, galleryMedia } from './portfolio-data.js';
@@ -67,7 +68,7 @@ export function AboutOpening() {
       <img className="about-cover-portrait" src="/media/photos/about-backlight-white.png" alt="Backlit portrait of Aashish Mahato looking over his shoulder" width="1456" height="1080" fetchPriority="high" />
       <div className="about-cover-top"><span>THE PERSON BEHIND THE WORK</span><span>KATHMANDU, NEPAL</span></div>
       <div className="about-cover-name">
-        <div className="about-cover-handwriting" aria-hidden="true"><span>Creative</span></div>
+        <div className="about-cover-handwriting" aria-hidden="true"><HandwrittenText>Creative</HandwrittenText></div>
         <h1 className="kinetic-title" id="kinetic-title" aria-label="Aashish Mahato"><span className="kinetic-full-name" aria-hidden="true">{['AASHISH', 'MAHATO'].map(name => <span className="kinetic-name-word" key={name}>{Array.from(name).map((letter, index) => <span className="kinetic-char" key={index}>{letter}</span>)}</span>)}</span></h1>
         <div className="about-cover-footer"><p>Film. Photography. Design. Code.</p><a href="#kinetic-intro">MEET ME <span>↓</span></a></div>
       </div>

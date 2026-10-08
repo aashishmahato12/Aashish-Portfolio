@@ -16,7 +16,7 @@ export default defineConfig({
         return relativeFile === (pagePath === '/' ? 'index.html' : `${pagePath.slice(1)}index.html`);
       });
       if (!route) return html;
-      const clean = html.replace(/<title>[\s\S]*?<\/title>/gi, '').replace(/<meta\b[^>]*(?:name=["'](?:description|robots|twitter:card)["']|property=["']og:[^"']*["'])[^>]*>/gi, '').replace(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi, '').replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
+      const clean = html.replace(/<title>[\s\S]*?<\/title>/gi, '').replace(/<meta\b[^>]*(?:name=["'](?:description|robots|twitter:[^"']*)["']|property=["']og:[^"']*["'])[^>]*>/gi, '').replace(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi, '').replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
       const [title, description, pagePath] = searchMeta[route];
       return { html: clean, tags: [
         { tag: 'title', children: title, injectTo: 'head' },
@@ -25,6 +25,10 @@ export default defineConfig({
         { tag: 'link', attrs: { rel: 'canonical', href: `${siteUrl}${pagePath}` }, injectTo: 'head' },
         ...Object.entries({ type: 'website', url: `${siteUrl}${pagePath}`, title, description, image: `${siteUrl}${searchImages[route]}` }).map(([key, content]) => ({ tag: 'meta', attrs: { property: `og:${key}`, content }, injectTo: 'head' })),
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' }, injectTo: 'head' },
+        { tag: 'meta', attrs: { name: 'twitter:image', content: `${siteUrl}${searchImages[route]}` }, injectTo: 'head' },
+        { tag: 'meta', attrs: { name: 'twitter:title', content: title }, injectTo: 'head' },
+        { tag: 'meta', attrs: { name: 'twitter:description', content: description }, injectTo: 'head' },
+        { tag: 'meta', attrs: { property: 'og:image:alt', content: route.startsWith('skill-') ? title : 'Aashish Mahato — creative in film, photography, design, and code' }, injectTo: 'head' },
         { tag: 'script', attrs: { id: 'portfolio-structured-data', type: 'application/ld+json' },
           children: JSON.stringify(structuredData(route)).replaceAll('<', '\\u003c'), injectTo: 'head' },
         { tag: 'meta', attrs: { property: 'og:site_name', content: 'Aashish Mahato' }, injectTo: 'head' },

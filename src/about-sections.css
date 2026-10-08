@@ -127,3 +127,14 @@
 .kinetic-name-word{display:flex;justify-content:center;width:100%}
 .about-cover-handwriting{font-size:clamp(38px,10vw,68px);margin-bottom:12px}
 }
+
+/* Breathing room for the personal introduction. */
+.kinetic-intro{padding-top:clamp(88px,8vw,120px);padding-bottom:clamp(88px,8vw,120px)}
+.kinetic-intro-grid{margin-top:56px}
+.kinetic-intro .about-story-cards{margin-top:56px;gap:24px}
+.kinetic-intro .about-story-card{padding:34px}
+.kinetic-intro .about-story-card h3{margin:16px 0 18px}
+.kinetic-intro .about-profile-row{margin-top:40px;row-gap:20px}
+.kinetic-intro .kinetic-fieldwork{margin-top:64px;gap:24px}
+@media(max-width:950px){.kinetic-intro .about-story-card{padding:26px}.kinetic-intro .about-story-cards{gap:18px}}
+@media(max-width:700px){.kinetic-intro{padding-top:64px;padding-bottom:64px}.kinetic-intro-grid{margin-top:38px}.kinetic-intro .about-story-cards{margin-top:40px;gap:20px}.kinetic-intro .about-story-card{padding:26px}.kinetic-intro .about-profile-row{margin-top:32px}.kinetic-intro .kinetic-fieldwork{margin-top:44px;gap:16px}}

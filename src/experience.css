@@ -759,3 +759,18 @@ html.lenis{scroll-behavior:auto}
 @media(max-width:1000px){.header-name{display:none}.creative-header nav a{padding:11px 16px}}
 @media(max-width:600px){.inner-nav.creative-header{min-height:118px;flex-direction:column;align-items:stretch;gap:14px;padding:16px 20px}.header-identity{justify-content:center}.creative-header .inner-logo{font-size:28px}.creative-header nav{justify-content:space-between;gap:0;padding:4px;font-size:10px}.creative-header nav a{padding:9px 12px;gap:7px}.creative-header nav .header-contact{margin-left:0}.header-arrow{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.creative-header nav a,.header-arrow{transition:none}}
+
+.testimonial-card--wide{grid-column:1/-1;padding:36px}
+.testimonial-card--wide blockquote{max-width:920px}
+.testimonial-card--wide blockquote p+p{margin-top:20px}
+.testimonial-card figcaption .testimonial-initials{display:grid;place-items:center;background:#111;color:#fff;font-size:11px;font-weight:600;line-height:1}
+@media(max-width:700px){.testimonial-card--wide{padding:24px}.testimonial-card--wide blockquote p+p{margin-top:18px}}
+
+/* Handwritten accents echo the About portrait without replacing body type. */
+.signature-heading{position:relative;isolation:isolate}
+.signature-accent{display:block;position:relative;z-index:1;width:fit-content;font:400 clamp(48px,7.8vw,125px)/.9 'Mr Dafoe','Brush Script MT',cursive;letter-spacing:0;color:#e34530;transform:rotate(-12deg);transform-origin:center center;margin:0 0 -.28em 1vw;padding-right:12px}
+.signature-page-title{margin:90px 0 45px}
+.inner-intro .signature-page-title h1{margin:0}
+.signature-page-title .signature-accent{font-size:clamp(48px,7.8vw,125px);margin-bottom:-.28em}
+.testimonials-heading .signature-accent{margin-bottom:-.2em;font-size:clamp(48px,6vw,88px)}
+@media(max-width:700px){.signature-page-title{margin:64px 0 35px}.signature-page-title .signature-accent{font-size:clamp(45px,11vw,75px);margin-bottom:5px}.testimonials-heading .signature-accent{font-size:clamp(45px,11vw,75px);margin-bottom:5px}}

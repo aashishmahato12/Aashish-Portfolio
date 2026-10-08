@@ -98,7 +98,7 @@ export default function HomePanels({ lenisRef }) {
   }, [current]);
 
   return <section className="home-panels" ref={rootRef} id="home-gallery" aria-labelledby="home-gallery-title">
-    <div className="experience-shell home-panels-intro"><div className="experience-section-top"><span>01 / THE MOVING IMAGE</span><span>A VISUAL FIRST LOOK</span></div><span className="home-panels-kicker">THE PORTFOLIO IN FRAMES</span><h2 id="home-gallery-title">THE WORK <em>MOVES.</em></h2><p>Film, photographs, and the ideas between them. Scroll through the work.</p></div>
+    <div className="experience-shell home-panels-intro"><div className="experience-section-top"><span>01 / THE MOVING IMAGE</span><span>A VISUAL FIRST LOOK</span></div><span className="home-panels-kicker">THE PORTFOLIO IN FRAMES</span><h2 id="home-gallery-title">THE WORK <em>MOVES.</em></h2><p>From travel films and portraits to brand identities and digital experiences, I explore different ways to bring an idea to life. Each frame, visual, and interaction is shaped by the story it needs to tell. Scroll through a selection of my work across film, photography, design, and code.</p></div>
     <div className="home-panel-stage">
       <div className="home-panel-track">{panels.map((item, index) => <article className="home-panel" id={`work-panel-${index + 1}`} key={item.id}>
         <div className="home-panel-media">{item.type === 'video' ? <PanelVideo item={item} play={stageVisible && current === index} /> : <img src={item.src} alt={mediaAlt(item)} loading="lazy" />}</div>

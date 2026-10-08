@@ -24,11 +24,11 @@ export const searchMeta = {
   'skill-web': ['Web Developer in Kathmandu, Nepal | Aashish Mahato', 'Explore responsive websites and React interfaces by Aashish Mahato, a web developer based in Kathmandu, Nepal.', '/work/web/'],
 };
 export const searchImages = {
-  home: '/videos/hero-poster.jpg',
-  work: '/videos/hero-poster.jpg',
-  contact: '/media/photos/tree-final-18.webp',
-  about: '/media/photos/tree-final-18.webp',
-  gallery: '/media/photos/tree-final-27.webp',
+  home: '/media/social/aashish-mahato-preview.jpg',
+  work: '/media/social/aashish-mahato-preview.jpg',
+  contact: '/media/social/aashish-mahato-preview.jpg',
+  about: '/media/social/aashish-mahato-preview.jpg',
+  gallery: '/media/social/aashish-mahato-preview.jpg',
   'skill-film': '/media/posters/mustang.jpg',
   'skill-photography': '/media/photos/tree-final-27.webp',
   'skill-motion': '/media/posters/product-motion.jpg',
