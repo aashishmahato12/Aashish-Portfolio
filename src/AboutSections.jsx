@@ -62,18 +62,15 @@ export function AboutOpening() {
   const ref = useRef(null);
   useMotion(ref);
   return <div className="kinetic-about" ref={ref}>
-    <section className="kinetic-hero" aria-labelledby="kinetic-title">
-      <img className="kinetic-hero-background" src="/media/photos/about-hero-stage.jpg" alt="" width="1536" height="1024" fetchPriority="high" />
-      <div className="kinetic-topline"><span>AASHISH MAHATO</span><span>KATHMANDU, NEPAL / MULTIDISCIPLINARY CREATIVE</span></div>
-      <div className="kinetic-stage">
-        <div className="kinetic-hero-copy">
-          <span className="kinetic-hero-eyebrow">ABOUT ME / CREATIVE IN KATHMANDU</span>
-          <h1 className="kinetic-title" id="kinetic-title" aria-label="Aashish Mahato">{['AASHISH', 'MAHATO.'].map(line => <span aria-hidden="true" key={line}>{Array.from(line).map((letter, index) => <span className="kinetic-char" key={index}>{letter}</span>)}</span>)}</h1>
-          <div className="kinetic-hero-description"><span>FILMMAKER. PHOTOGRAPHER.<br />DESIGNER. DEVELOPER.</span><p>I turn observations into images,<br />ideas into identities,<br />and designs into experiences.</p></div>
-        </div>
-        <span className="kinetic-hero-index" aria-hidden="true">[ A / M ]</span>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" />
+    <section className="kinetic-hero kinetic-hero--portrait" aria-labelledby="kinetic-title">
+      <img className="about-cover-portrait" src="/media/photos/about-backlight-white.png" alt="Backlit portrait of Aashish Mahato looking over his shoulder" width="1456" height="1080" fetchPriority="high" />
+      <div className="about-cover-top"><span>THE PERSON BEHIND THE WORK</span><span>KATHMANDU, NEPAL</span></div>
+      <div className="about-cover-name">
+        <div className="about-cover-handwriting" aria-hidden="true"><span>Creative</span></div>
+        <h1 className="kinetic-title" id="kinetic-title" aria-label="Aashish Mahato"><span className="kinetic-full-name" aria-hidden="true">{['AASHISH', 'MAHATO'].map(name => <span className="kinetic-name-word" key={name}>{Array.from(name).map((letter, index) => <span className="kinetic-char" key={index}>{letter}</span>)}</span>)}</span></h1>
+        <div className="about-cover-footer"><p>Film. Photography. Design. Code.</p><a href="#kinetic-intro">MEET ME <span>↓</span></a></div>
       </div>
-      <div className="kinetic-hero-bottom"><p>One person. Many creative directions.<br />Always looking for a different perspective.</p><a href="#kinetic-intro">SCROLL TO MEET ME <span>↓</span></a><span className="kinetic-live"><i /> BASED IN KATHMANDU</span></div>
     </section>
     <section className="kinetic-intro" id="kinetic-intro" aria-labelledby="kinetic-intro-title">
       <div className="kinetic-section-label"><span>01 / THE PERSON</span><span>A LITTLE CONTEXT</span></div>

@@ -1,7 +1,7 @@
 .gallery-hover-word{display:flex!important;align-items:center;width:max-content;max-width:100%}
 .gallery-hover-letter{position:relative;display:inline-flex;flex:none;align-items:center;justify-content:center;height:.9em;cursor:crosshair;vertical-align:top}
 .gallery-hover-glyph{display:inline-block;white-space:pre}
-.gallery-hover-image{position:absolute;inset:.06em 0 .1em;display:block;overflow:hidden;border-radius:.04em;opacity:0;visibility:hidden;pointer-events:none;box-shadow:0 .06em .2em #0005}
+.gallery-hover-image{position:absolute;inset:.06em 0 .1em;display:block;overflow:hidden;border-radius:.04em;opacity:0;visibility:hidden;pointer-events:none;box-shadow:0 .06em .2em #00000055}
 .gallery-hover-image img{position:absolute;top:-5%;left:-5%;display:block;width:110%;height:110%;object-fit:cover;pointer-events:none}
 .gallery-hover-word .masked-title-dot{align-self:center;flex:none}
 @media(hover:none){.gallery-hover-letter{pointer-events:none}}

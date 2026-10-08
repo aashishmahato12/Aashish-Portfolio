@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react';
 import './floppy-library.css';
 import { playSound } from './creative-sfx';
 
-const colors = ['#5b8176', '#c19a5b', '#b77760', '#719397', '#8a8099', '#84936c', '#73849b'];
+const colors = ['#e34530', '#292929', '#c63826', '#444444', '#a92c1d', '#666666', '#111111'];
 
 export default function FloppyLibrary({ items, active, onSelect, controlRef }) {
   const [open, setOpen] = useState(false);

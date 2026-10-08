@@ -1,19 +1,19 @@
-.gallery-cinematic{position:relative;isolation:isolate;height:100svh;min-height:580px;overflow:hidden;background:linear-gradient(#07100bae,#07100bdb),url('/media/photos/tree-final-26.webp') center/cover;color:#f6f2e9}
-.gallery-cinematic::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#0a100d91,transparent 35%,transparent 65%,#0a100d66),linear-gradient(0deg,#080d0bc9,transparent 45%,#080d0b4d)}
-.cinematic-top,.cinematic-bottom{position:absolute;z-index:4;left:clamp(20px,4vw,72px);right:clamp(20px,4vw,72px);display:flex;align-items:center;justify-content:space-between;gap:24px;font:700 10px/1.5 'DM Sans',sans-serif;letter-spacing:.16em;color:#e4d0aa}
+.gallery-cinematic{position:relative;isolation:isolate;height:100svh;min-height:580px;overflow:hidden;background:linear-gradient(#111111ae,#111111db),url('/media/photos/tree-final-26.webp') center/cover;color:#ffffff}
+.gallery-cinematic::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,#11111191,transparent 35%,transparent 65%,#11111166),linear-gradient(0deg,#111111c9,transparent 45%,#1111114d)}
+.cinematic-top,.cinematic-bottom{position:absolute;z-index:4;left:clamp(20px,4vw,72px);right:clamp(20px,4vw,72px);display:flex;align-items:center;justify-content:space-between;gap:24px;font:700 10px/1.5 'DM Sans',sans-serif;letter-spacing:.16em;color:#e34530}
 .cinematic-top{top:36px}.cinematic-bottom{bottom:35px}.cinematic-bottom>span:last-child{text-align:right}
 .cinematic-scene{position:absolute;inset:0;perspective:1000px;perspective-origin:55% 48%;overflow:hidden}
 .cinematic-world{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
-.cinematic-card{position:absolute;top:50%;left:50%;width:min(48vw,740px);height:min(58vh,550px);margin-left:calc(-1 * min(24vw,370px));margin-top:calc(-1 * min(29vh,275px));overflow:hidden;background:#27372d;box-shadow:0 30px 100px #0009;will-change:transform,opacity}
+.cinematic-card{position:absolute;top:50%;left:50%;width:min(48vw,740px);height:min(58vh,550px);margin-left:calc(-1 * min(24vw,370px));margin-top:calc(-1 * min(29vh,275px));overflow:hidden;background:#111111;box-shadow:0 30px 100px #00000099;will-change:transform,opacity}
 .cinematic-card img{width:100%;height:100%;display:block;object-fit:cover;filter:saturate(.86)}
-.cinematic-card::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 60%,#0008)}
+.cinematic-card::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 60%,#00000088)}
 .cinematic-card>span{position:absolute;bottom:18px;left:20px;z-index:1;font:700 10px 'DM Sans',sans-serif;letter-spacing:.13em;text-transform:uppercase}
-.cinematic-copy{position:absolute;z-index:3;left:clamp(20px,4vw,72px);right:clamp(20px,4vw,72px);bottom:clamp(100px,15vh,170px);pointer-events:none;text-shadow:0 2px 18px #000b}
-.cinematic-kicker{font:700 10px 'DM Sans',sans-serif;letter-spacing:.2em;color:#d2aa79}
+.cinematic-copy{position:absolute;z-index:3;left:clamp(20px,4vw,72px);right:clamp(20px,4vw,72px);bottom:clamp(100px,15vh,170px);pointer-events:none;text-shadow:0 2px 18px #000000bb}
+.cinematic-kicker{font:700 10px 'DM Sans',sans-serif;letter-spacing:.2em;color:#e34530}
 .cinematic-copy h2{position:relative;height:clamp(66px,9vw,140px);margin:16px 0 0;font:700 clamp(44px,8.5vw,130px)/.9 'Manrope',sans-serif;letter-spacing:-.08em}
 .cinematic-line{position:absolute;inset:0 auto auto 0;white-space:nowrap}
-.cinematic-copy p{margin:12px 0 0;font:400 clamp(12px,1.1vw,16px) 'DM Sans',sans-serif;color:#e5dfd4}
-.cinematic-progress{flex:1;height:1px;max-width:260px;background:#f0eee65c;overflow:hidden}.cinematic-progress-fill{display:block;width:100%;height:100%;background:#d2aa79;transform:scaleX(0);transform-origin:left}
+.cinematic-copy p{margin:12px 0 0;font:400 clamp(12px,1.1vw,16px) 'DM Sans',sans-serif;color:#ffffff}
+.cinematic-progress{flex:1;height:1px;max-width:260px;background:#ffffff5c;overflow:hidden}.cinematic-progress-fill{display:block;width:100%;height:100%;background:#e34530;transform:scaleX(0);transform-origin:left}
 @media(max-width:700px){
   .gallery-cinematic{height:100svh;min-height:560px;padding:0}
   .cinematic-top,.cinematic-bottom{left:20px;right:20px;font-size:8px}

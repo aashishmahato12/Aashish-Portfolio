@@ -1,3 +1,4 @@
+import { isWebKit } from './browser-performance.js';
 import { creativeServices, projectQuestions } from './services-data.js';
 import { mediaAlt, mediaDescription } from './media-text.js';
 import React, { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -11,7 +12,6 @@ import { SiteHeader as SiteNav, SiteFooter } from './SiteChrome.jsx';
 import { searchMeta, searchImages, structuredData, officialProfiles } from './seo-data.js';
 import HomePanels from './HomePanels.jsx';
 import ParallaxChapters from './ParallaxChapters.jsx';
-import { Cursor, CursorFollow, CursorProvider } from './components/animate-ui/components/animate/cursor.jsx';
 import { PreviewLinkCard, PreviewLinkCardContent, PreviewLinkCardImage, PreviewLinkCardPortal, PreviewLinkCardTrigger } from './components/animate-ui/primitives/radix/preview-link-card.jsx';
 import { collaborators, featuredProjects, galleryMedia, heroReel, webProjects } from './portfolio-data.js';
 
@@ -96,73 +96,75 @@ function MaskedHeroTitle({ text, id }) {
   return <h1 id={id} aria-label={`${text}.`}>{words.map((word, index) => <React.Fragment key={`${word}-${index}`}>{index > 0 && ' '}<span className="masked-title-mask" aria-hidden="true"><span className="masked-title-word"><HeroCharacters text={word} />{index === words.length - 1 && <i className="masked-title-dot">.</i>}</span></span></React.Fragment>)}</h1>;
 }
 
-function CollaboratorMark({ company }) {
-  return <div className="collaborator-mark" style={{ '--brand-color': company.color, '--brand-ink': company.ink || '#fff' }}><img src={company.logo} alt={`${company.name} logo`} loading="lazy" /><CursorProvider><Cursor className="collaborator-cursor" /><CursorFollow className="collaborator-cursor-label" side="bottom" sideOffset={12} align="start" alignOffset={8}>{company.name}</CursorFollow></CursorProvider></div>;
-}
-
-function CollaborationShowcase() {
-  const rootRef = useRef(null);
-  const loops = useRef([]);
-  const [paused, setPaused] = useState(false);
-
-  useLayoutEffect(() => {
-    const root = rootRef.current;
-    const media = gsap.matchMedia();
-    media.add('(prefers-reduced-motion: no-preference)', () => {
-      loops.current = Array.from(root.querySelectorAll('.brand-ribbon-track')).map((track, index) =>
-        gsap.fromTo(track, { xPercent: index ? -50 : 0 }, {
-          xPercent: index ? 0 : -50, duration: 48 + index * 6,
-          repeat: -1, ease: 'none', paused: true,
-        })
-      );
-      const sync = () => loops.current.forEach((loop) => {
-        loop.paused(document.hidden || root.dataset.paused === 'true');
-      });
-      const mutation = new MutationObserver(sync);
-      mutation.observe(root, { attributes: true, attributeFilter: ['data-paused'] });
-      document.addEventListener('visibilitychange', sync);
-      sync();
-      return () => {
-        mutation.disconnect();
-        document.removeEventListener('visibilitychange', sync);
-        loops.current.forEach((loop) => loop.revert()); loops.current = [];
-      };
-    });
-    return () => media.revert();
-  }, []);
-
-  const rows = [collaborators.slice(0, 6), collaborators.slice(6)];
-  return <div className="brand-ribbons" ref={rootRef} data-paused={paused} aria-label="Company collaborations">
-    <div className="brand-ribbons-bar"><button type="button" aria-pressed={paused} onClick={() => setPaused(!paused)}>{paused ? 'RESUME MOTION ↗' : 'PAUSE MOTION Ⅱ'}</button></div>
-    <div className="brand-ribbons-stage">{rows.map((row, rowIndex) => <div className="brand-ribbon" key={rowIndex}>
-      <div className="brand-ribbon-track">{[0, 1].map((copy) => <div className="brand-ribbon-group" key={copy} aria-hidden={copy === 1 ? true : undefined}>
-        {row.map((company) => <div className="brand-ribbon-item" key={company.name}><CollaboratorMark company={company} /></div>)}
-      </div>)}</div>
-    </div>)}</div>
-  </div>;
-}
-
 function HomeCollaborators() {
+  const sectionRef = useRef(null);
+  useLayoutEffect(() => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const context = gsap.context(() => {
+      gsap.from('.collaboration-card', {
+        y: 20, opacity: 0, duration: .55, stagger: .035, ease: 'power2.out',
+        clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: '.collaboration-grid', start: 'top 88%', once: true },
+      });
+    }, sectionRef);
+    return () => context.revert();
+  }, []);
+  return <section className="home-collaborators" ref={sectionRef} aria-labelledby="home-collaborators-title">
+    <div className="experience-shell">
+      <SectionTop number="04" label="COLLABORATIONS" aside="THE NAMES BEHIND THE WORK" />
+      <div className="collaboration-intro">
+        <div><h2 id="home-collaborators-title">Good company.<br /><em>Better work.</em></h2><p>Real collaborations across film, design, and digital.</p></div>
+        <div className="collaboration-total"><strong>{collaborators.length}</strong><span>Brands &amp; teams<br />I’ve worked with</span></div>
+      </div>
+      <div className="collaboration-grid" aria-label="Brands and teams">{collaborators.map((company, index) =>
+        <figure className="collaboration-card" key={company.name}>
+          <div className="collaboration-logo"><img src={company.logo} alt={`${company.name} logo`} loading="lazy" decoding="async" /></div>
+          <figcaption><span>{company.name}</span><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span></figcaption>
+        </figure>
+      )}</div>
+      <p className="collaboration-note">Good people. Shared ideas. Work made together.</p>
+    </div>
+  </section>;
+}
+
+const savariTestimonials = [
+  { discipline: 'Graphic design', emphasis: ['clean and thoughtful visuals', 'strong and professional visual identity'], quote: 'Aashish brought our ideas to life through clean and thoughtful visuals. His attention to detail and creative approach gave Savari a strong and professional visual identity.' },
+  { discipline: 'Web', emphasis: ['clean, user-friendly website', 'overall user experience', 'polished final product'], quote: 'Aashish transformed our ideas into a clean, user-friendly website for Savari. He paid close attention to both the visual details and the overall user experience, resulting in a polished final product.' },
+  { discipline: 'Videos', emphasis: ['creativity and strong storytelling', 'framing, editing, and detail'], quote: 'Aashish brought creativity and strong storytelling to Savari’s visual content. His attention to framing, editing, and detail helped create videos that effectively represented our project.' },
+];
+
+function HomeTestimonials({ number = "05" }) {
   const sectionRef = useRef(null);
   useLayoutEffect(() => {
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
-      let countAnimation;
-      let titleAnimation;
       const context = gsap.context(() => {
-        gsap.from('.brand-ribbons-stage', { autoAlpha: 0, y: 40, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.brand-ribbons-stage', start: 'top 88%', once: true } });
-        ScrollTrigger.create({ trigger: sectionRef.current, start: 'top 78%', once: true, onEnter: () => {
-          const counter = { value: 0 };
-          const number = sectionRef.current.querySelector('.collaborator-showcase-count-number');
-          countAnimation = animate(counter, { value: collaborators.length, duration: 1500, ease: 'out(4)', onUpdate: () => { number.textContent = String(Math.round(counter.value)).padStart(2, '0'); } });
-          titleAnimation = animate(sectionRef.current.querySelectorAll('.collaborator-showcase-title span'), { opacity: [0, 1], translateY: [55, 0], delay: stagger(130), duration: 900, ease: 'out(4)' });
-        } });
+        gsap.utils.toArray('.testimonial-card').forEach((card) => {
+          gsap.from(card.querySelectorAll('.testimonial-word'), {
+            opacity: 0, y: 4, duration: .24, stagger: .065, ease: 'power1.out',
+            scrollTrigger: { trigger: card, start: 'top 85%', once: true },
+          });
+        });
       }, sectionRef);
-      return () => { countAnimation?.revert(); titleAnimation?.revert(); context.revert(); };
+      return () => context.revert();
     });
     return () => media.revert();
   }, []);
-  return <section className="home-collaborators" ref={sectionRef} aria-labelledby="home-collaborators-title"><div className="experience-shell"><SectionTop number="04" label="COLLABORATIONS" aside="THE NAMES BEHIND THE WORK" /><div className="collaborator-showcase-heading"><div className="collaborator-showcase-count"><strong className="collaborator-showcase-count-number">{String(collaborators.length).padStart(2, '0')}</strong><span>BRANDS<br />AND TEAMS</span></div><div className="collaborator-showcase-title" id="home-collaborators-title"><span>GOOD COMPANY.</span><span>BETTER WORK.</span><p>Real collaborations across film, design, and digital.</p></div></div><CollaborationShowcase /><div className="collaborator-showcase-foot"><span>THE LIST KEEPS MOVING ↗</span><span>{String(collaborators.length).padStart(2, '0')} SELECTED COLLABORATIONS</span></div></div></section>;
+  return <section ref={sectionRef} className="home-testimonials" id="client-voices" aria-labelledby="testimonials-title">
+    <div className="experience-shell">
+      <SectionTop number={number} label="CLIENT VOICES" aside="SAVARI / THE CYBERIANS" />
+      <div className="testimonials-heading"><h2 id="testimonials-title">From idea<br />to <em>impact.</em></h2><p>One project. Three creative disciplines.<br />In the words of the project manager.</p></div>
+      <div className="testimonials-grid">{savariTestimonials.map((item, index) => <figure className="testimonial-card" key={item.discipline}>
+        <div className="testimonial-category"><span>{item.discipline}</span><span aria-hidden="true">0{index + 1}</span></div>
+        <span className="testimonial-quote-mark" aria-hidden="true">“</span>
+        <blockquote><p aria-label={item.quote}>{item.quote.split(new RegExp(`(${item.emphasis.join('|')})`, 'g')).map((part, partIndex) => {
+          const words = part.split(/(\s+)/).map((word, wordIndex) => /\s+/.test(word) ? word : <span className="testimonial-word" aria-hidden="true" key={wordIndex}>{word}</span>);
+          return item.emphasis.includes(part) ? <strong key={partIndex}>{words}</strong> : <React.Fragment key={partIndex}>{words}</React.Fragment>;
+        })}</p></blockquote>
+        <figcaption><div className="testimonial-author"><img className="testimonial-avatar" src="/media/photos/biraj-sharma.png" alt="Biraj Sharma" width="40" height="40" loading="lazy" /><div><strong>Biraj Sharma</strong><span>Project Manager, The Cyberians</span></div></div><img className="testimonial-company-logo" src="/media/logos/savari.webp" alt="Savari" width="72" height="40" loading="lazy" /></figcaption>
+      </figure>)}</div>
+    </div>
+  </section>;
 }
 
 function HomeProof() {
@@ -176,7 +178,7 @@ function HomeProof() {
     }, sectionRef);
     return () => context.revert();
   }, []);
-  return <section className="home-proof" ref={sectionRef} aria-labelledby="home-proof-title"><div className="home-proof-inner"><div className="home-proof-mosaic" aria-hidden="true">{mosaic.map((item, index) => <div className="home-proof-tile" key={`${item.id}-${index}`}><img src={item.cover || item.src} alt="" loading="lazy" /></div>)}</div><div className="home-proof-title" data-reveal><span>THE PEOPLE AND THE PROJECTS</span><h2 id="home-proof-title">MADE WITH TEAMS.<br /><em>BUILT WITH INTENT.</em></h2><p>A few of the collaborations behind the images, identities, and experiences.</p></div><div className="home-proof-cards">{projects.map((project, index) => { const company = collaborators.find((item) => item.name === project.company); return <a className="home-proof-card" href={projectHref(project)} key={project.id} data-reveal><div className="home-proof-card-head"><span className="home-proof-card-logo">{company && <img src={company.logo} alt="" loading="lazy" />}</span><div><strong>{project.company}</strong><small>{project.category}</small></div><span aria-hidden="true">↗</span></div><span className="home-proof-card-index">{String(index + 1).padStart(2, '0')} / SELECTED PROJECT</span><h3>{project.title}</h3><p>{project.description}</p></a>; })}</div></div></section>;
+  return <section className="home-proof" ref={sectionRef} aria-label="Selected collaborations"><div className="home-proof-inner"><div className="home-proof-mosaic" aria-hidden="true">{mosaic.map((item, index) => <div className="home-proof-tile" key={`${item.id}-${index}`}><img src={item.cover || item.src} alt="" loading="lazy" /></div>)}</div><div className="home-proof-cards">{projects.map((project, index) => { const company = collaborators.find((item) => item.name === project.company); return <a className="home-proof-card" href={projectHref(project)} key={project.id} data-reveal><div className="home-proof-card-head"><span className="home-proof-card-logo">{company && <img src={company.logo} alt="" loading="lazy" />}</span><div><strong>{project.company}</strong><small>{project.category}</small></div><span aria-hidden="true">↗</span></div><span className="home-proof-card-index">{String(index + 1).padStart(2, '0')} / SELECTED PROJECT</span><h3>{project.title}</h3><p>{project.description}</p></a>; })}</div></div></section>;
 }
 
 const homeRoles = ['FILMMAKER', 'PHOTOGRAPHER', 'MOTION DESIGNER', 'BRAND DESIGNER', 'GRAPHIC DESIGNER', 'UI DESIGNER', 'WEB DEVELOPER'];
@@ -240,6 +242,7 @@ function Home({ lenisRef }) {
 
     <HomeSkills />
     <HomeCollaborators />
+    <HomeTestimonials />
     <HomeProof />
     <ProjectGuide />
     <SiteFooter />
@@ -387,7 +390,7 @@ function HomeSkills() {
   return <section className="home-skills home-make" id="my-work" ref={sectionRef} aria-labelledby="home-skills-title">
     <div className="experience-shell">
       <SectionTop number="03" label="MY WORK" aside="SEVEN CREATIVE DIRECTIONS" />
-      <div className="work-skills-heading" data-reveal><h2 id="home-skills-title">WHAT I<br /><em>MAKE.</em></h2><p>One idea, many ways to bring it to life. Explore my work in film, photography, design, and code.</p></div>
+      <div className="work-skills-heading" data-reveal><h2 id="home-skills-title">WHAT I <em>MAKE.</em></h2><p>One idea, many ways to bring it to life. Explore my work in film, photography, design, and code.</p></div>
       <div className="make-carousel" aria-roledescription="carousel" aria-label="Creative disciplines" onMouseEnter={() => setInteracting(true)} onMouseLeave={() => setInteracting(false)} onFocusCapture={() => setInteracting(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setInteracting(false); }}>
         <div className="make-viewport"><div className="make-track" ref={slideRef}>{[...workSkills, ...workSkills].map((skill, index) => {
           const service = creativeServices.find((item) => item.id === skill.id);
@@ -620,11 +623,11 @@ function ContactPage() {
     font.href = 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap';
     document.head.append(font);
   }, []);
-  return <div className="inner-page contact-page"><SiteNav current="contact" /><main><section className="inner-intro experience-shell"><SectionTop number="01" label="CONTACT" aside="KATHMANDU, NEPAL" /><h1>LET’S TALK<span>.</span></h1><p>Contact Aashish Mahato about film, photography, branding, graphic design, motion graphics, and web projects.</p></section><section className="contact-content experience-shell" aria-labelledby="contact-options-title"><div><span className="experience-eyebrow">YOUR PROJECT. ONE ACCOUNTABLE PARTNER.</span><h2 id="contact-options-title">Start a conversation.</h2><p>I’m based in Kathmandu, Nepal. Send me a message through Instagram or LinkedIn with what you want to make, who it’s for, and your timeline.</p><div className="contact-profile-links">{officialProfiles.filter(profile => ['Instagram', 'LinkedIn'].includes(profile.label)).map(profile => <a className="experience-text-link" href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">Message Aashish on {profile.label} ↗</a>)}</div></div><div><h2>Before we start</h2><ul><li>What you need: a film, photographs, a visual identity, graphics, or a website.</li><li>Your audience, project scope, timeline, and budget.</li><li>Examples or references that explain your direction.</li></ul><p>Explore my <a href="/work/">Work</a>, browse the <a href="/gallery/">Gallery</a>, or read <a href="/about/">About me</a> before getting in touch.</p></div></section></main><SiteFooter /></div>;
+  return <div className="inner-page contact-page"><SiteNav current="contact" /><main><section className="inner-intro experience-shell"><SectionTop number="01" label="CONTACT" aside="KATHMANDU, NEPAL" /><h1>LET’S TALK<span>.</span></h1><p>Contact Aashish Mahato about film, photography, branding, graphic design, motion graphics, and web projects.</p></section><section className="contact-content experience-shell" aria-labelledby="contact-options-title"><div><span className="experience-eyebrow">YOUR PROJECT. ONE ACCOUNTABLE PARTNER.</span><h2 id="contact-options-title">Start a conversation.</h2><p>I’m based in Kathmandu, Nepal. Send me a message through Instagram or LinkedIn with what you want to make, who it’s for, and your timeline.</p><div className="contact-profile-links">{officialProfiles.filter(profile => ['Instagram', 'LinkedIn'].includes(profile.label)).map(profile => <a className="experience-text-link" href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">Message Aashish on {profile.label} ↗</a>)}</div></div><div><h2>Before we start</h2><ul><li>What you need: a film, photographs, a visual identity, graphics, or a website.</li><li>Your audience, project scope, timeline, and budget.</li><li>Examples or references that explain your direction.</li></ul><p>Explore my <a href="/work/">Work</a>, browse the <a href="/gallery/">Gallery</a>, or read <a href="/about/">About me</a> before getting in touch.</p></div></section><HomeTestimonials number="02" /></main><SiteFooter /></div>;
 }
 
 function AboutPage() {
-  return <div className="inner-page about-page"><SiteNav current="about" /><main><AboutOpening /><AboutTimeline /><AboutAfterTimeline /></main><SiteFooter /></div>;
+  return <div className="inner-page about-page"><SiteNav current="about" /><main><AboutOpening /><AboutTimeline /><AboutAfterTimeline /><HomeTestimonials number="06" /></main><SiteFooter /></div>;
 }
 
 export default function Experience() {
@@ -639,7 +642,7 @@ export default function Experience() {
     const previousRestoration = window.history.scrollRestoration;
     window.history.scrollRestoration = 'manual';
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const lenis = reducedMotion.matches ? null : new Lenis({ autoRaf: true, anchors: true, smoothWheel: true, duration: 1.05 });
+    const lenis = reducedMotion.matches || isWebKit ? null : new Lenis({ autoRaf: true, anchors: true, smoothWheel: true, duration: 1.05 });
     lenisRef.current = lenis;
     const onScroll = () => ScrollTrigger.update();
     lenis?.on('scroll', onScroll);
@@ -704,5 +707,5 @@ export default function Experience() {
   }, []);
 
   const Page = route.startsWith('skill-') ? SkillPage : { home: Home, work: WorkPage, gallery: GalleryPage, about: AboutPage, contact: ContactPage }[route];
-  return <><Suspense fallback={<div role="status" style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#0d1210', color: '#f5f2eb' }}>Opening {route === 'gallery' ? 'gallery' : 'about'}…</div>}><div key={route}><Page skillId={route.startsWith('skill-') ? route.slice(6) : undefined} lenisRef={lenisRef} /></div></Suspense><div className="experience-transition" ref={overlay} aria-hidden="true"><span>A/M<small>®</small></span><i /><p>IMAGE · MOTION · DESIGN · CODE</p></div></>;
+  return <><Suspense fallback={<div role="status" style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#111111', color: '#ffffff' }}>Opening {route === 'gallery' ? 'gallery' : 'about'}…</div>}><div key={route}><Page skillId={route.startsWith('skill-') ? route.slice(6) : undefined} lenisRef={lenisRef} /></div></Suspense><div className="experience-transition" ref={overlay} aria-hidden="true"><span>A/M<small>®</small></span><i /><p>IMAGE · MOTION · DESIGN · CODE</p></div></>;
 }

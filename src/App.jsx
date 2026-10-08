@@ -14,7 +14,23 @@ function HeroLetters({ text }) {
 
 function Hero() {
   const heroRef = useRef(null);
+  const videoRef = useRef(null);
   const [videoReady, setVideoReady] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    const preference = matchMedia('(prefers-reduced-motion: reduce)');
+    let inView = false;
+    const sync = () => {
+      if (inView && !document.hidden && !preference.matches) video.play().catch(() => {});
+      else video.pause();
+    };
+    const observer = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; sync(); });
+    observer.observe(heroRef.current);
+    document.addEventListener('visibilitychange', sync);
+    preference.addEventListener('change', sync);
+    return () => { observer.disconnect(); video.pause(); document.removeEventListener('visibilitychange', sync); preference.removeEventListener('change', sync); };
+  }, []);
 
   useLayoutEffect(() => {
     const hero = heroRef.current;
@@ -91,7 +107,7 @@ function Hero() {
 
     const update = () => {
       frame = 0;
-      if (reducedMotion.matches) return;
+      if (reducedMotion.matches || window.scrollY > heroHeight) return;
 
       const progress = Math.min(1, Math.max(0, window.scrollY / heroHeight));
       hero.style.setProperty('--hero-bg-shift', `${Math.round(progress * Math.min(heroHeight * 0.045, 48))}px`);
@@ -121,7 +137,7 @@ function Hero() {
   return (
     <section ref={heroRef} className="hero" id="top" aria-labelledby="hero-title">
       <div className="hero-fallback" aria-hidden="true"><div className="fallback-light" /></div>
-      <video className={`hero-video ${videoReady ? 'is-ready' : ''}`} autoPlay muted loop playsInline preload="metadata" poster={heroReel.poster} aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)}>
+      <video ref={videoRef} className={`hero-video ${videoReady ? 'is-ready' : ''}`} muted loop playsInline preload="metadata" poster={heroReel.poster} aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)}>
         <source src={heroReel.mobileSrc} media="(max-width: 700px)" type="video/mp4" />
         <source src={heroReel.src} type="video/mp4" />
       </video>

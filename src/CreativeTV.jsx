@@ -1,3 +1,4 @@
+import { isWebKit } from './browser-performance.js';
 import gsap from 'gsap';
 import React, { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { ChevronLeft, ChevronRight, Pause, Play, Power, Triangle, Volume2, VolumeX, Maximize2 } from 'lucide-react';
@@ -33,7 +34,7 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
         const [THREE, { RoundedBoxGeometry }] = await Promise.all([import('three'), import('three/addons/geometries/RoundedBoxGeometry.js')]);
         if (cancelled) return;
         const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' });
-        renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+        renderer.setPixelRatio(Math.min(devicePixelRatio, isWebKit ? 1 : 1.5));
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -42,26 +43,26 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(35, 1, .1, 50);
         camera.position.set(0, .75, 7.8); camera.lookAt(0, -.3, 0);
-        scene.add(new THREE.HemisphereLight(0xffffff, 0x807367, 2.6));
-        const light = new THREE.DirectionalLight(0xfff3dd, 3.2);
+        scene.add(new THREE.HemisphereLight(0xffffff, 0x777777, 2.6));
+        const light = new THREE.DirectionalLight(0xffffff, 3.2);
         light.position.set(-3, 6, 5); light.castShadow = true;
-        light.shadow.mapSize.set(1024, 1024); light.shadow.camera.left = -5; light.shadow.camera.right = 5;
+        light.shadow.mapSize.set(isWebKit ? 512 : 1024, isWebKit ? 512 : 1024); light.shadow.camera.left = -5; light.shadow.camera.right = 5;
         light.shadow.camera.top = 5; light.shadow.camera.bottom = -5; light.shadow.normalBias = .025;
         scene.add(light);
         const rim = new THREE.DirectionalLight(0xffffff, 1.4); rim.position.set(4, 2, -2); scene.add(rim);
         const tv = new THREE.Group(); tv.rotation.y = -.12; scene.add(tv);
         const motion = gsap.context(() => {});
         const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const cream = new THREE.MeshStandardMaterial({ color: 0xd6cbb7, roughness: .52 });
-        const dark = new THREE.MeshStandardMaterial({ color: 0x292a26, roughness: .48 });
-        const copper = new THREE.MeshStandardMaterial({ color: 0x966144, roughness: .45, metalness: .3 });
+        const cream = new THREE.MeshStandardMaterial({ color: 0xf5f5f5, roughness: .52 });
+        const dark = new THREE.MeshStandardMaterial({ color: 0x292929, roughness: .48 });
+        const copper = new THREE.MeshStandardMaterial({ color: 0xe34530, roughness: .45, metalness: .3 });
         function box(w, h, d, radius, material, x, y, z) {
           const mesh = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, radius), material);
           mesh.position.set(x, y, z); mesh.castShadow = true; mesh.receiveShadow = true; tv.add(mesh); return mesh;
         }
         box(4.2, 3.1, 1.25, .16, cream, 0, 0, 0);
         box(3.42, 2.49, .14, .14, dark, -.25, .12, .65);
-        box(3.17, 2.25, .08, .11, new THREE.MeshStandardMaterial({ color: 0x0b100e, roughness: .22 }), -.25, .12, .75);
+        box(3.17, 2.25, .08, .11, new THREE.MeshStandardMaterial({ color: 0x111111, roughness: .22 }), -.25, .12, .75);
         const screenMaterial = new THREE.ShaderMaterial({
           uniforms: { mediaMap: { value: null }, videoMedia: { value: false }, nextMap: { value: null }, slideProgress: { value: 0 }, sliding: { value: false }, containScale: { value: new THREE.Vector2(1, 1) }, nextContain: { value: new THREE.Vector2(1, 1) }, reveal: { value: 0 }, beamWidth: { value: 0 }, cropScale: { value: new THREE.Vector2(1, 1) } },
           vertexShader: 'varying vec2 mediaUv; void main(){ mediaUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
@@ -101,7 +102,7 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           if (time - lastIdle < 120 && !reduced) return;
           lastIdle = time;
           const ctx = idleContext;
-          ctx.fillStyle = '#09110e'; ctx.fillRect(0, 0, 768, 530);
+          ctx.fillStyle = '#111111'; ctx.fillRect(0, 0, 768, 530);
           const noise = noiseContext.createImageData(128, 88);
           for (let i = 0; i < noise.data.length; i += 4) {
             const value = Math.random() * 90;
@@ -109,13 +110,13 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           }
           noiseContext.putImageData(noise, 0, 0); ctx.globalAlpha = .19;
           ctx.drawImage(noiseCanvas, 0, 0, 768, 530); ctx.globalAlpha = 1;
-          ctx.textAlign = 'center'; ctx.fillStyle = '#87b79d'; ctx.font = '18px monospace';
+          ctx.textAlign = 'center'; ctx.fillStyle = '#aaaaaa'; ctx.font = '18px monospace';
           ctx.fillText('A / M  ·  CREATIVE SYSTEM', 384, 78);
-          ctx.strokeStyle = '#b8e3c5'; ctx.lineWidth = 3; ctx.shadowColor = '#82dba1'; ctx.shadowBlur = 12;
+          ctx.strokeStyle = '#e34530'; ctx.lineWidth = 3; ctx.shadowColor = '#e34530'; ctx.shadowBlur = 12;
           ctx.strokeRect(350, 135, 68, 64); ctx.strokeRect(367, 135, 32, 22); ctx.strokeRect(362, 172, 44, 27);
-          ctx.fillStyle = '#cff1d5'; ctx.font = 'bold 35px monospace';
+          ctx.fillStyle = '#ffffff'; ctx.font = 'bold 35px monospace';
           ctx.fillText('SELECT A FLOPPY DISK', 384, 266);
-          ctx.shadowBlur = 0; ctx.fillStyle = '#96bfa3'; ctx.font = '20px monospace';
+          ctx.shadowBlur = 0; ctx.fillStyle = '#aaaaaa'; ctx.font = '20px monospace';
           ctx.fillText('Open the box. Pick a discipline.', 384, 309);
           ctx.font = '17px monospace'; ctx.fillText('READY FOR YOUR NEXT IDEA', 384, 405);
           if (reduced || Math.floor(time / 650) % 2 === 0) ctx.fillRect(529, 394, 10, 15);
@@ -131,7 +132,7 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
         for (let i = 0; i < 7; i++) box(.35, .018, .025, .007, dark, 1.68, -.48 - i * .08, .65);
         box(1.1, .09, .055, .02, copper, -.97, -1.3, .66);
         box(1.42, .14, .05, .015, dark, .66, -1.3, .67);
-        const diskMaterial = new THREE.MeshStandardMaterial({ color: 0x5b8176, roughness: .55 });
+        const diskMaterial = new THREE.MeshStandardMaterial({ color: 0xe34530, roughness: .55 });
         const insertedDisk = new THREE.Group(); insertedDisk.position.set(.66, -1.3, .85); tv.add(insertedDisk);
         const diskBody = new THREE.Mesh(new RoundedBoxGeometry(1.24, .075, .9, 2, .025), diskMaterial); insertedDisk.add(diskBody);
         const labelCanvas = document.createElement('canvas'); labelCanvas.width = 512; labelCanvas.height = 200;
@@ -139,7 +140,7 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
         const labelMaterial = new THREE.MeshBasicMaterial({ map: labelMap });
         const diskLabel = new THREE.Mesh(new THREE.PlaneGeometry(.98, .38), labelMaterial);
         diskLabel.rotation.x = -Math.PI / 2; diskLabel.position.set(0, .041, .13); insertedDisk.add(diskLabel);
-        const ledMaterial = new THREE.MeshBasicMaterial({ color: 0x98bd71 });
+        const ledMaterial = new THREE.MeshBasicMaterial({ color: 0xe34530 });
         const led = new THREE.Mesh(new THREE.SphereGeometry(.045, 12, 12), ledMaterial);
         led.position.set(1.68, -1.24, .67); tv.add(led);
         // Physical controls are part of the TV's base; HTML hit areas follow their 3D positions.
@@ -162,20 +163,21 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
             if (text !== control.text) {
               control.text = text;
               const ctx = control.canvas.getContext('2d'); ctx.clearRect(0, 0, 128, 128);
-              ctx.fillStyle = disabled ? '#73786c' : control.key === 'power' ? '#e7aa80' : '#f4efdf';
+              ctx.fillStyle = disabled ? '#777777' : control.key === 'power' ? '#e34530' : '#ffffff';
               ctx.font = `bold ${control.key === 'sound' ? 38 : 76}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(symbols[control.key], 64, 67); control.map.needsUpdate = true;
             }
           });
         }
+        const controlButtons = new Map(controls.map(({ key }) => [key, remoteRef.current?.querySelector(`[data-control="${key}"]`)]));
         function positionControls() {
           tv.updateMatrixWorld(true);
-          const controlCleanup = [];
-        controls.forEach(({ key, cap }) => {
-            const button = remoteRef.current?.querySelector(`[data-control="${key}"]`);
+          const hostWidth = host.clientWidth, hostHeight = host.clientHeight;
+          controls.forEach(({ key, cap }) => {
+            const button = controlButtons.get(key);
             if (!button) return;
             const points = [[-.22,-.17],[.22,.17]].map(([x,y]) => new THREE.Vector3(x,y,.07).applyMatrix4(cap.matrixWorld).project(camera));
-            const left = (points[0].x + 1) * host.clientWidth / 2, top = (1 - points[1].y) * host.clientHeight / 2;
-            Object.assign(button.style, { left: `${left}px`, top: `${top}px`, width: `${(points[1].x-points[0].x)*host.clientWidth/2}px`, height: `${(points[1].y-points[0].y)*host.clientHeight/2}px` });
+            const left = (points[0].x + 1) * hostWidth / 2, top = (1 - points[1].y) * hostHeight / 2;
+            Object.assign(button.style, { left: `${left}px`, top: `${top}px`, width: `${(points[1].x-points[0].x)*hostWidth/2}px`, height: `${(points[1].y-points[0].y)*hostHeight/2}px` });
           });
         }
         const controlCleanup = [];
@@ -183,8 +185,8 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           const button = remoteRef.current?.querySelector(`[data-control="${key}"]`);
           if (!button) return;
           const press = () => { playSound('click'); motion.add(() => gsap.to(cap.position, { z: .665, duration: .08, yoyo: true, repeat: 1 })); };
-          const hover = () => { playSound('hover'); cap.material.color.set(0x465043); };
-          const leave = () => cap.material.color.set(0x292a26);
+          const hover = () => { playSound('hover'); cap.material.color.set(0x444444); renderer.render(scene, camera); };
+          const leave = () => { cap.material.color.set(0x292929); renderer.render(scene, camera); };
           button.addEventListener('click', press); button.addEventListener('pointerenter', hover); button.addEventListener('pointerleave', leave);
           button.addEventListener('focus', hover); button.addEventListener('blur', leave);
           controlCleanup.push(() => { button.removeEventListener('click', press); button.removeEventListener('pointerenter', hover); button.removeEventListener('pointerleave', leave); button.removeEventListener('focus', hover); button.removeEventListener('blur', leave); });
@@ -201,10 +203,17 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           raf = requestAnimationFrame(frame);
           if (time - last < 32) return;
           last = time;
-          tv.rotation.x += (targetX - tv.rotation.x) * .12;
-          tv.rotation.y += (targetY - tv.rotation.y) * .12;
-          if (idleScreen.visible && !reduced) drawIdle(time);
-          positionControls();
+          const rotating = Math.abs(targetX - tv.rotation.x) + Math.abs(targetY - tv.rotation.y) > .0001;
+          const buttonsMoving = controls.some(({ cap }) => gsap.isTweening(cap.position));
+          const idleUpdating = idleScreen.visible && !reduced && time - lastIdle >= 120;
+          const mediaPlaying = !settingsRef.current.expanded && ((video && !video.paused) || (carouselTween && !carouselTween.paused()));
+          if (!rotating && !buttonsMoving && !idleUpdating && !mediaPlaying && !booting) return;
+          if (rotating) {
+            tv.rotation.x += (targetX - tv.rotation.x) * .12;
+            tv.rotation.y += (targetY - tv.rotation.y) * .12;
+          }
+          if (idleUpdating) drawIdle(time);
+          if (rotating || buttonsMoving) positionControls();
           renderer.render(scene, camera);
         }
         function sync() {
@@ -212,13 +221,13 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           syncControls(); positionControls();
           screen.visible = state.power && !!currentRef.current;
           idleScreen.visible = state.power && !currentRef.current;
-          ledMaterial.color.set(state.power && currentRef.current ? 0x98bd71 : 0x664037);
+          ledMaterial.color.set(state.power && currentRef.current ? 0xe34530 : 0x555555);
           if (video) {
             video.muted = state.muted;
-            if (visible && state.power && state.playing && !state.expanded && !booting) video.play().catch(() => {});
+            if (visible && !document.hidden && state.power && state.playing && !state.expanded && !booting) video.play().catch(() => {});
             else video.pause();
           }
-          if (carouselTween) carouselTween.paused(!visible || !state.power || !state.playing || state.expanded || booting);
+          if (carouselTween) carouselTween.paused(!visible || document.hidden || !state.power || !state.playing || state.expanded || booting);
           renderer.render(scene, camera);
         }
         // Fill the CRT with every medium, cropping excess at the edges.
@@ -263,10 +272,10 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           insertedDisk.visible = !!next; booting = !!next;
           if (video) { video.pause(); video.removeAttribute('src'); video.load(); video.remove(); video = null; }
           if (!next) { screen.visible = false; sync(); return; }
-          const palette = { Film: '#5b8176', Photography: '#c19a5b', Motion: '#b77760', Branding: '#719397', 'Graphic design': '#8a8099', Digital: '#84936c', Web: '#73849b' };
-          diskMaterial.color.set(palette[next.name] || '#5b8176');
-          const label = labelCanvas.getContext('2d'); label.fillStyle = '#f4efdf'; label.fillRect(0, 0, 512, 200);
-          label.fillStyle = '#29362c'; label.font = 'bold 42px sans-serif'; label.fillText(next.name.toUpperCase(), 24, 88); label.font = '22px monospace'; label.fillText('AASHISH MAHATO / CREATIVE DISK', 24, 146); labelMap.needsUpdate = true;
+          const palette = { Film: '#e34530', Photography: '#292929', Motion: '#c63826', Branding: '#444444', 'Graphic design': '#a92c1d', Digital: '#666666', Web: '#111111' };
+          diskMaterial.color.set(palette[next.name] || '#e34530');
+          const label = labelCanvas.getContext('2d'); label.fillStyle = '#ffffff'; label.fillRect(0, 0, 512, 200);
+          label.fillStyle = '#111111'; label.font = 'bold 42px sans-serif'; label.fillText(next.name.toUpperCase(), 24, 88); label.font = '22px monospace'; label.fillText('AASHISH MAHATO / CREATIVE DISK', 24, 146); labelMap.needsUpdate = true;
           motion.add(() => {
             gsap.killTweensOf([insertedDisk.position, insertedDisk.rotation, tv.scale]);
             if (!reduced) {
@@ -321,10 +330,16 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           const w = host.clientWidth, h = host.clientHeight;
           renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); positionControls(); renderer.render(scene, camera);
         }); resize.observe(host);
-        const observer = new IntersectionObserver(([entry]) => {
-          visible = entry.isIntersecting; cancelAnimationFrame(raf);
+        let inView = false;
+        const updateVisibility = () => {
+          visible = inView && !document.hidden;
+          cancelAnimationFrame(raf);
           sync(); if (visible) raf = requestAnimationFrame(frame);
+        };
+        const observer = new IntersectionObserver(([entry]) => {
+          inView = entry.isIntersecting; updateVisibility();
         }, { rootMargin: '80px' }); observer.observe(host);
+        document.addEventListener('visibilitychange', updateVisibility);
         const down = e => { if (e.pointerType === 'touch') return; drag = { x: e.clientX, y: e.clientY, rx: targetX, ry: targetY }; renderer.domElement.setPointerCapture(e.pointerId); };
         const move = e => { if (!drag) return; targetY = THREE.MathUtils.clamp(drag.ry + (e.clientX - drag.x) * .005, -.65, .65); targetX = THREE.MathUtils.clamp(drag.rx + (e.clientY - drag.y) * .003, -.18, .18); };
         const up = () => { drag = null; };
@@ -348,7 +363,7 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
         } };
         load(currentRef.current); setReady(true);
         dispose = () => {
-          controlCleanup.forEach(cleanup => cleanup()); carouselTween?.kill(); carouselMaps.forEach(map => map.dispose()); motion.revert(); controls.forEach(control => control.map.dispose()); labelMap.dispose(); observer.disconnect(); resize.disconnect(); cancelAnimationFrame(raf); ++mediaId;
+          controlCleanup.forEach(cleanup => cleanup()); carouselTween?.kill(); carouselMaps.forEach(map => map.dispose()); motion.revert(); controls.forEach(control => control.map.dispose()); labelMap.dispose(); document.removeEventListener('visibilitychange', updateVisibility); observer.disconnect(); resize.disconnect(); cancelAnimationFrame(raf); ++mediaId;
           if (video) { video.pause(); video.removeAttribute('src'); video.load(); video.remove(); }
           texture?.dispose(); scene.traverse(object => { object.geometry?.dispose(); if (object.material) object.material.dispose(); });
           idleMap.dispose(); renderer.dispose(); renderer.domElement.remove(); engineRef.current = null;

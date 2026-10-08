@@ -1,17 +1,17 @@
-.parallax-chapter{position:relative;display:grid;place-items:center;height:100svh;min-height:540px;overflow:hidden;isolation:isolate;background:#17221c;color:#f5f1e8;text-align:center}
+.parallax-chapter{position:relative;display:grid;place-items:center;height:100svh;min-height:540px;overflow:hidden;isolation:isolate;background:#111111;color:#ffffff;text-align:center}
 .parallax-chapter-image{position:absolute;inset:-28% 0;z-index:-2;background-size:cover;background-position:center;will-change:transform}
-.parallax-chapter-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,#07100b9c,#07100b42 50%,#07100b9c)}
+.parallax-chapter-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,#1111119c,#11111142 50%,#1111119c)}
 .parallax-chapter-content{padding:35px}
-.parallax-chapter-content span{color:#d7b88b;font:700 10px 'DM Sans',sans-serif;letter-spacing:.23em}
+.parallax-chapter-content span{color:#e34530;font:700 10px 'DM Sans',sans-serif;letter-spacing:.23em}
 .parallax-chapter-content h2{margin:30px 0 16px;font:650 clamp(60px,10vw,155px)/.9 'Manrope',sans-serif;letter-spacing:-.08em}
-.parallax-chapter-content p{font:400 clamp(16px,2vw,25px) 'DM Sans',sans-serif;color:#f0eee8}
+.parallax-chapter-content p{font:400 clamp(16px,2vw,25px) 'DM Sans',sans-serif;color:#ffffff}
 @media(max-width:700px){.parallax-chapter-content h2{font-size:clamp(45px,12vw,80px)}}
 @media(prefers-reduced-motion:reduce){.parallax-chapter-image{will-change:auto}}
 
-.parallax-chapter-link{display:inline-flex;align-items:center;justify-content:center;margin-top:22px;padding:15px 23px;border:1px solid #f5f1e870;border-radius:40px;color:#f5f1e8;text-decoration:none;font:600 11px 'DM Sans',sans-serif;letter-spacing:.1em;background:#07100b30;transition:background .2s}
-.parallax-chapter-link:hover,.parallax-chapter-link:focus-visible{background:#f5f1e8;color:#17221c}
+.parallax-chapter-link{display:inline-flex;align-items:center;justify-content:center;margin-top:22px;padding:15px 23px;border:1px solid #ffffff70;border-radius:40px;color:#ffffff;text-decoration:none;font:600 11px 'DM Sans',sans-serif;letter-spacing:.1em;background:#11111130;transition:background .2s}
+.parallax-chapter-link:hover,.parallax-chapter-link:focus-visible{background:#ffffff;color:#111111}
 .work-parallax-skills .parallax-chapter-content{width:min(100%,1200px);box-sizing:border-box}
 .work-parallax-skills .parallax-chapter-content h2{font-size:clamp(45px,8vw,125px);overflow-wrap:normal}
 .work-parallax-skills .parallax-chapter-content p{line-height:1.5;max-width:650px;margin-inline:auto}
-.work-parallax-skills .parallax-chapter-shade{background:linear-gradient(0deg,#07100bbb,#07100b75 50%,#07100bbb)}
+.work-parallax-skills .parallax-chapter-shade{background:linear-gradient(0deg,#111111bb,#11111175 50%,#111111bb)}
 @media(max-width:700px){.work-parallax-skills .parallax-chapter-content{padding:24px}.work-parallax-skills .parallax-chapter-content h2{font-size:clamp(35px,8.5vw,60px);letter-spacing:-.065em}}
