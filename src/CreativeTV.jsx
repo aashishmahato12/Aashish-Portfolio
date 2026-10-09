@@ -111,7 +111,7 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           noiseContext.putImageData(noise, 0, 0); ctx.globalAlpha = .19;
           ctx.drawImage(noiseCanvas, 0, 0, 768, 530); ctx.globalAlpha = 1;
           ctx.textAlign = 'center'; ctx.fillStyle = '#aaaaaa'; ctx.font = '18px monospace';
-          ctx.fillText('A / M  ·  CREATIVE SYSTEM', 384, 78);
+          ctx.fillText('A / M  ·  PORTFOLIO', 384, 78);
           ctx.strokeStyle = '#e34530'; ctx.lineWidth = 3; ctx.shadowColor = '#e34530'; ctx.shadowBlur = 12;
           ctx.strokeRect(350, 135, 68, 64); ctx.strokeRect(367, 135, 32, 22); ctx.strokeRect(362, 172, 44, 27);
           ctx.fillStyle = '#ffffff'; ctx.font = 'bold 35px monospace';
@@ -275,7 +275,7 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           const palette = { Film: '#e34530', Photography: '#292929', Motion: '#c63826', Branding: '#444444', 'Graphic design': '#a92c1d', Digital: '#666666', Web: '#111111' };
           diskMaterial.color.set(palette[next.name] || '#e34530');
           const label = labelCanvas.getContext('2d'); label.fillStyle = '#ffffff'; label.fillRect(0, 0, 512, 200);
-          label.fillStyle = '#111111'; label.font = 'bold 42px sans-serif'; label.fillText(next.name.toUpperCase(), 24, 88); label.font = '22px monospace'; label.fillText('AASHISH MAHATO / CREATIVE DISK', 24, 146); labelMap.needsUpdate = true;
+          label.fillStyle = '#111111'; label.font = 'bold 42px sans-serif'; label.fillText(next.name.toUpperCase(), 24, 88); label.font = '22px monospace'; label.fillText('AASHISH MAHATO / PROJECT DISK', 24, 146); labelMap.needsUpdate = true;
           motion.add(() => {
             gsap.killTweensOf([insertedDisk.position, insertedDisk.rotation, tv.scale]);
             if (!reduced) {
@@ -315,9 +315,9 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           }
           if (next.video) {
             const element = document.createElement('video');
-            video = element; element.src = next.video; element.loop = !next.rotateFilms;
+            video = element; element.defaultMuted = true; element.muted = settingsRef.current.muted; element.crossOrigin = 'anonymous'; element.src = next.video; element.loop = !next.rotateFilms;
             element.addEventListener('ended', () => { if (!cancelled && id === mediaId) videoEndRef.current?.(); }); element.muted = settingsRef.current.muted;
-            element.playsInline = true; element.preload = 'metadata'; element.hidden = true; element.setAttribute('aria-hidden', 'true'); host.appendChild(element);
+            element.playsInline = true; element.preload = 'auto'; element.hidden = true; element.setAttribute('aria-hidden', 'true'); host.appendChild(element);
             element.addEventListener('loadeddata', () => {
               if (cancelled || id !== mediaId) return;
               texture?.dispose(); texture = new THREE.VideoTexture(element);
@@ -378,7 +378,7 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
 
 
   return <div className={`creative-tv${ready ? ' has-3d-controls' : ''}`}>
-    <div className="creative-tv-status"><span><i className={power && item ? 'is-on' : ''} /> AM / CREATIVE CHANNEL</span><span>{item ? `CH ${String(channel + 1).padStart(2, '0')} / ${String(count).padStart(2, '0')}` : 'NO DISK'}</span></div>
+    <div className="creative-tv-status"><span><i className={power && item ? 'is-on' : ''} /> AM / PROJECT PREVIEW</span><span>{item ? `CH ${String(channel + 1).padStart(2, '0')} / ${String(count).padStart(2, '0')}` : 'NO DISK'}</span></div>
     <div className="creative-tv-stage" ref={hostRef}>
       {!ready && <div className="creative-tv-fallback">{item && <img src={item.image} alt={item.caption} loading="lazy" />}</div>}
       <div className="creative-tv-drive" aria-hidden="true"><span /><small>DISK DRIVE</small></div>

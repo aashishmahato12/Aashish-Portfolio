@@ -145,9 +145,9 @@ function Hero() {
       <SiteHeader current="home" />
       <div className="hero-content">
         <span className="hero-reveal-accent" aria-hidden="true" />
-        <span className="hero-kicker">AASHISH MAHATO <span>—</span> MULTIDISCIPLINARY CREATIVE</span>
+        <span className="hero-kicker">AASHISH MAHATO <span>—</span> FILM / PHOTOGRAPHY / DESIGN / WEB</span>
         <h1 id="hero-title" aria-label="Aashish Mahato"><span className="hero-name-line" aria-hidden="true"><HeroLetters text="AASHISH" /></span>{' '}<span className="hero-name-line" aria-hidden="true"><HeroLetters text="MAHATO." /></span></h1>
-        <p><span>IMAGE</span> <i>•</i> <span>MOTION</span> <i>•</i> <span>DESIGN</span> <i>•</i> <span>CODE</span></p>
+        <p><span>FILM</span> <i>•</i> <span>PHOTOGRAPHY</span> <i>•</i> <span>DESIGN</span> <i>•</i> <span>WEB</span></p>
       </div>
       <a className="hero-scroll" href="#home-gallery"><span>SCROLL TO EXPLORE</span><span aria-hidden="true">↘</span></a>
       <span className="hero-edition">PORTFOLIO / 2026</span>

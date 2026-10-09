@@ -1,7 +1,7 @@
 export const creativeServices = [
   {
     id: 'film', name: 'Filmmaking & editing',
-    description: 'Travel films, videography, editing, and visual storytelling with a sense of place.',
+    description: 'Travel films, videography, and video editing.',
     evidence: 'Watch the Mustang and Manang travel films to explore my landscape filmmaking and editing.',
   },
   {
@@ -11,7 +11,7 @@ export const creativeServices = [
   },
   {
     id: 'motion', name: 'Motion graphics',
-    description: 'Animated visuals and product presentations that explain an idea through movement.',
+    description: 'Motion graphics, animated product videos, and presentations.',
     evidence: 'The Product Motion film presents a digital driving licence interface through animation.',
   },
   {
@@ -31,7 +31,7 @@ export const creativeServices = [
   },
   {
     id: 'web', name: 'Web development',
-    description: 'Responsive websites and React interfaces that bring content, design, and interactions together.',
+    description: 'Responsive websites, React interfaces, and web applications.',
     evidence: 'Visit the Cosmic Electrical website and UniSync student dashboard, or explore the linked GitHub repositories.',
   },
 ];

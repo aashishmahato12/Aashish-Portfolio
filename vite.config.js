@@ -1,13 +1,14 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
+import { agentReadinessPlugin } from './server/vite-agent-plugin.js';
 import tailwindcss from '@tailwindcss/vite';
 import { searchMeta, searchImages, siteUrl, structuredData } from './src/seo-data.js';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [tailwindcss(), {
+  plugins: [agentReadinessPlugin(), tailwindcss(), {
     name: 'portfolio-identity',
     transformIndexHtml(html, context) {
       const relativeFile = path.relative(root, context.filename).split(path.sep).join('/');
@@ -19,6 +20,8 @@ export default defineConfig({
       const clean = html.replace(/<title>[\s\S]*?<\/title>/gi, '').replace(/<meta\b[^>]*(?:name=["'](?:description|robots|twitter:[^"']*)["']|property=["']og:[^"']*["'])[^>]*>/gi, '').replace(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi, '').replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
       const [title, description, pagePath] = searchMeta[route];
       return { html: clean, tags: [
+        { tag: 'link', attrs: { rel: 'describedby', href: '/llms.txt' }, injectTo: 'head' },
+        { tag: 'link', attrs: { rel: 'alternate', type: 'text/markdown', href: `${pagePath}index.md` }, injectTo: 'head' },
         { tag: 'title', children: title, injectTo: 'head' },
         { tag: 'meta', attrs: { name: 'description', content: description }, injectTo: 'head' },
         { tag: 'meta', attrs: { name: 'robots', content: 'index, follow, max-image-preview:large' }, injectTo: 'head' },
@@ -50,6 +53,7 @@ export default defineConfig({
         gallery: path.join(root, 'gallery/index.html'),
         about: path.join(root, 'about/index.html'),
         contact: path.join(root, 'contact/index.html'),
+        privacy: path.join(root, 'privacy/index.html'),
       },
     },
   },

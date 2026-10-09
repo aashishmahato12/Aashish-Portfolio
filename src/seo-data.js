@@ -1,6 +1,6 @@
 import { creativeServices } from './services-data.js';
 export const siteUrl = 'https://aashish-mahato.com.np';
-export const creativeBio = 'Aashish Mahato is a filmmaker, photographer, designer, and web developer based in Kathmandu, Nepal. His portfolio brings together travel films, photography, motion graphics, branding, graphic design, and websites.';
+export const creativeBio = 'Aashish Mahato is a filmmaker, photographer, designer, and web developer based in Kathmandu, Nepal. His portfolio includes travel films, photography, motion graphics, branding, graphic design, and websites.';
 export const officialProfiles = [
   { label: 'Instagram', url: 'https://www.instagram.com/aashishmahato12/' },
   { label: 'GitHub', url: 'https://github.com/aashishmahato12' },
@@ -10,6 +10,7 @@ export const officialProfiles = [
 ];
 
 export const searchMeta = {
+  privacy: ['Privacy | Aashish Mahato', 'How Aashish Mahato’s portfolio uses analytics, hosting services, external media, and project enquiry information.', '/privacy/'],
   home: ['Aashish Mahato | Film, Photography & Design in Kathmandu', 'Explore filmmaking, photography, motion graphics, branding, graphic design, and web development by Aashish Mahato, based in Kathmandu, Nepal.', '/'],
   work: ['Work | Film, Photography, Design & Websites by Aashish Mahato', 'Explore Aashish Mahato’s selected projects in filmmaking, photography, motion graphics, branding, graphic design, digital design, and web development.', '/work/'],
   contact: ['Contact Aashish Mahato | Creative Projects in Kathmandu', 'Contact Aashish Mahato in Kathmandu, Nepal to discuss film, photography, branding, design, and website projects through his official profiles.', '/contact/'],
@@ -24,6 +25,7 @@ export const searchMeta = {
   'skill-web': ['Web Developer in Kathmandu, Nepal | Aashish Mahato', 'Explore responsive websites and React interfaces by Aashish Mahato, a web developer based in Kathmandu, Nepal.', '/work/web/'],
 };
 export const searchImages = {
+  privacy: '/media/social/aashish-mahato-preview.jpg',
   home: '/media/social/aashish-mahato-preview.jpg',
   work: '/media/social/aashish-mahato-preview.jpg',
   contact: '/media/social/aashish-mahato-preview.jpg',

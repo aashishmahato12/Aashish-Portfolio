@@ -65,8 +65,8 @@ export default function GalleryCinematic({ items }) {
       </div>)}
     </div></div>
     <div className="cinematic-copy"><span className="cinematic-kicker">A JOURNEY THROUGH THE WORK</span>
-      <h2 id="cinematic-title">{frames.map((item, index) => <span className="cinematic-line" key={`${item.src}-title`}>{index === 0 ? 'EVERY FRAME' : index === frames.length - 1 ? 'MORE TO COME.' : item.title.toUpperCase()}</span>)}</h2>
-      <p>Film. Image. Design. A different perspective with every scroll.</p>
+      <h2 id="cinematic-title">{frames.map((item, index) => <span className="cinematic-line" key={`${item.src}-title`}>{index === 0 ? 'SELECTED WORK' : index === frames.length - 1 ? 'VIEW THE GALLERY.' : item.title.toUpperCase()}</span>)}</h2>
+      <p>Scroll to view films, photographs, and design projects.</p>
     </div>
     <div className="cinematic-bottom"><span>SCROLL TO EXPLORE ↓</span><div className="cinematic-progress"><i className="cinematic-progress-fill" /></div><span>{String(frames.length).padStart(2, '0')} SELECTED FRAMES</span></div>
   </section>;

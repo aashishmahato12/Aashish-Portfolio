@@ -48,7 +48,7 @@ export function GalleryPhotoFlow({ photos }) {
     return () => media.revert();
   }, []);
   return <section className="gallery-photo-flow" ref={ref} aria-labelledby="gallery-flow-heading">
-    <div className="experience-shell gallery-photo-flow-heading"><span>THE ARCHIVE / 02</span><h2 id="gallery-flow-heading">THE LONGER LOOK.</h2><p>Photography and design from the complete visual collection.</p></div>
+    <div className="experience-shell gallery-photo-flow-heading"><span>GALLERY / 02</span><h2 id="gallery-flow-heading">PHOTOGRAPHY & DESIGN.</h2><p>Photography and design from the complete visual collection.</p></div>
     <div className="gallery-photo-flow-grid">{photos.map((item, index) => <figure className="gallery-flow-image" key={`${item.src}-${index}`}><img src={item.src} alt={mediaAlt(item)} loading="lazy" /><figcaption>{String(index + 1).padStart(2, '0')} / {item.title}</figcaption></figure>)}</div>
   </section>;
 }
@@ -72,7 +72,7 @@ export function GalleryFinalGrid({ photos }) {
     return () => media.revert();
   }, []);
   return <section className="gallery-final" ref={ref} aria-labelledby="gallery-final-title">
-    <div className="experience-shell gallery-final-heading"><span>THE ARCHIVE / 03</span><h2 id="gallery-final-title">MORE TO SEE.</h2><p>Keep moving through the work.</p></div>
+    <div className="experience-shell gallery-final-heading"><span>GALLERY / 03</span><h2 id="gallery-final-title">MORE PROJECTS.</h2><p>More photographs and design projects.</p></div>
     <div className="gallery-final-grid"><div className="gallery-final-grid-inner">{[0, 1, 2].map((column) => <div className="gallery-final-column" key={column}>{photos.slice(column * 3, column * 3 + 3).map((item) => <div className="gallery-final-image" key={item.src}><img src={item.src} alt={mediaAlt(item)} loading="lazy" /></div>)}</div>)}</div></div>
   </section>;
 }

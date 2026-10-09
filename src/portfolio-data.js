@@ -12,8 +12,8 @@ export const heroReel = {
   type: 'video',
   title: 'Current showreel',
   category: 'Film',
-  src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/q_auto:best/f_auto/v1790583244/reel_3.mp4',
-  mobileSrc: 'https://res.cloudinary.com/ghmgpvvn/video/upload/w_960,q_auto:eco,f_mp4/v1790583244/reel_3.mp4',
+  src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791543451/hero.mp4',
+  mobileSrc: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791543451/hero.mp4',
   poster: '/videos/hero-poster.jpg',
 };
 
@@ -22,19 +22,19 @@ export const featuredProjects = [
     id: 'mustang-film', title: 'Mustang', category: 'Travel Film',
     description: 'A travel film through the landscapes of Mustang, Nepal.',
     cover: `${poster}/mustang.jpg`,
-    media: [{ id: 'mustang-video', type: 'video', title: 'Mustang travel film', category: 'Film', src: `${video}/mustang.mp4`, poster: `${poster}/mustang.jpg` }],
+    media: [{ id: 'mustang-video', type: 'video', title: 'Mustang travel film', category: 'Film', src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791545360/Timeline_1.mp4', poster: `${poster}/mustang.jpg` }],
   },
   {
     id: 'manang-film', title: 'Manang', category: 'Travel Film',
     description: 'Moving images of Manang and its Himalayan landscape.',
-    cover: `${poster}/manang.jpg`,
-    media: [{ id: 'manang-video', type: 'video', title: 'Manang travel film', category: 'Film', src: `${video}/manang.mp4`, poster: `${poster}/manang.jpg` }],
+    cover: `${poster}/manang-thumbnail.jpg`,
+    media: [{ id: 'manang-video', type: 'video', title: 'Manang travel film', category: 'Film', src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791546684/Manange.mp4', poster: `${poster}/manang-thumbnail.jpg` }],
   },
   {
     id: 'product-motion', title: 'Product Motion', category: 'Motion Graphics',
     description: 'An animated presentation of a digital licence experience.',
     cover: `${poster}/product-motion.jpg`,
-    media: [{ id: 'product-motion-video', type: 'video', title: 'Product motion film', category: 'Motion Graphics', src: `${video}/product-motion.mp4`, poster: `${poster}/product-motion.jpg` }],
+    media: [{ id: 'product-motion-video', type: 'video', title: 'Product motion film', category: 'Motion Graphics', src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791546163/Savari_Promo_Video.mp4', poster: `${poster}/product-motion.jpg` }],
   },
   {
     id: 'cic-nepal', title: 'CIC Nepal', category: 'Brand & Digital', company: 'Cosmic Innovation Center',
@@ -72,6 +72,13 @@ export const featuredProjects = [
 ];
 
 // Public work verified against the linked live site and GitHub repositories.
+// Display travel films first, followed by the general showreel.
+export const filmProjects = [
+  featuredProjects.find(project => project.id === 'manang-film'),
+  featuredProjects.find(project => project.id === 'mustang-film'),
+  { id: 'showreel', title: 'Current showreel', category: 'Film', description: 'A selection of my video projects.', cover: heroReel.poster, media: [heroReel] },
+];
+
 export const webProjects = [
   {
     id: 'cosmic-electrical-web', title: 'Cosmic Electrical', category: 'Client website',

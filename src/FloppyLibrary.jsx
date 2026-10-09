@@ -153,7 +153,7 @@ export default function FloppyLibrary({ items, active, onSelect, controlRef }) {
         <span className="floppy-box-stack">{items.map((item, index) => <span className="floppy-mini" key={item.name} style={{ '--disk-color': colors[index], '--disk-index': index }}><span className="floppy-shutter" /><span className="floppy-mini-label">{item.name}</span></span>)}</span>
         <span className="floppy-box-front"><span>A / M · 07 DISKS</span></span>
       </span>
-      <span className="floppy-box-title"><strong>My creative toolkit.</strong><ChevronDown size={18} aria-hidden="true" /></span>
+      <span className="floppy-box-title"><strong>Choose a skill.</strong><ChevronDown size={18} aria-hidden="true" /></span>
       <span className="floppy-box-instruction">{open ? 'Close the box ↑' : 'Open the box. Pick a discipline. ↓'}</span>
     </button>
     <div id="discipline-disks" hidden={!open} ref={grid}>
@@ -163,7 +163,7 @@ export default function FloppyLibrary({ items, active, onSelect, controlRef }) {
           <span className="floppy-disk-caption">{String(index + 1).padStart(2, '0')} / {item.name}</span>
         </button>)}
       </div>
-      <p className="floppy-library-note" role="status">{loading ? (loading.startsWith('Ejecting ') ? `${loading} back to the box…` : `Loading ${loading} into the TV…`) : 'Seven ways to make an idea real. Select a disk to preview the work.'}</p>
+      <p className="floppy-library-note" role="status">{loading ? (loading.startsWith('Ejecting ') ? `${loading} back to the box…` : `Loading ${loading} into the TV…`) : 'Select a disk to view projects for that skill.'}</p>
     </div>
   </div>;
 }

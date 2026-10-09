@@ -361,6 +361,7 @@ html.lenis{scroll-behavior:auto}
 .gallery-note{max-width:600px;border-top:1px solid #575757;margin:100px 0 0 auto;padding-top:25px;color:#b2b2b2;font-size:14px;line-height:1.7}
 .gallery-lightbox{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:70px 25px;background:#111111ed}
 .gallery-lightbox img{max-width:min(100%,1300px);max-height:calc(100svh - 170px);object-fit:contain}
+.gallery-lightbox video{width:min(100%,1300px);max-height:calc(100svh - 170px);object-fit:contain;background:#000}
 .gallery-lightbox button{position:absolute;top:23px;right:24px;border:1px solid #ffffff;background:#111111;color:#ffffff;padding:12px 18px;font-size:10px;font-weight:700;letter-spacing:.15em;cursor:pointer}
 .gallery-lightbox-meta{position:absolute;right:25px;bottom:25px;left:25px;display:flex;align-items:baseline;justify-content:space-between;gap:20px;color:#ffffff}
 .gallery-lightbox-meta span{color:#e34530;font:700 10px 'DM Sans',Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase}
@@ -488,7 +489,7 @@ html.lenis{scroll-behavior:auto}
 
 .project-guide{padding:110px 0;background:#ffffff;color:#111111}
 .project-guide h2{margin:25px 0;font:700 clamp(42px,6vw,90px)/.98 'Manrope',sans-serif;letter-spacing:-.06em}
-.project-guide h2 em{color:#e34530;font-family:Georgia,serif;font-weight:400}
+.project-guide h2 em{color:#e34530;font:inherit;font-style:normal}
 .project-guide-intro{max-width:720px;font-size:18px;line-height:1.7;color:#4d4d4d}
 .project-guide-services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:55px 0 75px}
 .project-guide-services a{border-top:1px solid #b2b2b2;padding-top:18px}
@@ -775,23 +776,24 @@ html.lenis{scroll-behavior:auto}
 .testimonials-heading .signature-accent{margin-bottom:-.2em;font-size:clamp(48px,6vw,88px)}
 @media(max-width:700px){.signature-page-title{margin:64px 0 35px}.signature-page-title .signature-accent{font-size:clamp(45px,11vw,75px);margin-bottom:5px}.testimonials-heading .signature-accent{font-size:clamp(45px,11vw,75px);margin-bottom:5px}}
 
-/* Static print grain on inner-page hero lettering only. */
-.inner-page .inner-intro h1:not(.gallery-intro-title),
-.inner-page .gallery-intro .masked-title-char,
-.inner-page .gallery-intro .masked-title-dot,
-.inner-page .inner-intro .signature-accent .handwritten-ink,
-.inner-page .inner-intro .signature-accent .handwriting-strokes,
-.inner-page .kinetic-hero .handwritten-ink,
-.inner-page .kinetic-hero .handwriting-strokes,
-.inner-page .skill-hero .masked-title-char,
-.inner-page .skill-hero .masked-title-dot{
-  -webkit-mask-image:url('/media/textures/print-grain.png');
-  mask-image:url('/media/textures/print-grain.png');
-  -webkit-mask-size:128px 128px;
-  mask-size:128px 128px;
-  -webkit-mask-repeat:repeat;
-  mask-repeat:repeat;
-}
-/* Leave room for script flourishes inside the texture mask. */
-.inner-page .inner-intro .signature-accent .handwritten-ink,
-.inner-page .kinetic-hero .handwritten-ink{padding-right:.25em;margin-right:-.25em}
+/* Simple Work hero with a balanced heading size. */
+.work-hero-layout{margin:90px 0 12px}
+.work-hero-layout .signature-page-title{margin:0}
+.work-hero-layout h1{font-size:clamp(96px,20vw,280px);line-height:.9;letter-spacing:-.075em}
+.work-hero-layout .signature-accent{font-size:clamp(48px,5.8vw,90px);margin-bottom:-.2em}
+.work-hero-summary{max-width:490px;margin:40px 0 0 auto}
+.work-hero-summary p{margin:0;color:#b8b8b8;font:400 clamp(18px,1.7vw,25px)/1.65 'Manrope',sans-serif;letter-spacing:-.025em}
+@media(max-width:700px){.work-hero-layout{margin-top:54px}.work-hero-layout h1{font-size:24vw}.work-hero-summary{margin-top:28px;max-width:100%}.work-hero-summary p{font-size:17px}}
+
+.privacy-content{max-width:850px;padding-bottom:clamp(80px,10vw,150px)}
+.privacy-content section{margin-bottom:48px}
+.privacy-content h2{font:600 clamp(23px,3vw,32px)/1.25 'Manrope',sans-serif;margin:0 0 18px}
+.privacy-content p,.privacy-content li{font:400 18px/1.8 'Manrope',sans-serif;color:#b8b8b8}
+.privacy-content a{color:#e34530;text-underline-offset:4px}
+
+.work-hero-layout .work-title-word{display:inline-block;overflow:hidden;color:inherit;vertical-align:bottom;padding:.08em .04em .04em 0;margin:-.08em -.04em -.04em 0}
+.work-hero-layout .work-title-letter{display:inline-block;color:inherit;transform-origin:50% 100%}
+.work-hero-layout .work-title-dot{color:#e34530}
+
+.experience-route-stage{background:#111111;min-height:100svh}
+.experience-route-page{width:100%}

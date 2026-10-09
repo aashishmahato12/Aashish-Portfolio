@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { X } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
-export default function ExpandedTVMedia({ item, slide, origin, startTime, muted, playing, onVideoEnd, onClose }) {
+export default function ExpandedTVMedia({ item, slide, origin, startTime, muted = true, playing, onVideoEnd, onClose }) {
   const dialog = useRef(null);
   const frame = useRef(null);
   const video = useRef(null);

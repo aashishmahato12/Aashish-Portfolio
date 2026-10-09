@@ -10,7 +10,7 @@ const pages = [
 
 export function SiteHeader({ current }) {
   return <header className="inner-nav creative-header">
-    <a className="header-identity" href="/" aria-label="Aashish Mahato home"><span className="inner-logo">A/M<span>®</span></span><span className="header-name">Aashish Mahato<small>Independent creative · Kathmandu</small></span></a>
+    <a className="header-identity" href="/" aria-label="Aashish Mahato home"><span className="inner-logo">A/M<span>®</span></span><span className="header-name">Aashish Mahato<small>Film, design & web · Kathmandu</small></span></a>
     <nav aria-label="Main navigation">
       {pages.map(page => <a className={page.id === 'contact' ? 'header-contact' : 'header-page'} key={page.id} href={page.href} aria-current={current === page.id ? 'page' : undefined}><span>{page.label}</span>{page.id === 'contact' && <span className="header-arrow" aria-hidden="true">↗</span>}</a>)}
     </nav>
@@ -20,8 +20,9 @@ export function SiteHeader({ current }) {
 export function SiteFooter() {
   return <footer className="experience-footer">
     <a href="/" className="footer-logo" aria-label="Aashish Mahato home">A/M<span>®</span></a>
-    <p>IMAGE · MOTION · DESIGN · CODE</p>
+    <p>FILM · PHOTOGRAPHY · DESIGN · WEB</p>
     <nav className="footer-pages" aria-label="Footer navigation">
+      <a href="/privacy/">Privacy</a>
       {pages.map(page => <a key={page.id} href={page.href}>{page.label}</a>)}
     </nav>
     <span>© 2026 AASHISH MAHATO</span>

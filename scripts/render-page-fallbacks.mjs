@@ -1,14 +1,17 @@
+import { privacySections, privacyUpdated, privacyProviders } from '../src/privacy-content.js';
+import { aboutMarkdown, contactMarkdown } from '../server/agent-content.js';
 import { creativeServices, projectQuestions } from '../src/services-data.js';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { featuredProjects, galleryMedia, webProjects } from '../src/portfolio-data.js';
+import { featuredProjects, filmProjects, galleryMedia, webProjects } from '../src/portfolio-data.js';
 
 import { mediaAlt, mediaDescription } from '../src/media-text.js';
 import { creativeBio, officialProfiles } from '../src/seo-data.js';
 
 const dist = resolve(dirname(fileURLToPath(import.meta.url)), '../dist');
 const escapeHtml = (value) => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+const plainMarkdown = value => value.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
 const link = (href, label) => `<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>`;
 const profileLinks = () => officialProfiles.map((profile) => link(profile.url, `Aashish Mahato on ${profile.label}`)).join(' · ');
 const thumbnail = (item) => {
@@ -19,7 +22,7 @@ const project = (item, href) => `<li>${thumbnail(item)}<h2>${link(href, item.tit
 const shell = (heading, intro, content) => `<main class="portfolio-fallback"><nav aria-label="Portfolio pages">${link('/', 'Home')}${link('/work/', 'Work')}${link('/gallery/', 'Gallery')}${link('/about/', 'About')}${link('/contact/', 'Contact')}</nav><h1>${escapeHtml(heading)}</h1><p class="portfolio-fallback-intro">${escapeHtml(intro)}</p>${content}</main>`;
 
 const groups = [
-  ['film', 'Film projects', 'Travel films and moving images by Aashish Mahato.', [{ id: 'showreel', title: 'Current showreel', category: 'Film', description: 'A moving overview of my visual work.' }, ...featuredProjects.filter((item) => item.category === 'Travel Film')]],
+  ['film', 'Film projects', 'Travel films and moving images by Aashish Mahato.', filmProjects],
   ['photography', 'Photography portfolio', 'Portraits, places, and moments photographed by Aashish Mahato.', galleryMedia.filter((item) => item.category === 'Photography')],
   ['motion', 'Motion graphics', 'Animated visuals and moving-image work by Aashish Mahato.', featuredProjects.filter((item) => item.category === 'Motion Graphics')],
   ['branding', 'Branding projects', 'Identity and brand presentation work by Aashish Mahato.', featuredProjects.filter((item) => item.category === 'Brand & Digital')],
@@ -28,17 +31,18 @@ const groups = [
   ['web', 'Web development projects', 'Websites and web applications built by Aashish Mahato.', webProjects],
 ];
 
-const projectGuide = `<section id="working-together"><h2>Creative work in Kathmandu, Nepal</h2><ul>${creativeServices.map((service) => `<li><h3>${link(`/work/${service.id}/`, service.name)}</h3><p>${escapeHtml(service.description)}</p></li>`).join('')}</ul><h3>Before we start</h3>${projectQuestions.map((item) => `<details><summary>${escapeHtml(item.question)}</summary><p>${escapeHtml(item.answer)}</p></details>`).join('')}<p>${link('https://www.instagram.com/aashishmahato12/', 'Discuss a project on Instagram')} · ${link('https://www.linkedin.com/in/aashish-mahato-nepal', 'Discuss a project on LinkedIn')}</p></section>`;
+const projectGuide = `<section id="working-together"><h2>Services in Kathmandu, Nepal</h2><ul>${creativeServices.map((service) => `<li><h3>${link(`/work/${service.id}/`, service.name)}</h3><p>${escapeHtml(service.description)}</p></li>`).join('')}</ul><h3>Before we start</h3>${projectQuestions.map((item) => `<details><summary>${escapeHtml(item.question)}</summary><p>${escapeHtml(item.answer)}</p></details>`).join('')}<p>${link('https://www.instagram.com/aashishmahato12/', 'Discuss a project on Instagram')} · ${link('https://www.linkedin.com/in/aashish-mahato-nepal', 'Discuss a project on LinkedIn')}</p></section>`;
 
 const combinedGallery = [...galleryMedia, ...featuredProjects.flatMap((project) => project.media.map((item, index) => ({ ...item, id: item.id || `${project.id}-${index}` })))];
 const uniqueGallery = combinedGallery.filter((item, index) => combinedGallery.findIndex((other) => other.src === item.src) === index);
 
 const routes = new Map([
+  ['privacy/index.html', shell('Privacy', `Last updated: ${privacyUpdated}`, privacySections.map(section => `<section><h2>${escapeHtml(section.title)}</h2><p>${escapeHtml(section.text)}</p></section>`).join('') + `<section><h2>Contact and provider policies</h2><p>${link('/contact/', 'Contact Aashish')}</p>${privacyProviders.map(provider => link(provider.url, provider.label)).join(' · ')}</section>`)],
   ['index.html', shell('Aashish Mahato', creativeBio, `<p>${profileLinks()}</p><section><h2>Explore my work</h2><ul>${groups.map(([slug, label]) => `<li>${link(`/work/${slug}/`, label)}</li>`).join('')}</ul></section><section><h2>Selected projects</h2><ul>${featuredProjects.map((item) => project(item, `/work/${item.category === 'Travel Film' ? 'film' : item.category === 'Motion Graphics' ? 'motion' : item.category === 'Graphic Design' ? 'graphic' : 'branding'}/#${item.id}`)).join('')}</ul></section>${projectGuide}`)],
-  ['work/index.html', shell('Work by Aashish Mahato', 'Film, photography, motion, branding, graphic design, digital experiences, and websites by Aashish Mahato.', `<section><h2>Explore each discipline</h2><ul>${groups.map(([slug, label, intro]) => `<li><h3>${link(`/work/${slug}/`, label)}</h3><p>${escapeHtml(intro)}</p></li>`).join('')}</ul></section><p>${link('/gallery/', 'Browse the Gallery')} · ${link('/about/', 'About Aashish')} · ${link('/contact/', 'Discuss a project')}</p>`)],
-  ['contact/index.html', shell('Contact Aashish Mahato', 'Contact Aashish Mahato in Kathmandu, Nepal about film, photography, design, and web projects.', `<section><h2>Start a conversation</h2><p>Send your project scope, audience, timeline, budget, and references through ${link('https://www.instagram.com/aashishmahato12/', 'Instagram')} or ${link('https://www.linkedin.com/in/aashish-mahato-nepal', 'LinkedIn')}.</p><p>${link('/work/', 'Explore my Work')} · ${link('/gallery/', 'Browse the Gallery')} · ${link('/about/', 'About me')}</p></section>`)],
-  ['about/index.html', shell('About Aashish Mahato', creativeBio, `<img src="/media/photos/tree-final-18.webp" alt="Aashish Mahato wearing round glasses in a black and white portrait" width="1200" height="1800" style="max-width:100%;height:auto"/><section><h2>My approach</h2><p>A film can become a photograph. A visual identity can become a digital experience. I refine each project until it meets the client's expectations and my own.</p><p>${link('/work/', 'See my skills and selected projects')}</p><p>${profileLinks()}</p></section><section><h2>Let’s connect the scope and build the delivery plan.</h2><p>Tell me what you want to make, who it’s for, and when you need it.</p>${link('/contact/', 'Start a conversation')}</section>`)],
-  ['gallery/index.html', shell('Gallery of films, photography, and design', 'Explore the visual archive of Aashish Mahato.', `<section><h2>Films, photographs, and designs</h2><ul>${uniqueGallery.map((item) => `<li>${thumbnail(item)}${link(`/gallery/#gallery-item-${item.id}`, `${item.title} — ${item.category}`)}<p>${escapeHtml(mediaDescription(item))}</p></li>`).join('')}</ul></section><p>${link('/work/graphic/', 'See graphic design projects')} · ${link('/work/branding/', 'See branding projects')}</p>`)],
+  ['work/index.html', shell('Work by Aashish Mahato', 'Film, photography, motion, branding, graphic design, digital experiences, and websites by Aashish Mahato.', `<section><h2>My skills</h2><ul>${groups.map(([slug, label, intro]) => `<li><h3>${link(`/work/${slug}/`, label)}</h3><p>${escapeHtml(intro)}</p></li>`).join('')}</ul></section><p>${link('/gallery/', 'Browse the Gallery')} · ${link('/about/', 'About Aashish')} · ${link('/contact/', 'Discuss a project')}</p>`)],
+  ['contact/index.html', shell('Contact Aashish Mahato', 'Contact Aashish Mahato in Kathmandu, Nepal about film, photography, design, and web projects.', `<section><p>${escapeHtml(plainMarkdown(contactMarkdown.split('## Start a project enquiry')[1].split('## Before contacting me')[0]))}</p><h2>Contact me</h2><p>Send your project scope, audience, timeline, budget, and references through ${link('https://www.instagram.com/aashishmahato12/', 'Instagram')} or ${link('https://www.linkedin.com/in/aashish-mahato-nepal', 'LinkedIn')}.</p><p>${link('/work/', 'Explore my Work')} · ${link('/gallery/', 'Browse the Gallery')} · ${link('/about/', 'About me')}</p></section>`)],
+  ['about/index.html', shell('About Aashish Mahato', creativeBio, `<img src="/media/photos/tree-final-18.webp" alt="Aashish Mahato wearing round glasses in a black and white portrait" width="1200" height="1800" style="max-width:100%;height:auto"/><section><p>${escapeHtml(aboutMarkdown.split('## Skills and work')[0].split(creativeBio)[1])}</p><h2>My approach</h2><p>I work in filmmaking, photography, graphic design, and web development. My portfolio includes travel films, portraits, brand designs, and websites.</p><p>${link('/work/', 'See my skills and selected projects')}</p><p>${profileLinks()}</p></section><section><h2>Have a project in mind?</h2><p>Tell me what you want to make, who it’s for, and when you need it.</p>${link('/contact/', 'Contact me')}</section>`)],
+  ['gallery/index.html', shell('Gallery of films, photography, and design', 'Browse films, photographs, and design projects by Aashish Mahato.', `<section><h2>Films, photographs, and designs</h2><ul>${uniqueGallery.map((item) => `<li>${thumbnail(item)}${link(`/gallery/#gallery-item-${item.id}`, `${item.title} — ${item.category}`)}<p>${escapeHtml(mediaDescription(item))}</p></li>`).join('')}</ul></section><p>${link('/work/graphic/', 'See graphic design projects')} · ${link('/work/branding/', 'See branding projects')}</p>`)],
 ]);
 
 for (const [slug, label, intro, items] of groups) {

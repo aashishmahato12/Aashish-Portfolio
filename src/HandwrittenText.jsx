@@ -35,7 +35,7 @@ const strokes = {
   p: ['M .45 .16 L .03 1', 'M .35 .5 C .97 -.2 1.13 .41 .54 .65 L 1 .57'],
 };
 
-export default function HandwrittenText({ children, className = '', speed = 1.8, delay = .18, play = true, onComplete }) {
+export default function HandwrittenText({ children, className = '', speed = 2.8, delay = .12, play = true, onComplete }) {
   const ref = useRef(null);
   const id = useId().replaceAll(':', '');
   const text = String(children);
