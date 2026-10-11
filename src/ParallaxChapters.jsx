@@ -76,6 +76,7 @@ function ChapterSlideshow({ images }) {
 
 export default function ParallaxChapters({ items = chapters, label = 'FILM / PHOTOGRAPHY / DESIGN', className = '' }) {
   const ref = useRef(null);
+  const depthTitles = items === chapters;
   useEffect(() => {
     const videos = [...ref.current.querySelectorAll('video')];
     const visible = new Set();
@@ -118,19 +119,27 @@ export default function ParallaxChapters({ items = chapters, label = 'FILM / PHO
             { y: () => -window.innerHeight * ratio() * .45 },
             { y: () => window.innerHeight * (1 - ratio()) * .45,
               ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true } });
-          gsap.from(section.querySelectorAll('.parallax-chapter-content > *'), { autoAlpha: 0, y: 45, stagger: .12, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 72%', once: true } });
+          const textTrigger = depthTitles
+            ? { trigger: section, start: 'top 72%', end: 'bottom 28%', toggleActions: 'restart reset restart reset' }
+            : { trigger: section, start: 'top 72%', once: true };
+          gsap.from(section.querySelectorAll(depthTitles ? '.parallax-chapter-content > :not(h2)' : '.parallax-chapter-content > *'), { autoAlpha: 0, y: 45, stagger: .12, duration: .9, ease: 'power3.out', scrollTrigger: textTrigger });
+          if (depthTitles) gsap.from(section.querySelectorAll('.chapter-depth-char'), {
+            rotationX: 75, rotationY: -18, z: -140, y: 45, autoAlpha: 0,
+            transformOrigin: '50% 80%', duration: 1.05, stagger: .045, ease: 'power3.out',
+            scrollTrigger: { ...textTrigger },
+          });
         });
       }, ref);
       return () => context.revert();
     });
     return () => media.revert();
-  }, []);
+  }, [depthTitles]);
   return <div className={`parallax-chapters ${className}`} ref={ref}>{items.map((chapter, index) => <section className="parallax-chapter" key={chapter.title} id={chapter.id} aria-label={chapter.title}>
     <div className="parallax-chapter-image" style={{ backgroundImage: `url(${chapter.video?.poster || chapter.image})` }}>
       {chapter.video && <video data-src={chapter.video.src} poster={chapter.video.poster || chapter.image} muted loop playsInline preload="none" aria-hidden="true" />}
       {!chapter.video && chapter.slides?.length > 1 && <ChapterSlideshow images={[chapter.image, ...chapter.slides]} />}
     </div>
     <div className="parallax-chapter-shade" />
-    <div className="parallax-chapter-content"><span>{String(index + 1).padStart(2, '0')} / {label}</span><h2>{chapter.title}</h2><p>{chapter.line}</p>{chapter.href && <a className="parallax-chapter-link" href={chapter.href}>EXPLORE THE WORK ↗</a>}</div>
+    <div className="parallax-chapter-content"><span>{String(index + 1).padStart(2, '0')} / {label}</span><h2 className={depthTitles ? 'chapter-depth-title' : undefined} aria-label={depthTitles ? chapter.title : undefined}>{depthTitles ? Array.from(chapter.title).map((letter, letterIndex) => <span className="chapter-depth-char" aria-hidden="true" key={letterIndex}>{letter}</span>) : chapter.title}</h2><p>{chapter.line}</p>{chapter.href && <a className="parallax-chapter-link" href={chapter.href}>EXPLORE THE WORK ↗</a>}</div>
   </section>)}</div>;
 }

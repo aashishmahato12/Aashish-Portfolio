@@ -98,6 +98,21 @@ export default function HomePanels({ lenisRef }) {
     return () => motion.revert();
   }, [current]);
 
+  useLayoutEffect(() => {
+    const media = gsap.matchMedia();
+    media.add('(prefers-reduced-motion: no-preference)', () => {
+      const context = gsap.context(() => {
+        const cards = rootRef.current.querySelectorAll('.home-panel');
+        gsap.set(rootRef.current.querySelectorAll('.home-panel-content > *'), { autoAlpha: 0, x: -70 });
+        if (stageVisible) gsap.to(cards[current].querySelectorAll('.home-panel-content > *'), {
+          autoAlpha: 1, x: 0, duration: .85, stagger: .12, ease: 'power3.out',
+        });
+      }, rootRef);
+      return () => context.revert();
+    });
+    return () => media.revert();
+  }, [current, stageVisible]);
+
   return <section className="home-panels" ref={rootRef} id="home-gallery" aria-labelledby="home-gallery-title">
     <div className="experience-shell home-panels-intro"><div className="experience-section-top"><span>01 / SELECTED WORK</span><span>FILM / PHOTOGRAPHY / DESIGN</span></div><span className="home-panels-kicker">MY PORTFOLIO</span><h2 id="home-gallery-title">SELECTED <em>WORK.</em></h2><p>Browse my travel films, photographs, brand designs, and websites. Scroll to view selected projects, or visit the Work page for more details.</p></div>
     <div className="home-panel-stage">

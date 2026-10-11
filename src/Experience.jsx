@@ -106,51 +106,51 @@ function MaskedHeroTitle({ text, id }) {
 
 function HomeCollaborators() {
   const sectionRef = useRef(null);
+  const wallTweens = useRef([]);
+  const pausedRef = useRef(false);
+  const [wallPaused, setWallPaused] = useState(false);
+  const rows = [collaborators.slice(0, 5), collaborators.slice(5, 9), collaborators.slice(9)];
+  const setWallMotion = (paused) => {
+    pausedRef.current = paused;
+    setWallPaused(paused);
+    wallTweens.current.forEach((tween) => paused ? tween.pause() : tween.resume());
+  };
   useLayoutEffect(() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const context = gsap.context(() => {
-      gsap.from('.collaboration-card', {
-        y: 36, rotationX: 8, opacity: 0, duration: .8, stagger: .055, ease: 'power3.out',
-        clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: '.collaboration-grid', start: 'top 88%', once: true },
+      gsap.from('.collaboration-title-char', {
+        rotationX: 75, rotationY: -18, z: -140, y: 45, autoAlpha: 0,
+        transformOrigin: '50% 80%', duration: 1.05, stagger: .045, ease: 'power3.out',
+        scrollTrigger: { trigger: '#home-collaborators-title', start: 'top 88%', once: true },
       });
-      gsap.utils.toArray('.collaboration-logo').forEach((logo, index) => {
-        const drift = gsap.to(logo, {
-          y: index % 2 ? 4 : -4, duration: 2.2 + index % 3 * .3,
-          repeat: -1, yoyo: true, ease: 'sine.inOut', paused: true,
+      wallTweens.current = gsap.utils.toArray('.logo-wall-track').map((track, index) => {
+        const tween = gsap.fromTo(track, { xPercent: index % 2 ? -50 : 0 }, {
+          xPercent: index % 2 ? 0 : -50, duration: index === 0 ? 40 : 34,
+          repeat: -1, ease: 'none', paused: true,
         });
-        ScrollTrigger.create({
-          trigger: logo, start: 'top bottom', end: 'bottom top',
-          onToggle: ({ isActive }) => isActive ? drift.resume() : drift.pause(),
-        });
+        ScrollTrigger.create({ trigger: track, start: 'top bottom', end: 'bottom top',
+          onToggle: ({ isActive }) => isActive && !pausedRef.current ? tween.resume() : tween.pause() });
+        return tween;
       });
     }, sectionRef);
-    return () => context.revert();
+    return () => { context.revert(); wallTweens.current = []; };
   }, []);
   return <section className="home-collaborators" ref={sectionRef} aria-labelledby="home-collaborators-title">
     <div className="experience-shell">
       <SectionTop number="04" label="COLLABORATIONS" aside="BRANDS AND TEAMS" />
       <div className="collaboration-intro">
-        <div><h2 id="home-collaborators-title">Clients &amp; <em>teams.</em></h2><p>Brands and teams I’ve worked with on film, design, and web projects.</p></div>
+        <div><h2 id="home-collaborators-title" aria-label="Clients & teams."><span className="collaboration-title-word" aria-hidden="true">{Array.from('Clients').map((letter, index) => <span className="collaboration-title-char" key={index}>{letter}</span>)}</span>{' '}<span className="collaboration-title-char" aria-hidden="true">&amp;</span>{' '}<em className="collaboration-title-word" aria-hidden="true">{Array.from('teams.').map((letter, index) => <span className="collaboration-title-char" key={index}>{letter}</span>)}</em></h2><p>Brands and teams I’ve worked with on film, design, and web projects.</p></div>
         <div className="collaboration-total"><strong>{collaborators.length}</strong><span>Brands &amp; teams<br />I’ve worked with</span></div>
       </div>
-      <div className="collaboration-grid" aria-label="Brands and teams">{collaborators.map((company, index) =>
-        <figure className="collaboration-card" key={company.name}
-          onPointerMove={(event) => {
-            if (event.pointerType !== 'mouse' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            const card = event.currentTarget;
-            const bounds = card.getBoundingClientRect();
-            card.style.setProperty('--tilt-x', `${-(event.clientY - bounds.top - bounds.height / 2) / bounds.height * 8}deg`);
-            card.style.setProperty('--tilt-y', `${(event.clientX - bounds.left - bounds.width / 2) / bounds.width * 8}deg`);
-          }}
-          onPointerLeave={(event) => {
-            event.currentTarget.style.removeProperty('--tilt-x');
-            event.currentTarget.style.removeProperty('--tilt-y');
-          }}>
-          <div className="collaboration-logo"><img src={company.logo} alt={`${company.name} logo`} loading="lazy" decoding="async" /></div>
-          <figcaption><span>{company.name}</span><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span></figcaption>
-        </figure>
-      )}</div>
+      <div className="logo-wall" aria-label="Brands and teams" onPointerEnter={() => wallTweens.current.forEach((tween) => tween.pause())} onPointerLeave={() => { if (!pausedRef.current) wallTweens.current.forEach((tween) => tween.resume()); }} onPointerDown={(event) => { if (event.pointerType === 'touch') setWallMotion(true); }}>
+        {rows.map((companies, rowIndex) => <div className="logo-wall-row" key={rowIndex}><div className="logo-wall-track">
+          {[0, 1].map((copy) => <div className="logo-wall-group" key={copy} aria-hidden={copy === 1 || undefined}>{[...companies, ...companies].map((company, companyIndex) => <figure className="collaboration-card" key={`${company.name}-${companyIndex}`} aria-hidden={companyIndex >= companies.length || undefined}>
+            <div className="collaboration-logo"><img src={company.logo} alt={`${company.name} logo`} loading="lazy" decoding="async" /></div>
+            <figcaption>{company.name}</figcaption>
+          </figure>)}</div>)}
+        </div></div>)}
+      </div>
+      <div className="logo-wall-controls"><button type="button" aria-pressed={wallPaused} onClick={() => setWallMotion(!wallPaused)}>{wallPaused ? 'Resume' : 'Pause'} logo motion</button></div>
       <p className="collaboration-note">Film, design, and web projects for these brands and teams.</p>
     </div>
   </section>;
@@ -165,39 +165,73 @@ const clientTestimonials = [
     emphasis: ['technical expertise, creativity, and design skills', 'dedicated, creative, and willing to go the extra mile', 'bright future ahead of him'],
     quote: 'Aashish has helped me on several of my projects, including Dream Chasers and the “Will You Go on a Date With Me?” website, and his contribution has been exceptional.\n\nAashish has a strong combination of technical expertise, creativity, and design skills. His ability to bring ideas to life through web development and thoughtful design has helped me tremendously across these projects. He is not only highly skilled but also dedicated, creative, and willing to go the extra mile to make sure the final result is something to be proud of.\n\nI genuinely appreciate all the support and hard work he has put into the projects we’ve worked on together. I have no doubt that Aashish has a bright future ahead of him, and with his talent and passion for technology, I believe he will go very far.',
   },
+  {"discipline": "Cosmic Electrical Limited", "author": "Mahesh Mahato", "avatar": "/media/photos/mahesh-mahato.png", "role": "Founder & Managing Director", "company": "Cosmic Electrical Limited", "logo": "/media/logos/cosmic-electrical.webp", "emphasis": ["attention to detail"], "quote": "Aashish brings a unique combination of creativity, technical understanding, and dedication to his work. From visual storytelling and video production to graphic design and digital presentation, he has consistently demonstrated the ability to translate our company’s vision into meaningful creative work. His attention to detail, willingness to learn, and commitment to quality make him a promising young creative professional."},
+  {"discipline": "Cosmic Group", "author": "Cosmic Group", "role": "Corporate Team", "company": "Cosmic Group", "logo": "/media/logos/cosmic-group.webp", "emphasis": ["creative"], "quote": "Aashish has contributed to strengthening our digital and visual identity across multiple businesses. His versatility in website development, graphic design, and multimedia production allows him to approach projects with both creative vision and technical precision. He brings fresh perspectives, thoughtful execution, and a strong sense of responsibility to every assignment."},
+  {"discipline": "Cosmic Innovation Center (CIC Nepal)", "author": "CIC Nepal", "role": "Management Team", "company": "Cosmic Innovation Center (CIC Nepal)", "logo": "/media/logos/cic.webp", "emphasis": ["attention to detail"], "quote": "Creativity and innovation go hand in hand, and Aashish demonstrates both. His contributions to our visual identity, digital presence, and promotional materials reflect a strong understanding of modern design and communication. He approaches creative challenges with curiosity, initiative, and a genuine interest in technology, making him a valuable contributor to our innovation-driven environment."},
+  {"discipline": "Cosmic Foundation", "author": "Cosmic Foundation", "role": "Management Team", "company": "Cosmic Foundation", "logo": "/media/logos/cosmic-foundation.webp", "emphasis": ["attention to detail"], "quote": "Aashish understands that effective design is not simply about aesthetics, but about communicating purpose. His creative contributions have helped us present our initiatives with clarity and visual impact. Through thoughtful design and storytelling, he demonstrates an ability to connect meaningful ideas with audiences in an engaging and professional way."},
+  {"discipline": "Cosmic Capital Pvt. Ltd.", "author": "Cosmic Capital", "role": "Management Team", "company": "Cosmic Capital Pvt. Ltd.", "logo": "/media/logos/cosmic-capital.webp", "emphasis": ["attention to detail"], "quote": "Aashish combines creative thinking with a practical understanding of digital communication. His work reflects a thoughtful approach to visual consistency, professional presentation, and modern design. He has shown the ability to understand business requirements and translate them into clear, engaging digital experiences that support our corporate identity."},
+  {"discipline": "Cosmic Infra Pvt. Ltd.", "author": "Cosmic Infra", "role": "Management Team", "company": "Cosmic Infra Pvt. Ltd.", "logo": "/media/logos/cosmic-infra.webp", "emphasis": ["attention to detail"], "quote": "Aashish has demonstrated a strong ability to transform technical and corporate information into visually compelling content. His approach to website presentation, graphic design, and digital communication reflects creativity, precision, and attention to detail. He consistently strives to deliver work that is both visually refined and aligned with our professional standards."},
 ];
 
 function HomeTestimonials({ number = "05" }) {
+  const testimonials = useMemo(() => {
+    const shuffled = [...clientTestimonials];
+    for (let index = shuffled.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+    }
+    return shuffled;
+  }, []);
   const sectionRef = useRef(null);
+  const rowTweens = useRef([]);
+  const pausedRef = useRef(false);
+  const [paused, setPaused] = useState(false);
+  const changeMotion = (value) => {
+    pausedRef.current = value;
+    setPaused(value);
+    rowTweens.current.forEach((tween) => value ? tween.pause() : tween.resume());
+  };
   useLayoutEffect(() => {
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
       const context = gsap.context(() => {
-        gsap.utils.toArray('.testimonial-card').forEach((card) => {
-          gsap.from(card.querySelectorAll('.testimonial-word'), {
-            opacity: 0, y: 4, duration: .24, stagger: Math.min(.065, 2.4 / card.querySelectorAll('.testimonial-word').length), ease: 'power1.out',
-            scrollTrigger: { trigger: card, start: 'top 85%', once: true },
+        gsap.from('.review-title-char', {
+          rotationX: 75, rotationY: -18, z: -140, y: 45, autoAlpha: 0,
+          transformOrigin: '50% 80%', duration: 1.05, stagger: .045, ease: 'power3.out',
+          scrollTrigger: { trigger: '#testimonials-title', start: 'top 88%', once: true },
+        });
+        rowTweens.current = gsap.utils.toArray('.review-row-track').map((track, index) => {
+          const tween = gsap.fromTo(track, { xPercent: index ? -50 : 0 }, {
+            xPercent: index ? 0 : -50, duration: 70, repeat: -1, ease: 'none', paused: true,
           });
+          ScrollTrigger.create({ trigger: track, start: 'top bottom', end: 'bottom top',
+            onToggle: ({ isActive }) => isActive && !pausedRef.current ? tween.resume() : tween.pause() });
+          return tween;
         });
       }, sectionRef);
-      return () => context.revert();
+      return () => { context.revert(); rowTweens.current = []; };
     });
     return () => media.revert();
-  }, []);
-  return <section ref={sectionRef} className="home-testimonials" id="client-voices" aria-labelledby="testimonials-title">
-    <div className="experience-shell">
-      <SectionTop number={number} label="TESTIMONIALS" aside="CLIENTS & COLLABORATORS" />
-      <div className="testimonials-heading"><div className="signature-heading"><HandwrittenText className="signature-accent">Feedback</HandwrittenText><h2 id="testimonials-title">Client <em>reviews.</em></h2></div><p>Feedback from clients and people I’ve worked with.</p></div>
-      <div className="testimonials-grid">{clientTestimonials.map((item, index) => <figure className={`testimonial-card${item.wide ? " testimonial-card--wide" : ""}`} key={item.discipline}>
-        <div className="testimonial-category"><span>{item.discipline}</span><span aria-hidden="true">0{index + 1}</span></div>
+  }, [testimonials]);
+  const renderCard = (item, index) => (<figure className="testimonial-card" key={item.discipline}>
+        <div className="testimonial-category"><span>{item.discipline}</span><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span></div>
         <span className="testimonial-quote-mark" aria-hidden="true">“</span>
         <blockquote>{item.quote.split("\n\n").map((paragraph, paragraphIndex) => <p key={paragraphIndex} aria-label={paragraph}>{paragraph.split(new RegExp(`(${item.emphasis.join('|')})`, 'g')).map((part, partIndex) => {
           const words = part.split(/(\s+)/).map((word, wordIndex) => /\s+/.test(word) ? word : <span className="testimonial-word" aria-hidden="true" key={wordIndex}>{word}</span>);
           return item.emphasis.includes(part) ? <strong key={partIndex}>{words}</strong> : <React.Fragment key={partIndex}>{words}</React.Fragment>;
         })}</p>)}</blockquote>
-        <figcaption><div className="testimonial-author">{item.author ? <span className="testimonial-avatar testimonial-initials" aria-hidden="true">HM</span> : <img className="testimonial-avatar" src="/media/photos/biraj-sharma.png" alt="Biraj Sharma" width="40" height="40" loading="lazy" />}<div><strong>{item.author || "Biraj Sharma"}</strong><span>{item.author ? "Developer, Dream Chasers" : "Project Manager, The Cyberians"}</span></div></div><img className="testimonial-company-logo" src={item.author ? "/media/logos/dream-chaser.jpg" : "/media/logos/savari.webp"} alt={item.author ? "Dream Chaser" : "Savari"} width="72" height="40" loading="lazy" /></figcaption>
-      </figure>)}</div>
-    </div>
+        <figcaption><div className="testimonial-author">{item.avatar ? <img className="testimonial-avatar" src={item.avatar} alt={item.author} width="40" height="40" loading="lazy" /> : item.author ? <span className="testimonial-avatar testimonial-initials" aria-hidden="true">{item.author.split(/\s+/).map((word) => word[0]).slice(0, 2).join('')}</span> : <img className="testimonial-avatar" src="/media/photos/biraj-sharma.png" alt="Biraj Sharma" width="40" height="40" loading="lazy" />}<div><strong>{item.author || "Biraj Sharma"}</strong><span>{item.role || (item.author ? "Developer, Dream Chasers" : "Project Manager, The Cyberians")}</span></div></div><img className="testimonial-company-logo" src={item.logo || (item.author ? "/media/logos/dream-chaser.jpg" : "/media/logos/savari.webp")} alt={item.company || (item.author ? "Dream Chaser" : "Savari")} width="72" height="40" loading="lazy" /></figcaption>
+      </figure>);
+  return <section ref={sectionRef} className="home-testimonials home-testimonials--reference" id="client-voices" aria-labelledby="testimonials-title">
+    <div className="experience-shell"><div className="reviews-panel">
+      <div className="testimonials-heading"><h2 id="testimonials-title" aria-label="Client reviews."><span className="review-title-word" aria-hidden="true">{Array.from('Client').map((letter, index) => <span className="review-title-char" key={index}>{letter}</span>)}</span>{' '}<em className="review-title-word" aria-hidden="true">{Array.from('reviews.').map((letter, index) => <span className="review-title-char" key={index}>{letter}</span>)}</em></h2><p>Feedback from clients and people I’ve worked with.</p></div>
+      <div className="review-rows" onPointerEnter={() => rowTweens.current.forEach((tween) => tween.pause())} onPointerLeave={() => { if (!pausedRef.current) rowTweens.current.forEach((tween) => tween.resume()); }} onPointerDown={(event) => { if (event.pointerType === 'touch') changeMotion(true); }} onFocusCapture={() => rowTweens.current.forEach((tween) => tween.pause())} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget) && !pausedRef.current) rowTweens.current.forEach((tween) => tween.resume()); }}>
+        {[testimonials.slice(0, 5), testimonials.slice(5)].map((row, rowIndex) => <div className="review-row" key={rowIndex}><div className="review-row-track">
+          {[0, 1].map((copy) => <div className="review-row-group" key={copy} aria-hidden={copy === 1 || undefined}>{row.map((item, index) => renderCard(item, rowIndex * 5 + index))}</div>)}
+        </div></div>)}
+      </div>
+      <div className="reviews-controls"><button type="button" aria-pressed={paused} onClick={() => changeMotion(!paused)}>{paused ? 'Resume' : 'Pause'} motion</button></div>
+    </div></div>
   </section>;
 }
 
@@ -231,7 +265,7 @@ function HomeIdentityTitle() {
   }, [role, visible, paused, reducedMotion]);
   return <div className="home-identity" ref={titleRef}>
     <h2 id="home-about-title" className="home-identity-title" aria-label="I am a filmmaker, photographer, motion designer, brand designer, graphic designer, UI designer, and web developer."><span className="identity-prefix" aria-hidden="true">I AM A</span><em className="identity-role" ref={lettersRef} aria-hidden="true" key={role}>{homeRoles[role].split(' ').map((word, index, words) => <span className="identity-word" key={index}>{[...(word + (index === words.length - 1 ? '.' : ''))].map((character, position) => <span className="identity-flip-character" key={position}>{character}</span>)}</span>)}</em></h2>
-    <div className="identity-status"><span>{String(role + 1).padStart(2, '0')} / 07 · MY SKILLS</span>{!reducedMotion && <button type="button" aria-label={paused ? 'Resume skill animation' : 'Pause skill animation'} onClick={() => setPaused(!paused)}>{paused ? 'PLAY ↗' : 'PAUSE Ⅱ'}</button>}</div>
+    <div className="identity-status"><span className="identity-counter" key={role}>{String(role + 1).padStart(2, '0')} / 07 · MY SKILLS</span>{!reducedMotion && <button type="button" aria-label={paused ? 'Resume skill animation' : 'Pause skill animation'} onClick={() => setPaused(!paused)}>{paused ? 'PLAY ↗' : 'PAUSE Ⅱ'}</button>}</div>
   </div>;
 }
 
@@ -242,6 +276,12 @@ function Home({ lenisRef }) {
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
       const context = gsap.context(() => {
+        const copy = aboutRef.current.querySelector('.home-about-copy');
+        const reveal = gsap.timeline({ scrollTrigger: { trigger: copy, start: 'top 85%', once: true } });
+        reveal.from(copy.querySelectorAll('.home-about-facts span'), { autoAlpha: 0, y: 18, rotationX: 35, duration: .65, stagger: .1, ease: 'power3.out' })
+          .from(copy.querySelectorAll(':scope > p:not(.official-profile-links)'), { autoAlpha: 0, y: 28, duration: .85, stagger: .18, ease: 'power3.out' }, '-=.3')
+          .from(copy.querySelectorAll('.official-profile-links a'), { autoAlpha: 0, y: 16, duration: .5, stagger: .07, ease: 'power3.out' }, '-=.4')
+          .from(copy.querySelector('.experience-text-link'), { autoAlpha: 0, y: 16, duration: .6, ease: 'power3.out' }, '-=.2');
         gsap.utils.toArray('.home-about-photo', aboutRef.current).forEach((photo, index) => {
           const distance = () => window.innerWidth <= 1100 ? (index === 0 ? 14 : -10) : (index === 0 ? 65 : -45);
           gsap.fromTo(photo, { y: () => distance() }, {
@@ -258,7 +298,7 @@ function Home({ lenisRef }) {
     <HomePanels lenisRef={lenisRef} />
     <ParallaxChapters />
 
-    <section className="home-about" ref={aboutRef} aria-labelledby="home-about-title"><div className="experience-shell"><SectionTop number="02" label="ABOUT ME" aside="KATHMANDU, NEPAL" /><div className="home-about-photos"><figure className="home-about-photo home-about-photo--portrait"><img src="/media/photos/tree-final-18.webp" alt="Aashish Mahato wearing round glasses in a black and white portrait" width="1200" height="1800" loading="lazy" /><figcaption>AASHISH / KATHMANDU</figcaption></figure><figure className="home-about-photo home-about-photo--field"><img src="/media/posters/manang.jpg" alt="Himalayan landscape from Aashish Mahato’s Manang travel film" loading="lazy" /><figcaption>IN THE FIELD / MANANG</figcaption></figure></div><div className="home-about-grid"><div data-reveal><span className="experience-eyebrow">ABOUT ME</span><HomeIdentityTitle /></div><div className="home-about-copy" data-reveal><div className="home-about-facts"><span>20 years old</span><span>Kathmandu, Nepal</span></div><p>I’m Aashish Mahato, based in Kathmandu, Nepal. I’m the Creative Head at Cosmic Group. I work in filmmaking, photography, graphic design, and web development.</p><p>My projects include travel films from Mustang and Manang, portraits, social media graphics, brand designs, and websites.</p><p>I started using a computer in 2020 and began graphic design in 2023. I later explored filmmaking and photography. At Herald College Kathmandu, I’m learning web development and motion graphics.</p><p className="official-profile-links">{officialProfiles.map((profile) => <a href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">{profile.label} ↗</a>)}</p><a className="experience-text-link" href="/about/">MORE ABOUT ME <span>↗</span></a></div></div></div></section>
+    <section className="home-about" ref={aboutRef} aria-labelledby="home-about-title"><div className="experience-shell"><SectionTop number="02" label="ABOUT ME" aside="KATHMANDU, NEPAL" /><div className="home-about-photos"><figure className="home-about-photo home-about-photo--portrait"><img src="/media/photos/tree-final-18.webp" alt="Aashish Mahato wearing round glasses in a black and white portrait" width="1200" height="1800" loading="lazy" /><figcaption>AASHISH / KATHMANDU</figcaption></figure><figure className="home-about-photo home-about-photo--field"><img src="/media/posters/manang.jpg" alt="Himalayan landscape from Aashish Mahato’s Manang travel film" loading="lazy" /><figcaption>IN THE FIELD / MANANG</figcaption></figure></div><div className="home-about-grid"><div data-reveal><span className="experience-eyebrow">ABOUT ME</span><HomeIdentityTitle /></div><div className="home-about-copy"><div className="home-about-facts"><span>20 years old</span><span>Kathmandu, Nepal</span></div><p>I’m Aashish Mahato, based in Kathmandu, Nepal. I’m the Creative Head at Cosmic Group. I work in filmmaking, photography, graphic design, and web development.</p><p>My projects include travel films from Mustang and Manang, portraits, social media graphics, brand designs, and websites.</p><p>I started using a computer in 2020 and began graphic design in 2023. I later explored filmmaking and photography. At Herald College Kathmandu, I’m learning web development and motion graphics.</p><p className="official-profile-links">{officialProfiles.map((profile) => <a href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">{profile.label} ↗</a>)}</p><a className="experience-text-link" href="/about/">MORE ABOUT ME <span>↗</span></a></div></div></div></section>
 
     <HomeSkills />
     <HomeCollaborators />
@@ -550,9 +590,10 @@ function SkillPage({ skillId }) {
     }, hero);
     return () => context.revert();
   }, [skillId]);
+  const serviceContext = <section className="work-service-context" aria-label={`${service.name} by Aashish Mahato`}><div><h3>{service.name} by Aashish Mahato</h3><p>{service.description} Based in Kathmandu, Nepal.</p></div><div><h3>Project examples</h3><p>{service.evidence}</p><a href="/contact/">DISCUSS A PROJECT ↗</a></div></section>;
   return <div className={`inner-page skill-page skill-page--${skill.id}`}><SiteNav current="work" /><main>
     <section className="skill-hero" ref={heroRef} aria-labelledby="skill-title"><div className="skill-hero-image">{skill.slides ? skill.slides.map((src, index) => <img className="skill-hero-slide" src={src} alt="" loading={index === 0 ? "eager" : "lazy"} key={src} />) : <img src={skill.cover} alt="" />}{heroVideo && <video className={`skill-hero-video ${heroVideoReady ? 'is-ready' : ''}`} src={heroVideo.src} muted playsInline preload={heroVideoStart === 0 ? "auto" : "metadata"} poster={heroVideo.poster || skill.cover} aria-hidden="true" onLoadedData={(event) => { if (heroVideoStart !== 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onLoadedMetadata={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} onSeeked={(event) => { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onEnded={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} />}</div><div className="skill-hero-shade" /><div className="skill-hero-content experience-shell"><div className="skill-hero-overline"><a href="/work/">← ALL SKILLS</a><span>{String(workSkills.indexOf(skill) + 1).padStart(2, '0')} / {String(workSkills.length).padStart(2, '0')}</span></div><div className="skill-hero-main"><span className="skill-hero-kicker">AASHISH MAHATO / MY WORK</span><MaskedHeroTitle text={skill.name} id="skill-title" /><p>{skill.line}</p></div><div className="skill-hero-bottom"><span>SELECTED PROJECTS BELOW</span><span>SCROLL ↓</span></div></div></section>
-    <section className={`work-detail work-detail--${skill.id}`}><div className="experience-shell"><nav className="work-detail-switcher" aria-label="Explore other skills">{workSkills.map((item) => <a href={`/work/${item.id}/`} key={item.id} aria-current={skill.id === item.id ? 'page' : undefined}>{item.name}</a>)}</nav><div className="work-detail-heading" data-reveal><span>{skill.name} / SKILLS</span><h2>PROJECTS<i>.</i></h2><p>{skill.line}</p><div className="work-detail-capabilities" aria-label={`${skill.name} skills`}>{skill.capabilities.map((capability) => <span key={capability}>{capability}</span>)}</div></div><section className="work-service-context" aria-label={`${service.name} by Aashish Mahato`}><div><h3>{service.name} by Aashish Mahato</h3><p>{service.description} Based in Kathmandu, Nepal.</p></div><div><h3>Project examples</h3><p>{service.evidence}</p><a href="/contact/">DISCUSS A PROJECT ↗</a></div></section><WorkMediaGallery skill={skill} key={skill.id} />{skill.id === 'web' && <div className="github-proof" data-reveal><div className="github-proof-heading"><div><span>PUBLIC GITHUB ACTIVITY / SEPTEMBER 2026 SNAPSHOT</span><h3>GITHUB <em>ACTIVITY.</em></h3><p>A snapshot of my GitHub contribution activity. Visit my profile for the latest projects and activity.</p></div><a href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer">VIEW GITHUB ↗</a></div><a className="github-proof-image" href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer" aria-label="View current GitHub contribution activity"><img src="/media/github-contributions-2026-09.png" alt="Screenshot of Aashish Mahato's GitHub contribution graph in September 2026" loading="lazy" /></a></div>}<div className="skill-page-end"><a href="/work/">← ALL SKILLS</a><a href="/gallery/">FULL GALLERY ↗</a></div></div></section>
+    <section className={`work-detail work-detail--${skill.id}`}><div className="experience-shell"><nav className="work-detail-switcher" aria-label="Explore other skills">{workSkills.map((item) => <a href={`/work/${item.id}/`} key={item.id} aria-current={skill.id === item.id ? 'page' : undefined}>{item.name}</a>)}</nav><div className="work-detail-heading" data-reveal><span>{skill.name} / SKILLS</span><h2>PROJECTS<i>.</i></h2><p>{skill.line}</p>{skill.id === 'branding' ? <p className="work-branding-support">A selection of identity designs and printed materials for CIC Nepal and Decora, including business cards, service booklets, and brand presentations.</p> : <div className="work-detail-capabilities" aria-label={`${skill.name} skills`}>{skill.capabilities.map((capability) => <span key={capability}>{capability}</span>)}</div>}</div>{skill.id !== 'branding' && serviceContext}<WorkMediaGallery skill={skill} key={skill.id} />{skill.id === 'web' && <div className="github-proof" data-reveal><div className="github-proof-heading"><div><span>PUBLIC GITHUB ACTIVITY / SEPTEMBER 2026 SNAPSHOT</span><h3>GITHUB <em>ACTIVITY.</em></h3><p>A snapshot of my GitHub contribution activity. Visit my profile for the latest projects and activity.</p></div><a href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer">VIEW GITHUB ↗</a></div><a className="github-proof-image" href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer" aria-label="View current GitHub contribution activity"><img src="/media/github-contributions-2026-09.png" alt="Screenshot of Aashish Mahato's GitHub contribution graph in September 2026" loading="lazy" /></a></div>}<div className="skill-page-end"><a href="/work/">← ALL SKILLS</a><a href="/gallery/">FULL GALLERY ↗</a></div>{skill.id === 'branding' && serviceContext}</div></section>
   </main><SiteFooter /></div>;
 }
 

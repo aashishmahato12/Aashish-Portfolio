@@ -211,6 +211,7 @@ html.lenis{scroll-behavior:auto}
 .work-detail-heading h2{margin:0;font:600 clamp(50px,6vw,90px)/.94 'Manrope',Arial,sans-serif;letter-spacing:-.08em;overflow-wrap:anywhere}
 .work-detail-heading h2 i{color:#e34530;font-style:normal}
 .work-detail-heading p{max-width:300px;margin:0 0 8px;color:#575757;font-size:16px;line-height:1.6}
+.work-detail-heading .work-branding-support{grid-column:1/-1;max-width:720px;margin:12px 0 0}
 .work-detail-capabilities{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .work-detail-capabilities span{border:1px solid #9d9d9d;border-radius:50px;padding:8px 12px;color:#3c3c3c;font:700 9px 'DM Sans',Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase}
 .work-project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:42px 20px}
@@ -576,6 +577,14 @@ html.lenis{scroll-behavior:auto}
 .identity-status{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:30px;padding-top:18px;border-top:1px solid #bdbdbd;font-size:9px;font-weight:600;letter-spacing:.08em;color:#696969}
 .identity-status button{border:0;background:none;color:#383838;padding:8px 0;font:inherit;white-space:nowrap;cursor:pointer}
 .identity-status button:focus-visible{outline:2px solid #e34530;outline-offset:4px}
+.identity-counter{display:inline-block;animation:identity-counter-reveal .55s cubic-bezier(.22,1,.36,1) both}
+@keyframes identity-counter-reveal{from{opacity:0;transform:translateY(8px) rotateX(45deg)}to{opacity:1;transform:translateY(0) rotateX(0)}}
+.home-about-facts{perspective:700px}
+.home-about-copy .official-profile-links a{display:inline-block;transition:color .2s ease,translate .25s ease}
+.home-about-copy .official-profile-links a:hover{color:#e34530;translate:0 -3px}
+.home-about-copy .experience-text-link>span{display:inline-block;transition:translate .3s cubic-bezier(.22,1,.36,1)}
+.home-about-copy .experience-text-link:hover>span{translate:4px -4px}
+@media(prefers-reduced-motion:reduce){.identity-counter{animation:none}.home-about-copy .official-profile-links a,.home-about-copy .experience-text-link>span{transition:none}.home-about-copy .official-profile-links a:hover,.home-about-copy .experience-text-link:hover>span{translate:none}}
 @media(max-width:700px){.home-about h2.home-identity-title{font-size:clamp(34px,8.6vw,59px)}.identity-status{font-size:8px;letter-spacing:.02em}.identity-prefix{margin-bottom:16px}}
 
 /* Align the introduction from the top, with a tighter section rhythm. */
@@ -692,6 +701,9 @@ html.lenis{scroll-behavior:auto}
 .collaboration-intro{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;padding:42px 0 38px}
 .collaboration-intro h2{margin:0;font:600 clamp(44px,5.4vw,84px)/1.02 'Manrope',Arial,sans-serif;letter-spacing:-.065em}
 .collaboration-intro h2 em{font-style:normal;color:#e34530}
+.collaboration-intro h2{perspective:900px;perspective-origin:50% 50%}
+.collaboration-title-word{display:inline-block;white-space:nowrap;transform-style:preserve-3d}
+.collaboration-title-char{display:inline-block;transform-style:preserve-3d;backface-visibility:hidden;text-shadow:0 1px 0 #00000012,0 3px 5px #00000008}
 .collaboration-intro p{margin:20px 0 0;color:#575757;font-size:15px;line-height:1.6}
 .collaboration-total{display:flex;align-items:center;gap:16px;padding:18px 0 18px 24px;border-left:1px solid #9f9f9f;flex-shrink:0}
 .collaboration-total strong{font:600 52px/1 'Manrope',Arial,sans-serif;letter-spacing:-.06em}
@@ -775,6 +787,15 @@ html.lenis{scroll-behavior:auto}
 .testimonial-card--wide blockquote{max-width:920px}
 .testimonial-card--wide blockquote p+p{margin-top:20px}
 .testimonial-card figcaption .testimonial-initials{display:grid;place-items:center;background:#111;color:#fff;font-size:11px;font-weight:600;line-height:1}
+/* Packed testimonial bento with two wider feature cards. */
+.testimonials-bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-flow:dense;gap:16px}
+.testimonials-bento .testimonial-card{grid-column:span 2;min-width:0;height:420px;padding:26px;box-sizing:border-box;overflow:hidden}
+.testimonials-bento .testimonial-card--wide{grid-column:span 4;background:#f4eee5;border-color:#f4eee5}
+.testimonials-bento .testimonial-card blockquote{overflow-y:auto;min-height:0;scrollbar-width:thin;padding-right:6px}
+.testimonials-bento .testimonial-card blockquote p{font-size:16px}
+.testimonials-bento .testimonial-card figcaption{flex-shrink:0;padding-top:14px;border-top:1px solid #ddd}
+@media(max-width:1000px){.testimonials-bento{grid-template-columns:repeat(2,minmax(0,1fr))}.testimonials-bento .testimonial-card{grid-column:span 1}.testimonials-bento .testimonial-card--wide{grid-column:span 2}}
+@media(max-width:700px){.testimonials-bento{grid-template-columns:1fr}.testimonials-bento .testimonial-card,.testimonials-bento .testimonial-card--wide{grid-column:1;height:auto;max-height:520px;padding:24px}}
 @media(max-width:700px){.testimonial-card--wide{padding:24px}.testimonial-card--wide blockquote p+p{margin-top:18px}}
 
 /* Handwritten accents echo the About portrait without replacing body type. */
@@ -918,3 +939,40 @@ html.lenis{scroll-behavior:auto}
  .home-collaborators .collaboration-card figcaption{font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){.home-collaborators .collaboration-card{transition:none}.home-collaborators .collaboration-card:hover{transform:none}}
+.logo-wall{display:grid;gap:14px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.logo-wall-row{overflow:hidden}
+.logo-wall-track{display:flex;width:max-content;will-change:transform}
+.logo-wall-group{display:flex;gap:14px;padding-right:14px;flex-shrink:0}
+.home-collaborators .logo-wall .collaboration-card{flex:0 0 230px;width:230px;min-height:164px;border-radius:14px;padding:18px}
+.home-collaborators .logo-wall .collaboration-card:hover{transform:none;box-shadow:none}
+.home-collaborators .logo-wall .collaboration-logo{height:100px}
+.logo-wall-controls{text-align:center;margin-top:22px}
+.logo-wall-controls button{background:transparent;border:1px solid #bbb;border-radius:50px;padding:10px 18px;color:#555;font:500 12px 'Manrope',sans-serif;cursor:pointer}
+.home-testimonials--reference{padding:80px 0;background:#fff}
+.reviews-panel{background:#fff;color:#111;border-radius:0;padding:40px 0 24px;overflow:hidden;text-align:center}
+.reviews-panel .testimonials-heading{display:block;margin:26px 24px 32px;text-align:center}
+.reviews-panel .testimonials-heading h2{font:600 clamp(38px,5vw,64px)/1.15 'Manrope',sans-serif;letter-spacing:-.045em;margin:0;perspective:900px;transform-style:preserve-3d}
+.review-title-word{display:inline-block;white-space:nowrap;transform-style:preserve-3d}
+.review-title-char{display:inline-block;transform-style:preserve-3d;backface-visibility:hidden;text-shadow:0 2px 0 #00000018,0 5px 12px #00000018}
+.reviews-panel .testimonials-heading h2 em{font-style:normal;color:#e34530}
+.reviews-panel .testimonials-heading p{max-width:none;margin:12px 0 0;color:#777;font-size:14px}
+.review-rows{display:grid;gap:16px;mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+.review-row{overflow:hidden;text-align:left}
+.review-row-track{display:flex;width:max-content;will-change:transform}
+.review-row-group{display:flex;flex-shrink:0;gap:16px;padding-right:16px}
+.reviews-panel .testimonial-card{flex:0 0 340px;width:340px;height:330px;box-sizing:border-box;padding:22px;background:#f5f5f7;border:1px solid #e9e9ed;border-radius:18px}
+.reviews-panel .testimonial-category{font-size:9px;color:#777}
+.reviews-panel .testimonial-quote-mark{color:#e34530;height:35px;font-size:48px;margin-top:10px}
+.reviews-panel .testimonial-card blockquote{overflow-y:auto;min-height:0;scrollbar-width:thin;margin-bottom:16px;padding-right:5px}
+.reviews-panel .testimonial-card blockquote p{font-size:14px;line-height:1.5}
+.reviews-panel .testimonial-card blockquote p+p{margin-top:14px}
+.reviews-panel .testimonial-card figcaption{flex-shrink:0;gap:8px}
+.reviews-panel .testimonial-company-logo{width:48px;max-height:32px;object-fit:contain}
+.reviews-panel .testimonial-author strong{font-size:12px}
+.reviews-panel .testimonial-avatar{width:32px;height:32px;flex-basis:32px}
+.reviews-controls{margin-top:22px}
+.reviews-controls button{background:transparent;border:1px solid #ddd;border-radius:50px;padding:9px 16px;color:#666;font:500 11px 'Manrope',sans-serif;cursor:pointer}
+@media(max-width:600px){.home-testimonials--reference{padding:48px 0}.reviews-panel{padding-top:28px}.reviews-panel .testimonial-card{flex-basis:285px;width:285px;height:350px}.review-rows{gap:12px}}
+@media(prefers-reduced-motion:reduce){.review-rows{mask-image:none;padding:0 20px}.review-row{overflow-x:auto}.review-row-track{transform:none!important;will-change:auto}.review-row-group[aria-hidden="true"],.reviews-controls{display:none}}
+@media(max-width:600px){.home-collaborators .logo-wall .collaboration-card{flex-basis:180px;width:180px;min-height:145px}.logo-wall,.logo-wall-group{gap:10px}.logo-wall-group{padding-right:10px}}
+@media(prefers-reduced-motion:reduce){.logo-wall{mask-image:none}.logo-wall-track{width:100%;will-change:auto}.logo-wall-group{flex-wrap:wrap;justify-content:center;width:100%;padding:0}.logo-wall-group[aria-hidden="true"],.logo-wall .collaboration-card[aria-hidden="true"],.logo-wall-controls{display:none}.home-collaborators .logo-wall .collaboration-card{flex:1 1 180px}}
