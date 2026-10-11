@@ -1,5 +1,6 @@
 import Negotiator from 'negotiator';
 import { pageMarkdown, llmsText, agentInstructions, notFoundMarkdown } from './agent-content.js';
+import { notFoundHtml } from './not-found-page.js';
 export function canonicalPage(path) {
   const normalized = path.replace(/\/index\.html$/, '/');
   return normalized.endsWith('/') ? normalized : normalized + '/';
@@ -31,7 +32,7 @@ export function agentResponse(request) {
   if (representation === 'text/markdown') return respond(content || notFoundMarkdown, content ? 200 : 404);
   if (!content) {
     headers['Content-Type'] = 'text/html; charset=utf-8';
-    return respond('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page not found | Aashish Mahato</title><body style="background:#111;color:white;font:18px/1.6 system-ui;padding:8vw"><h1>404 — Page not found</h1><p>This page does not exist.</p><a style="color:#e34530" href="/">Home</a> · <a style="color:#e34530" href="/work/">Work</a></body></html>', 404);
+    return respond(notFoundHtml, 404);
   }
   return null;
 }

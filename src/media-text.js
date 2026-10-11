@@ -22,6 +22,8 @@ const descriptions = {
   '/media/design/158.webp': 'Blue congratulations poster featuring the Nepal cricket team',
   '/media/design/17.webp': 'Cosmic Electrical graphic with the message Work Hard, Spend Smart, Build Strong',
   '/media/design/tihar.webp': 'Tihar greeting design with festive food, lamps, and Nepali lettering',
+  '/media/design/dashain-greeting.webp': 'Cosmic Group Dashain greeting with red Nepali calligraphy, a kite, and a skyline of Nepal',
+  '/media/design/dashain-puja.webp': 'Cosmic Group Dashain design featuring a brass puja tray with tika, rice, jamara, flowers, and a lit lamp',
   '/media/design/25.webp': 'Red Nepali New Year greeting with a calendar and festive lettering',
   '/media/design/79.webp': 'Red-and-white recruitment poster advertising an Account Officer position',
   '/media/design/92.webp': 'Cosmic Group Tihar campaign graphic featuring a colorful kite',

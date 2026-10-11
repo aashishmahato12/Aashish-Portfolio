@@ -1,0 +1,41 @@
+.masonry-list{position:relative;width:100%;margin-top:36px}
+.masonry-item{position:absolute;top:0;left:0;min-width:0}
+.masonry-tile{display:block;width:100%;height:100%;padding:0;border:0;background:none;text-align:left;cursor:zoom-in;color:inherit}
+.masonry-visual{position:relative;display:block;width:100%;overflow:hidden;border-radius:10px;background:#ecebe7;transform-origin:center}
+.masonry-visual img,.masonry-visual video{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.masonry-video{background:#111}
+.masonry-youtube{background:#111}
+.masonry-youtube img{object-fit:cover}
+.masonry-with-details .masonry-tile{height:auto}
+.masonry-details{display:flow-root;padding:16px 2px 24px}
+.masonry-open{position:absolute;bottom:12px;right:12px;padding:9px 11px;background:#111c;color:#fff;border-radius:4px;font:600 9px/1.2 'DM Sans',sans-serif;letter-spacing:.1em;opacity:0;transition:opacity .25s;pointer-events:none}
+.masonry-tile:hover .masonry-open,.masonry-tile:focus-visible .masonry-open{opacity:1}
+.masonry-caption{display:block;padding:12px 2px}
+.masonry-caption small{display:block;color:#e34530;font:600 8px/1.3 'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.12em}
+.masonry-caption strong{display:block;margin-top:5px;font:500 13px/1.35 'Manrope',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.masonry-tile:focus-visible{outline:2px solid #e34530;outline-offset:4px;border-radius:10px}
+.masonry-color-shift .masonry-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(45deg,#ff009633,#0096ff33);opacity:0;transition:opacity .3s;pointer-events:none}
+.masonry-color-shift:hover .masonry-visual::after{opacity:1}
+@media(hover:none){.masonry-open{opacity:1}}
+@media(prefers-reduced-motion:reduce){.masonry-open,.masonry-color-shift .masonry-visual::after{transition:none}}
+
+.work-masonry-gallery{margin-top:40px}
+.work-masonry-single{max-width:620px;margin-inline:auto}
+.work-masonry-info>span{font:600 9px/1.4 'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.12em;color:#e34530}
+.work-masonry-info h3{margin:8px 0;font:500 clamp(20px,2vw,27px)/1.25 'Manrope',sans-serif;letter-spacing:-.04em;overflow-wrap:anywhere}
+.work-masonry-info p{margin:10px 0;font:400 13px/1.65 'DM Sans',sans-serif;color:#777}
+.work-masonry-info a{display:inline-block;margin-top:12px;color:#e34530;font:600 10px/1.5 'DM Sans',sans-serif;letter-spacing:.06em}
+.work-masonry-links{display:flex;flex-wrap:wrap;gap:8px 20px}
+.work-masonry-gallery .web-project-art-content{padding:22px}
+.work-masonry-gallery .web-project-art-content strong{font-size:clamp(27px,3vw,42px)}
+.work-masonry-gallery .web-project-browser small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.work-media-lightbox{position:fixed;inset:0;z-index:100;background:#111f;display:flex;align-items:center;justify-content:center;padding:70px 24px 32px;overflow:auto;color:#fff}
+.work-media-close{position:fixed;top:20px;right:24px;z-index:1;border:1px solid #ffffff80;background:#111;color:#fff;padding:12px 18px;font:600 10px 'DM Sans',sans-serif;letter-spacing:.1em;cursor:pointer}
+.work-media-preview{width:min(100%,1100px);max-height:100%;overflow:auto}
+.work-media-preview>img,.work-media-preview>video{display:block;width:100%;max-height:65svh;object-fit:contain;background:#111}
+.work-media-preview>iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
+.work-media-preview .work-masonry-info{padding:20px 2px}
+.work-media-preview .work-masonry-info p{color:#aaa}
+.work-web-preview{height:min(55svh,480px)}
+.work-media-close:focus-visible,.work-masonry-info a:focus-visible{outline:2px solid #e34530;outline-offset:4px}
+@media(max-width:600px){.work-media-lightbox{padding:65px 20px 24px}.work-masonry-info h3{font-size:22px}}

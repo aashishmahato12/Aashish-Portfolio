@@ -94,7 +94,7 @@ export function AboutOpening() {
       <div className="kinetic-intro-grid">
         <h2 id="kinetic-intro-title" data-reveal>About me.</h2>
         <div className="about-person-summary" data-reveal>
-          <p className="kinetic-bio">I’m Aashish Mahato. I work in filmmaking, photography, graphic design, and web development.</p>
+          <p className="kinetic-bio">I’m Aashish Mahato, Creative Head at Cosmic Group. I work in filmmaking, photography, graphic design, and web development.</p>
           <div className="about-fact-chips"><span><MapPin size={16} aria-hidden="true" />Kathmandu, Nepal</span><span><GraduationCap size={16} aria-hidden="true" />Herald College Kathmandu</span></div>
         </div>
       </div>

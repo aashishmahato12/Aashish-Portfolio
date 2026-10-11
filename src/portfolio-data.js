@@ -63,6 +63,7 @@ export const featuredProjects = [
     description: 'A collection of campaign and social graphics for Cosmic Group.',
     cover: `${design}/162.webp`,
     media: [
+      ['dashain-greeting', 'Dashain greeting'], ['dashain-puja', 'Dashain puja design'],
       ['162', 'Anniversary graphic'], ['158', 'Cricket congratulations'],
       ['17', 'Motivational graphic'], ['tihar', 'Tihar greeting'],
       ['25', 'New year graphic'], ['79', 'Hiring graphic'],
@@ -72,11 +73,28 @@ export const featuredProjects = [
 ];
 
 // Public work verified against the linked live site and GitHub repositories.
-// Display travel films first, followed by the general showreel.
+export const corporateFilms = [
+  ['_rSA6XdkSKk', 'Celebrating 25 years of Excellence | Cosmic Electrical'],
+  ['Q9tsnL9auzA', 'A Gala of Gratitude: Celebrating Projects and Partnerships at Cosmic Electrical 🎉'],
+  ['jH0ymoImYpc', 'Cosmic Electrical Limited Proves 24 Years of Commitment to Quality.'],
+  ['KXSBv_oYkHo', 'Mahesh Mahato,MD Cosmic Electrical Limited'],
+  ['Bd_L1rkCnG4', 'Cosmic Electrical - Official Trailer'],
+].map(([youtubeId, title]) => ({
+  id: `corporate-${youtubeId}`,
+  title,
+  category: 'Corporate Film',
+  company: 'Cosmic Group',
+  description: 'Corporate video work by Aashish Mahato, Creative Head at Cosmic Group.',
+  cover: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`,
+  media: [{ id: youtubeId, type: 'youtube', youtubeId, title }],
+}));
+
+// Display travel films first, followed by the showreel and corporate films.
 export const filmProjects = [
   featuredProjects.find(project => project.id === 'manang-film'),
   featuredProjects.find(project => project.id === 'mustang-film'),
   { id: 'showreel', title: 'Current showreel', category: 'Film', description: 'A selection of my video projects.', cover: heroReel.poster, media: [heroReel] },
+  ...corporateFilms,
 ];
 
 export const webProjects = [
@@ -128,6 +146,7 @@ export const galleryMedia = [
 ];
 
 export const collaborators = [
+  { name: 'Dream Chaser', logo: `${logo}/dream-chaser.jpg`, color: '#171717' },
   { name: 'Fintasy', logo: `${logo}/fintasy.webp`, color: '#e87060', ink: '#161915' },
   { name: 'Cosmic Innovation Center', logo: `${logo}/cic.webp`, color: '#0868b8' },
   { name: 'Decora', logo: `${logo}/decora.webp`, color: '#167a2b' },

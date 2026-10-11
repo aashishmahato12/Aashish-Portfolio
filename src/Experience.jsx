@@ -2,7 +2,7 @@ import { privacySections, privacyProviders, privacyUpdated } from './privacy-con
 import { isWebKit } from './browser-performance.js';
 import { creativeServices, projectQuestions } from './services-data.js';
 import { mediaAlt, mediaDescription } from './media-text.js';
-import React, { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import Lenis from 'lenis';
 import gsap from 'gsap';
@@ -12,6 +12,7 @@ import App from './App.jsx';
 import { SiteHeader as SiteNav, SiteFooter } from './SiteChrome.jsx';
 import { searchMeta, searchImages, structuredData, officialProfiles } from './seo-data.js';
 import HomePanels from './HomePanels.jsx';
+import Masonry from './Masonry.jsx';
 import HandwrittenText from './HandwrittenText.jsx';
 import ParallaxChapters from './ParallaxChapters.jsx';
 import { PreviewLinkCard, PreviewLinkCardContent, PreviewLinkCardImage, PreviewLinkCardPortal, PreviewLinkCardTrigger } from './components/animate-ui/primitives/radix/preview-link-card.jsx';
@@ -24,8 +25,8 @@ const AboutOpening = React.lazy(() => import('./AboutSections.jsx').then((module
 const AboutAfterTimeline = React.lazy(() => import('./AboutSections.jsx').then((module) => ({ default: module.AboutAfterTimeline })));
 const GalleryFinalGrid = React.lazy(() => import('./GalleryEffects.jsx').then((module) => ({ default: module.GalleryFinalGrid })));
 const GalleryLetterTitle = React.lazy(() => import('./GalleryLetterTitle.jsx'));
-const GalleryIsometricWave = React.lazy(() => import('./GalleryIsometricWave.jsx'));
 const GalleryCinematic = React.lazy(() => import('./GalleryCinematic.jsx'));
+const GalleryIsometricWave = React.lazy(() => import('./GalleryIsometricWave.jsx'));
 
 const routeFor = (path) => {
   path = path.replace(/\/index\.html$/, '/');
@@ -109,9 +110,19 @@ function HomeCollaborators() {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const context = gsap.context(() => {
       gsap.from('.collaboration-card', {
-        y: 20, opacity: 0, duration: .55, stagger: .035, ease: 'power2.out',
+        y: 36, rotationX: 8, opacity: 0, duration: .8, stagger: .055, ease: 'power3.out',
         clearProps: 'transform,opacity',
         scrollTrigger: { trigger: '.collaboration-grid', start: 'top 88%', once: true },
+      });
+      gsap.utils.toArray('.collaboration-logo').forEach((logo, index) => {
+        const drift = gsap.to(logo, {
+          y: index % 2 ? 4 : -4, duration: 2.2 + index % 3 * .3,
+          repeat: -1, yoyo: true, ease: 'sine.inOut', paused: true,
+        });
+        ScrollTrigger.create({
+          trigger: logo, start: 'top bottom', end: 'bottom top',
+          onToggle: ({ isActive }) => isActive ? drift.resume() : drift.pause(),
+        });
       });
     }, sectionRef);
     return () => context.revert();
@@ -124,7 +135,18 @@ function HomeCollaborators() {
         <div className="collaboration-total"><strong>{collaborators.length}</strong><span>Brands &amp; teams<br />I’ve worked with</span></div>
       </div>
       <div className="collaboration-grid" aria-label="Brands and teams">{collaborators.map((company, index) =>
-        <figure className="collaboration-card" key={company.name}>
+        <figure className="collaboration-card" key={company.name}
+          onPointerMove={(event) => {
+            if (event.pointerType !== 'mouse' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const card = event.currentTarget;
+            const bounds = card.getBoundingClientRect();
+            card.style.setProperty('--tilt-x', `${-(event.clientY - bounds.top - bounds.height / 2) / bounds.height * 8}deg`);
+            card.style.setProperty('--tilt-y', `${(event.clientX - bounds.left - bounds.width / 2) / bounds.width * 8}deg`);
+          }}
+          onPointerLeave={(event) => {
+            event.currentTarget.style.removeProperty('--tilt-x');
+            event.currentTarget.style.removeProperty('--tilt-y');
+          }}>
           <div className="collaboration-logo"><img src={company.logo} alt={`${company.name} logo`} loading="lazy" decoding="async" /></div>
           <figcaption><span>{company.name}</span><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span></figcaption>
         </figure>
@@ -173,7 +195,7 @@ function HomeTestimonials({ number = "05" }) {
           const words = part.split(/(\s+)/).map((word, wordIndex) => /\s+/.test(word) ? word : <span className="testimonial-word" aria-hidden="true" key={wordIndex}>{word}</span>);
           return item.emphasis.includes(part) ? <strong key={partIndex}>{words}</strong> : <React.Fragment key={partIndex}>{words}</React.Fragment>;
         })}</p>)}</blockquote>
-        <figcaption><div className="testimonial-author">{item.author ? <span className="testimonial-avatar testimonial-initials" aria-hidden="true">HM</span> : <img className="testimonial-avatar" src="/media/photos/biraj-sharma.png" alt="Biraj Sharma" width="40" height="40" loading="lazy" />}<div><strong>{item.author || "Biraj Sharma"}</strong><span>{item.author ? "Developer, Dream Chasers" : "Project Manager, The Cyberians"}</span></div></div>{!item.author && <img className="testimonial-company-logo" src="/media/logos/savari.webp" alt="Savari" width="72" height="40" loading="lazy" />}</figcaption>
+        <figcaption><div className="testimonial-author">{item.author ? <span className="testimonial-avatar testimonial-initials" aria-hidden="true">HM</span> : <img className="testimonial-avatar" src="/media/photos/biraj-sharma.png" alt="Biraj Sharma" width="40" height="40" loading="lazy" />}<div><strong>{item.author || "Biraj Sharma"}</strong><span>{item.author ? "Developer, Dream Chasers" : "Project Manager, The Cyberians"}</span></div></div><img className="testimonial-company-logo" src={item.author ? "/media/logos/dream-chaser.jpg" : "/media/logos/savari.webp"} alt={item.author ? "Dream Chaser" : "Savari"} width="72" height="40" loading="lazy" /></figcaption>
       </figure>)}</div>
     </div>
   </section>;
@@ -236,7 +258,7 @@ function Home({ lenisRef }) {
     <HomePanels lenisRef={lenisRef} />
     <ParallaxChapters />
 
-    <section className="home-about" ref={aboutRef} aria-labelledby="home-about-title"><div className="experience-shell"><SectionTop number="02" label="ABOUT ME" aside="KATHMANDU, NEPAL" /><div className="home-about-photos"><figure className="home-about-photo home-about-photo--portrait"><img src="/media/photos/tree-final-18.webp" alt="Aashish Mahato wearing round glasses in a black and white portrait" width="1200" height="1800" loading="lazy" /><figcaption>AASHISH / KATHMANDU</figcaption></figure><figure className="home-about-photo home-about-photo--field"><img src="/media/posters/manang.jpg" alt="Himalayan landscape from Aashish Mahato’s Manang travel film" loading="lazy" /><figcaption>IN THE FIELD / MANANG</figcaption></figure></div><div className="home-about-grid"><div data-reveal><span className="experience-eyebrow">ABOUT ME</span><HomeIdentityTitle /></div><div className="home-about-copy" data-reveal><div className="home-about-facts"><span>20 years old</span><span>Kathmandu, Nepal</span></div><p>I’m Aashish Mahato, based in Kathmandu, Nepal. I work in filmmaking, photography, graphic design, and web development.</p><p>My projects include travel films from Mustang and Manang, portraits, social media graphics, brand designs, and websites.</p><p>I started using a computer in 2020 and began graphic design in 2023. I later explored filmmaking and photography. At Herald College Kathmandu, I’m learning web development and motion graphics.</p><p className="official-profile-links">{officialProfiles.map((profile) => <a href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">{profile.label} ↗</a>)}</p><a className="experience-text-link" href="/about/">MORE ABOUT ME <span>↗</span></a></div></div></div></section>
+    <section className="home-about" ref={aboutRef} aria-labelledby="home-about-title"><div className="experience-shell"><SectionTop number="02" label="ABOUT ME" aside="KATHMANDU, NEPAL" /><div className="home-about-photos"><figure className="home-about-photo home-about-photo--portrait"><img src="/media/photos/tree-final-18.webp" alt="Aashish Mahato wearing round glasses in a black and white portrait" width="1200" height="1800" loading="lazy" /><figcaption>AASHISH / KATHMANDU</figcaption></figure><figure className="home-about-photo home-about-photo--field"><img src="/media/posters/manang.jpg" alt="Himalayan landscape from Aashish Mahato’s Manang travel film" loading="lazy" /><figcaption>IN THE FIELD / MANANG</figcaption></figure></div><div className="home-about-grid"><div data-reveal><span className="experience-eyebrow">ABOUT ME</span><HomeIdentityTitle /></div><div className="home-about-copy" data-reveal><div className="home-about-facts"><span>20 years old</span><span>Kathmandu, Nepal</span></div><p>I’m Aashish Mahato, based in Kathmandu, Nepal. I’m the Creative Head at Cosmic Group. I work in filmmaking, photography, graphic design, and web development.</p><p>My projects include travel films from Mustang and Manang, portraits, social media graphics, brand designs, and websites.</p><p>I started using a computer in 2020 and began graphic design in 2023. I later explored filmmaking and photography. At Herald College Kathmandu, I’m learning web development and motion graphics.</p><p className="official-profile-links">{officialProfiles.map((profile) => <a href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">{profile.label} ↗</a>)}</p><a className="experience-text-link" href="/about/">MORE ABOUT ME <span>↗</span></a></div></div></div></section>
 
     <HomeSkills />
     <HomeCollaborators />
@@ -248,27 +270,91 @@ function Home({ lenisRef }) {
 
 const photographyProjects = galleryMedia.filter((item) => item.category === 'Photography').map((item) => ({ id: item.id, title: item.title, category: 'Photography', cover: item.src, media: [item] }));
 const workSkills = [
-  { id: 'film', name: 'FILM', line: 'Travel films, videography, and editing.', cover: filmProjects[0].cover, preview: filmProjects[1].cover, capabilities: ['Videography', 'Editing', 'Visual storytelling'], projects: filmProjects },
+  { id: 'film', name: 'FILM', line: 'Travel films, corporate videos, and editing.', cover: filmProjects[0].cover, preview: filmProjects[1].cover, capabilities: ['Videography', 'Editing', 'Visual storytelling'], projects: filmProjects },
   { id: 'photography', name: 'PHOTOGRAPHY', line: 'Portrait, street, nature, and landscape photography.', cover: photographyProjects[0].cover, preview: photographyProjects[1].cover, slides: photographyProjects.slice(0, 5).map((project) => project.cover), capabilities: ['Composition', 'Portraits', 'Landscape'], projects: photographyProjects },
   { id: 'motion', name: 'MOTION GRAPHICS', line: 'Animation and product videos.', cover: featuredProjects[2].cover, preview: featuredProjects[2].cover, capabilities: ['Animation', 'Motion design', 'Editing'], projects: featuredProjects.filter((project) => project.category === 'Motion Graphics') },
   { id: 'branding', name: 'BRANDING', line: 'Brand identities, business cards, and booklets.', cover: featuredProjects[3].cover, preview: featuredProjects[4].cover, slides: [featuredProjects[3].cover, featuredProjects[4].cover, featuredProjects[3].media[1].src], capabilities: ['Visual identity', 'Art direction', 'Brand mockups'], projects: featuredProjects.filter((project) => project.category === 'Brand & Digital') },
-  { id: 'graphic', name: 'GRAPHIC DESIGN', line: 'Social media posters and campaign graphics.', cover: featuredProjects[5].cover, preview: featuredProjects[5].media[1].src, slides: featuredProjects[5].media.slice(0, 5).map((item) => item.src), capabilities: ['Campaign graphics', 'Social design', 'Layout'], projects: featuredProjects.filter((project) => project.category === 'Graphic Design') },
+  { id: 'graphic', name: 'GRAPHIC DESIGN', line: 'Social media posters and campaign graphics.', cover: featuredProjects[5].cover, preview: featuredProjects[5].media[1].src, slides: ['dashain-puja', '162', '158', 'tihar', '25'].map((file) => `/media/design/${file}.webp`), capabilities: ['Campaign graphics', 'Social design', 'Layout'], projects: featuredProjects.filter((project) => project.category === 'Graphic Design') },
   { id: 'digital', name: 'DIGITAL', line: 'Website, dashboard, and mobile interface designs.', cover: featuredProjects[3].media.find((item) => item.category === 'Digital').src, preview: featuredProjects[4].media.find((item) => item.category === 'Digital').src, slides: [...featuredProjects[3].media, ...featuredProjects[4].media].filter((item) => item.category === 'Digital').map((item) => item.src), capabilities: ['Web design', 'UI concepts', 'Frontend'], projects: featuredProjects.filter((project) => project.category === 'Brand & Digital') },
   { id: 'web', name: 'WEB DEVELOPMENT', line: 'Responsive websites, React interfaces, and web tools.', cover: webProjects[0].mark, preview: webProjects[0].mark, capabilities: ['Responsive websites', 'React interfaces', 'Web tools'], projects: webProjects },
 ];
 const projectHref = (project) => `/work/${workSkills.find((skill) => skill.projects.some((item) => item.id === project.id))?.id || 'film'}/#${project.id}`;
 
-function WorkProjectCard({ project, index, skillId }) {
-  const video = project.media?.find((item) => item.type === 'video');
-  const photos = project.media?.filter((item) => item.type === 'photo' && (skillId === 'digital' ? item.category === 'Digital' : skillId === 'branding' ? item.category === 'Branding' : true)) || [];
-  const cover = photos[0]?.src || project.cover;
-  const extraPhotos = photos.filter((item) => item.src !== cover);
-  return <article className={`work-project-card ${['branding', 'graphic', 'digital'].includes(skillId) ? 'work-project-card--design' : ''} ${skillId === 'web' ? 'work-project-card--web' : ''}`} id={project.id} data-reveal>
-    <div className="work-project-visual">{skillId === 'web' ? <div className={`web-project-art web-project-art--${project.theme}`}><div className="web-project-browser"><span /><span /><span /><small>{new URL(project.liveUrl).hostname}</small></div><div className="web-project-art-content">{project.mark && <img src={project.mark} alt="" loading="lazy" />}<span>{project.category}</span><strong>{project.title}</strong><i>↗</i></div></div> : video ? <ReelVideo item={video} controls /> : <img src={cover} alt={mediaAlt({ ...project, src: cover })} loading="lazy" />}</div>
-    <div className="work-project-info"><span>{String(index + 1).padStart(2, '0')} / {project.category}</span><h3>{project.title}</h3><p>{mediaDescription(project) || project.category}</p></div>
-    {skillId === 'web' && <div className="web-project-links"><a href={project.liveUrl} target="_blank" rel="noopener noreferrer">VISIT {project.title.toUpperCase()} ↗</a>{project.repoUrl && <a href={project.repoUrl} target="_blank" rel="noopener noreferrer">{project.title.toUpperCase()} SOURCE CODE ↗</a>}</div>}
-    {extraPhotos.length > 0 && <div className="work-project-extras">{extraPhotos.map((item) => <figure key={item.src}><img src={item.src} alt={mediaAlt(item)} loading="lazy" /><figcaption>{item.title}</figcaption></figure>)}</div>}
-  </article>;
+function WebProjectVisual({ project }) {
+  return <div className={`web-project-art web-project-art--${project.theme}`}><div className="web-project-browser"><span /><span /><span /><small>{new URL(project.liveUrl).hostname}</small></div><div className="web-project-art-content">{project.mark && <img src={project.mark} alt="" loading="lazy" />}<span>{project.category}</span><strong>{project.title}</strong><i>↗</i></div></div>;
+}
+
+const workMasonryVisual = (item) => item.type === 'web' ? <WebProjectVisual project={item.project} /> : null;
+const workMasonryDetails = (item) => <div className="work-masonry-info">
+  <span>{item.category}</span><h3>{item.title}</h3>
+  {item.description && <p>{item.description}</p>}
+  {item.type === 'youtube' && <a href={`https://www.youtube.com/watch?v=${item.youtubeId}`} target="_blank" rel="noopener noreferrer">WATCH ON YOUTUBE ↗</a>}
+  {item.type === 'web' && <div className="work-masonry-links"><a href={item.project.liveUrl} target="_blank" rel="noopener noreferrer">VISIT WEBSITE ↗</a>{item.project.repoUrl && <a href={item.project.repoUrl} target="_blank" rel="noopener noreferrer">SOURCE CODE ↗</a>}</div>}
+</div>;
+
+function WorkMediaGallery({ skill }) {
+  const [selected, setSelected] = useState(null);
+  const triggerRef = useRef(null);
+  const dialogRef = useRef(null);
+  const galleryRef = useRef(null);
+  const items = useMemo(() => skill.projects.flatMap(project => {
+    if (skill.id === 'web') return [{ id: project.id, anchorId: project.id, type: 'web', title: project.title, category: project.category, description: project.description, aspectRatio: 4 / 3, project }];
+    return (project.media || []).filter(item => skill.id === 'branding' ? item.category === 'Branding' : skill.id === 'digital' ? item.category === 'Digital' : true).map((item, index) => ({
+      ...item, id: `${project.id}-${index}`, anchorId: index === 0 ? project.id : undefined,
+      title: item.type === 'photo' ? item.title || project.title : project.title,
+      category: item.category || project.category,
+      description: index === 0 ? project.description : undefined,
+      poster: item.poster || project.cover,
+      ...(item.type === 'youtube' ? { src: project.cover, aspectRatio: 16 / 9 } : {}),
+    }));
+  }), [skill]);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => ScrollTrigger.refresh());
+    observer.observe(galleryRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!selected || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const context = gsap.context(() => {
+      gsap.from(dialogRef.current, { opacity: 0, duration: .3 });
+      gsap.from('.work-media-preview', { y: 24, scale: .96, duration: .5, ease: 'power3.out' });
+    }, dialogRef);
+    return () => context.revert();
+  }, [selected]);
+
+  useEffect(() => {
+    if (!selected) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    dialogRef.current.querySelector('button').focus();
+    const onKey = event => {
+      if (event.key === 'Escape') setSelected(null);
+      if (event.key === 'Tab') {
+        const targets = [...dialogRef.current.querySelectorAll('button, a, iframe, video[controls]')];
+        const first = targets[0], last = targets[targets.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => { document.body.style.overflow = previous; window.removeEventListener('keydown', onKey); triggerRef.current?.focus(); };
+  }, [selected]);
+
+  return <div className={`work-masonry-gallery${items.length === 1 ? ' work-masonry-single' : ''}`} ref={galleryRef}>
+    <Masonry items={items} maxColumns={3} paused={Boolean(selected)} renderVisual={workMasonryVisual} renderDetails={workMasonryDetails} onOpen={(item, trigger) => { triggerRef.current = trigger; setSelected(item); }} />
+    {selected && <div className="work-media-lightbox" ref={dialogRef} role="dialog" aria-modal="true" aria-label={selected.title} onMouseDown={event => { if (event.target === event.currentTarget) setSelected(null); }}>
+      <button className="work-media-close" type="button" onClick={() => setSelected(null)} aria-label="Close preview">CLOSE ×</button>
+      <div className="work-media-preview">
+        {selected.type === 'youtube' ? <iframe src={`https://www.youtube-nocookie.com/embed/${selected.youtubeId}?autoplay=1&mute=1&playsinline=1&rel=0`} title={selected.title} allow="autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen />
+          : selected.type === 'video' ? <ReelVideo item={selected} controls />
+          : selected.type === 'web' ? <div className="work-web-preview"><WebProjectVisual project={selected.project} /></div>
+          : <img src={selected.src} alt={mediaAlt(selected)} />}
+        {workMasonryDetails(selected)}
+      </div>
+    </div>}
+  </div>;
 }
 
 function WorkSkillCard({ skill, index }) {
@@ -466,7 +552,7 @@ function SkillPage({ skillId }) {
   }, [skillId]);
   return <div className={`inner-page skill-page skill-page--${skill.id}`}><SiteNav current="work" /><main>
     <section className="skill-hero" ref={heroRef} aria-labelledby="skill-title"><div className="skill-hero-image">{skill.slides ? skill.slides.map((src, index) => <img className="skill-hero-slide" src={src} alt="" loading={index === 0 ? "eager" : "lazy"} key={src} />) : <img src={skill.cover} alt="" />}{heroVideo && <video className={`skill-hero-video ${heroVideoReady ? 'is-ready' : ''}`} src={heroVideo.src} muted playsInline preload={heroVideoStart === 0 ? "auto" : "metadata"} poster={heroVideo.poster || skill.cover} aria-hidden="true" onLoadedData={(event) => { if (heroVideoStart !== 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onLoadedMetadata={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} onSeeked={(event) => { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onEnded={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} />}</div><div className="skill-hero-shade" /><div className="skill-hero-content experience-shell"><div className="skill-hero-overline"><a href="/work/">← ALL SKILLS</a><span>{String(workSkills.indexOf(skill) + 1).padStart(2, '0')} / {String(workSkills.length).padStart(2, '0')}</span></div><div className="skill-hero-main"><span className="skill-hero-kicker">AASHISH MAHATO / MY WORK</span><MaskedHeroTitle text={skill.name} id="skill-title" /><p>{skill.line}</p></div><div className="skill-hero-bottom"><span>SELECTED PROJECTS BELOW</span><span>SCROLL ↓</span></div></div></section>
-    <section className={`work-detail work-detail--${skill.id}`}><div className="experience-shell"><nav className="work-detail-switcher" aria-label="Explore other skills">{workSkills.map((item) => <a href={`/work/${item.id}/`} key={item.id} aria-current={skill.id === item.id ? 'page' : undefined}>{item.name}</a>)}</nav><div className="work-detail-heading" data-reveal><span>{skill.name} / SKILLS</span><h2>PROJECTS<i>.</i></h2><p>{skill.line}</p><div className="work-detail-capabilities" aria-label={`${skill.name} skills`}>{skill.capabilities.map((capability) => <span key={capability}>{capability}</span>)}</div></div><section className="work-service-context" aria-label={`${service.name} by Aashish Mahato`}><div><h3>{service.name} by Aashish Mahato</h3><p>{service.description} Based in Kathmandu, Nepal.</p></div><div><h3>Project examples</h3><p>{service.evidence}</p><a href="/contact/">DISCUSS A PROJECT ↗</a></div></section><div className="work-project-grid">{skill.projects.map((project, index) => <WorkProjectCard project={project} index={index} skillId={skill.id} key={project.id} />)}</div>{skill.id === 'web' && <div className="github-proof" data-reveal><div className="github-proof-heading"><div><span>PUBLIC GITHUB ACTIVITY / SEPTEMBER 2026 SNAPSHOT</span><h3>GITHUB <em>ACTIVITY.</em></h3><p>A snapshot of my GitHub contribution activity. Visit my profile for the latest projects and activity.</p></div><a href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer">VIEW GITHUB ↗</a></div><a className="github-proof-image" href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer" aria-label="View current GitHub contribution activity"><img src="/media/github-contributions-2026-09.png" alt="Screenshot of Aashish Mahato's GitHub contribution graph in September 2026" loading="lazy" /></a></div>}<div className="skill-page-end"><a href="/work/">← ALL SKILLS</a><a href="/gallery/">FULL GALLERY ↗</a></div></div></section>
+    <section className={`work-detail work-detail--${skill.id}`}><div className="experience-shell"><nav className="work-detail-switcher" aria-label="Explore other skills">{workSkills.map((item) => <a href={`/work/${item.id}/`} key={item.id} aria-current={skill.id === item.id ? 'page' : undefined}>{item.name}</a>)}</nav><div className="work-detail-heading" data-reveal><span>{skill.name} / SKILLS</span><h2>PROJECTS<i>.</i></h2><p>{skill.line}</p><div className="work-detail-capabilities" aria-label={`${skill.name} skills`}>{skill.capabilities.map((capability) => <span key={capability}>{capability}</span>)}</div></div><section className="work-service-context" aria-label={`${service.name} by Aashish Mahato`}><div><h3>{service.name} by Aashish Mahato</h3><p>{service.description} Based in Kathmandu, Nepal.</p></div><div><h3>Project examples</h3><p>{service.evidence}</p><a href="/contact/">DISCUSS A PROJECT ↗</a></div></section><WorkMediaGallery skill={skill} key={skill.id} />{skill.id === 'web' && <div className="github-proof" data-reveal><div className="github-proof-heading"><div><span>PUBLIC GITHUB ACTIVITY / SEPTEMBER 2026 SNAPSHOT</span><h3>GITHUB <em>ACTIVITY.</em></h3><p>A snapshot of my GitHub contribution activity. Visit my profile for the latest projects and activity.</p></div><a href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer">VIEW GITHUB ↗</a></div><a className="github-proof-image" href="https://github.com/aashishmahato12" target="_blank" rel="noopener noreferrer" aria-label="View current GitHub contribution activity"><img src="/media/github-contributions-2026-09.png" alt="Screenshot of Aashish Mahato's GitHub contribution graph in September 2026" loading="lazy" /></a></div>}<div className="skill-page-end"><a href="/work/">← ALL SKILLS</a><a href="/gallery/">FULL GALLERY ↗</a></div></div></section>
   </main><SiteFooter /></div>;
 }
 
@@ -476,8 +562,6 @@ function GalleryPage() {
   const pageRef = useRef(null);
   const gridRef = useRef(null);
   const lightboxRef = useRef(null);
-  const filterTweenRef = useRef(null);
-  const filterBusyRef = useRef(false);
   const photoTriggerRef = useRef(null);
 
   // Natural-ratio archive images change the page height as they load.
@@ -521,30 +605,6 @@ function GalleryPage() {
   }, []);
 
   useLayoutEffect(() => {
-    const grid = gridRef.current;
-    if (!grid) return undefined;
-    const media = gsap.matchMedia();
-    media.add('(prefers-reduced-motion: no-preference)', () => {
-      const context = gsap.context(() => {
-        const cards = Array.from(grid.querySelectorAll('.gallery-piece'));
-        cards.forEach((card, index) => {
-          const visual = card.querySelector('.gallery-piece-media');
-          const caption = card.querySelector('.gallery-piece-caption');
-          gsap.set(card, { autoAlpha: 0, y: 72, x: index % 2 ? 24 : -24 });
-          gsap.set(visual, { clipPath: 'inset(0 0 18% 0)' });
-          gsap.timeline({ scrollTrigger: { trigger: card, start: 'top 88%', once: true } })
-            .to(card, { autoAlpha: 1, y: 0, x: 0, duration: .95, delay: index % 2 ? .1 : 0, ease: 'power3.out' })
-            .to(visual, { clipPath: 'inset(0 0 0% 0)', duration: 1.05, ease: 'power3.out' }, '<')
-            .from(caption, { autoAlpha: 0, y: 20, duration: .55, ease: 'power2.out' }, '<.35');
-        });
-      }, grid);
-      const refresh = window.requestAnimationFrame(() => ScrollTrigger.refresh());
-      return () => { window.cancelAnimationFrame(refresh); context.revert(); };
-    });
-    return () => media.revert();
-  }, [filter]);
-
-  useLayoutEffect(() => {
     if (!photo || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
     const context = gsap.context(() => {
       gsap.fromTo(lightboxRef.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: .38, ease: 'power2.out' });
@@ -553,8 +613,6 @@ function GalleryPage() {
     }, lightboxRef);
     return () => context.revert();
   }, [photo]);
-
-  useEffect(() => () => filterTweenRef.current?.kill(), []);
 
   const closePhoto = () => {
     const finish = () => { setPhoto(null); window.requestAnimationFrame(() => photoTriggerRef.current?.focus()); };
@@ -582,34 +640,20 @@ function GalleryPage() {
     return () => { window.clearTimeout(focusTimer); window.removeEventListener('keydown', onEscape); document.body.style.overflow = previousOverflow; };
   }, [photo]);
 
-  const changeFilter = (next) => {
-    if (next === filter || filterBusyRef.current) return;
-    const cards = gridRef.current?.querySelectorAll('.gallery-piece');
-    if (!cards?.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setFilter(next); return; }
-    filterBusyRef.current = true;
-    filterTweenRef.current = gsap.to(cards, {
-      autoAlpha: 0, y: -25, duration: .28, stagger: { each: .018, from: 'end' },
-      ease: 'power2.inOut', onComplete: () => { setFilter(next); filterBusyRef.current = false; },
-    });
-  };
-
-  const animateHover = (event, active) => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const image = event.currentTarget.querySelector('img');
-    if (image) gsap.to(image, { filter: active ? 'brightness(1.1)' : 'brightness(1)', duration: .35, ease: 'power2.out', overwrite: 'auto' });
-  };
-
-  const combined = [...galleryMedia, ...featuredProjects.flatMap((project) => (project.media || []).map((item,index) => ({ ...item, id: item.id || `${project.id}-${index}`, title: item.title || project.title })))];
-  const allMedia = combined.filter((item, index) => combined.findIndex((other) => other.src === item.src) === index);
+  const changeFilter = (next) => setFilter(next);
+  const allMedia = useMemo(() => {
+    const combined = [...galleryMedia, ...featuredProjects.flatMap((project) => (project.media || []).map((item,index) => ({ ...item, id: item.id || `${project.id}-${index}`, title: item.title || project.title })))];
+    return combined.filter((item, index) => combined.findIndex((other) => other.src === item.src) === index);
+  }, []);
   const allPhotos = allMedia.filter((item) => item.type === 'photo');
-  const items = allMedia.filter((item) => filter === 'all' || (filter === 'video' && item.type === 'video') || (filter === 'photography' && item.category === 'Photography') || (filter === 'design' && item.type === 'photo' && item.category !== 'Photography'));
+  const items = useMemo(() => allMedia.filter((item) => filter === 'all' || (filter === 'video' && item.type === 'video') || (filter === 'photography' && item.category === 'Photography') || (filter === 'design' && item.type === 'photo' && item.category !== 'Photography')), [allMedia, filter]);
 
   return <div className="inner-page gallery-page" ref={pageRef}>
     <SiteNav current="gallery" />
     <main>
       <section className="inner-intro gallery-intro experience-shell"><SectionTop number="01" label="GALLERY" aside="WATCH / VIEW / EXPLORE" /><div className="signature-heading signature-page-title"><HandwrittenText className="signature-accent">Explore</HandwrittenText><GalleryLetterTitle /></div><p>Browse my films, photographs, brand designs, and graphic design projects.</p></section>
       <GalleryCinematic items={allMedia} />
-      <section className="gallery-content experience-shell" id="gallery-library"><div className="gallery-library-heading"><span>PHOTOS / FILMS / DESIGN</span><h2>ALL <em>WORK.</em></h2><p>Open a photo, play a video, or filter by category.</p></div><div className="gallery-controls"><span aria-live="polite">{String(items.length).padStart(2, '0')} PIECES</span><div role="group" aria-label="Gallery filter">{[['all','ALL'],['video','FILMS'],['photography','PHOTOS'],['design','DESIGN']].map(([value,label])=><button type="button" key={value} aria-pressed={filter===value} onClick={()=>changeFilter(value)}>{label}</button>)}</div></div><div className="gallery-grid" ref={gridRef}>{items.map((item, index)=><article className="gallery-piece" id={`gallery-item-${item.id}`} key={item.id}><div className="gallery-piece-media">{item.type==='video'?<ReelVideo item={item} controls />:<button type="button" onPointerEnter={(event)=>animateHover(event,true)} onPointerLeave={(event)=>animateHover(event,false)} onClick={(event)=>{photoTriggerRef.current=event.currentTarget;setPhoto(item)}} aria-label={`Open ${item.title}`}><img src={item.src} alt={mediaAlt(item)} loading="lazy" /><span>EXPAND ↗</span></button>}</div><div className="gallery-piece-caption"><span>{String(index+1).padStart(2,'0')} / {item.category || item.type.toUpperCase()}</span><h2>{item.title}</h2></div><p className="gallery-media-description">{mediaDescription(item)}</p></article>)}</div></section>
+      <section className="gallery-content experience-shell" id="gallery-library"><div className="gallery-library-heading"><span>PHOTOS / FILMS / DESIGN</span><h2>ALL <em>WORK.</em></h2><p>Open a photo, play a video, or filter by category.</p></div><div className="gallery-controls"><span aria-live="polite">{String(items.length).padStart(2, '0')} PIECES</span><div role="group" aria-label="Gallery filter">{[['all','ALL'],['video','FILMS'],['photography','PHOTOS'],['design','DESIGN']].map(([value,label])=><button type="button" key={value} aria-pressed={filter===value} onClick={()=>changeFilter(value)}>{label}</button>)}</div></div><div ref={gridRef}><Masonry items={items} paused={Boolean(photo)} ease="power3.out" duration={.6} stagger={.05} animateFrom="bottom" hoverScale={.97} blurToFocus onOpen={(item, trigger) => { photoTriggerRef.current = trigger; setPhoto(item); }} /></div></section>
       <GalleryIsometricWave items={allMedia} paused={Boolean(photo)} onOpen={(item, trigger) => { photoTriggerRef.current = trigger; setPhoto(item); }} />
       <GalleryFinalGrid photos={allPhotos} />
     </main>

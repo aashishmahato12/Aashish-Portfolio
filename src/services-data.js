@@ -1,8 +1,8 @@
 export const creativeServices = [
   {
     id: 'film', name: 'Filmmaking & editing',
-    description: 'Travel films, videography, and video editing.',
-    evidence: 'Watch the Mustang and Manang travel films to explore my landscape filmmaking and editing.',
+    description: 'Travel films, corporate videos, videography, and video editing.',
+    evidence: 'Watch the Mustang and Manang travel films and my corporate videos for Cosmic Group to explore my filmmaking and editing.',
   },
   {
     id: 'photography', name: 'Photography',

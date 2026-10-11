@@ -1,6 +1,6 @@
 import { searchMeta, siteUrl, creativeBio, officialProfiles } from '../src/seo-data.js';
 import { creativeServices } from '../src/services-data.js';
-import { featuredProjects, galleryMedia, webProjects } from '../src/portfolio-data.js';
+import { featuredProjects, galleryMedia, webProjects, corporateFilms } from '../src/portfolio-data.js';
 import { privacySections, privacyProviders, privacyUpdated } from '../src/privacy-content.js';
 const link = (label, path) => `[${label}](${path.startsWith('/') ? siteUrl + path : path})`;
 const profiles = officialProfiles.map(p => `- ${link(p.label, p.url)}`).join('\n');
@@ -20,6 +20,7 @@ export const pageMarkdown = Object.fromEntries(Object.entries(searchMeta).map(([
   else {
     const service = creativeServices.find(s => id === `skill-${s.id}`);
     body += `${service.description}\n\n${service.evidence}\n\n## Project enquiries\n\n${link('Contact Aashish', '/contact/')}\n`;
+    if (service.id === 'film') body += `\n## Corporate films / Cosmic Group\n\n${corporateFilms.map(p => `- ${link(p.title, `https://www.youtube.com/watch?v=${p.media[0].youtubeId}`)}: ${p.description}`).join('\n')}\n`;
     if (service.id === 'web') body += `\n## Web projects\n\n${webProjects.map(p => `- ${p.title}: ${p.description || p.category}`).join('\n')}\n`;
   }
   body += `\n## Portfolio pages\n\n${['work', 'gallery', 'about', 'contact', 'privacy'].map(key => `- ${link(searchMeta[key][0], searchMeta[key][2])}`).join('\n')}\n`;

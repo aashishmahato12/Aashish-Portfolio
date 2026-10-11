@@ -6,6 +6,7 @@ import { searchMeta, siteUrl } from '../src/seo-data.js';
 import { pageMarkdown, llmsText, agentInstructions } from '../server/agent-content.js';
 import { chooseRepresentation, agentResponse } from '../server/agent-response.js';
 import middleware from '../middleware.js';
+import { notFoundHtml } from '../server/not-found-page.js';
 
 test('HTTP Accept quality values, exclusions, wildcards and HTML default', () => {
   for (const [accept, expected] of [
@@ -86,7 +87,17 @@ test('every built public page and machine file is served correctly over HTTP', a
     }
     const html404 = await get('/missing-agent-probe', 'text/html');
     assert.equal(html404.status, 404);
-    assert.match(await html404.text(), /404/);
+    assert.match(html404.headers.get('content-type'), /^text\/html/);
+    const errorPage = await html404.text();
+    assert.equal(errorPage, notFoundHtml);
+    assert.match(errorPage, /id="not-found-page"/);
+    assert.match(errorPage, /name="robots" content="noindex, follow"/);
+    assert.match(errorPage, /href="\/">Back to home/);
+    assert.equal(readFileSync('dist/404.html', 'utf8'), notFoundHtml);
+    const missingHead = await get('/missing-agent-probe', 'text/html', 'HEAD');
+    assert.equal(missingHead.status, 404);
+    assert.match(missingHead.headers.get('content-type'), /^text\/html/);
+    assert.equal(await missingHead.text(), '');
     const head = await get('/', 'text/markdown', 'HEAD');
     assert.equal(head.status, 200);
     assert.equal(await head.text(), '');

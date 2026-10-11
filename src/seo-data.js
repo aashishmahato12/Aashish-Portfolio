@@ -1,6 +1,6 @@
 import { creativeServices } from './services-data.js';
 export const siteUrl = 'https://aashish-mahato.com.np';
-export const creativeBio = 'Aashish Mahato is a filmmaker, photographer, designer, and web developer based in Kathmandu, Nepal. His portfolio includes travel films, photography, motion graphics, branding, graphic design, and websites.';
+export const creativeBio = 'Aashish Mahato is the Creative Head at Cosmic Group and a filmmaker, photographer, designer, and web developer based in Kathmandu, Nepal. His portfolio includes travel films, photography, motion graphics, branding, graphic design, and websites.';
 export const officialProfiles = [
   { label: 'Instagram', url: 'https://www.instagram.com/aashishmahato12/' },
   { label: 'GitHub', url: 'https://github.com/aashishmahato12' },
@@ -49,7 +49,8 @@ export function structuredData(route) {
     '@type': 'Person', '@id': personId, name: 'Aashish Mahato',
     url: `${siteUrl}/about/`, image: `${siteUrl}/media/photos/tree-final-18.webp`,
     description: creativeBio,
-    jobTitle: ['Filmmaker', 'Photographer', 'Designer', 'Web Developer'],
+    worksFor: { '@type': 'Organization', name: 'Cosmic Group' },
+    jobTitle: ['Creative Head', 'Filmmaker', 'Photographer', 'Designer', 'Web Developer'],
     knowsAbout: creativeServices.map((service) => service.name),
     homeLocation: { '@type': 'City', name: 'Kathmandu', containedInPlace: { '@type': 'Country', name: 'Nepal' } },
     sameAs: officialProfiles.map((profile) => profile.url),
