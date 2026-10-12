@@ -272,7 +272,7 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
           insertedDisk.visible = !!next; booting = !!next;
           if (video) { video.pause(); video.removeAttribute('src'); video.load(); video.remove(); video = null; }
           if (!next) { screen.visible = false; sync(); return; }
-          const palette = { Film: '#e34530', Photography: '#292929', Motion: '#c63826', Branding: '#444444', 'Graphic design': '#a92c1d', Digital: '#666666', Web: '#111111' };
+          const palette = { Film: '#e34530', Photography: '#292929', Motion: '#c63826', Branding: '#444444', 'Graphic design': '#a92c1d', 'UI/UX Design': '#666666', Web: '#111111' };
           diskMaterial.color.set(palette[next.name] || '#e34530');
           const label = labelCanvas.getContext('2d'); label.fillStyle = '#ffffff'; label.fillRect(0, 0, 512, 200);
           label.fillStyle = '#111111'; label.font = 'bold 42px sans-serif'; label.fillText(next.name.toUpperCase(), 24, 88); label.font = '22px monospace'; label.fillText('AASHISH MAHATO / PROJECT DISK', 24, 146); labelMap.needsUpdate = true;

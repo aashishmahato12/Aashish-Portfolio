@@ -1,4 +1,5 @@
 import React from 'react';
+import RubberSegment from './RubberSegment.jsx';
 import { officialProfiles } from './seo-data.js';
 
 const pages = [
@@ -13,21 +14,28 @@ export function SiteHeader({ current }) {
   return <header className="inner-nav creative-header">
     <a className="header-identity" href="/" aria-label="Aashish Mahato home"><span className="inner-logo">A/M<span>®</span></span><span className="header-name">Aashish Mahato<small>Film, design & web · Kathmandu</small></span></a>
     <nav aria-label="Main navigation">
-      {pages.map(page => <a className={page.id === 'contact' ? 'header-contact' : 'header-page'} key={page.id} href={page.href} aria-current={current === page.id ? 'page' : undefined}><span>{page.label}</span>{page.id === 'contact' && <span className="header-arrow" aria-hidden="true">↗</span>}</a>)}
+      <RubberSegment
+        items={pages.map(page => ({ value: page.id, href: page.href, label: <>{page.label}{page.id === 'contact' && <span className="header-arrow" aria-hidden="true">↗</span>}</> }))}
+        value={current}
+        trackColor="transparent"
+        thumbColor={current === 'contact' ? '#e34530' : '#fff'}
+        activeTextColor={current === 'contact' ? '#fff' : '#111'}
+        size="lg" radius={40} inset={4} equalSlots={false} draggable={false}
+        aria-label="Main navigation"
+      />
     </nav>
   </header>;
 }
 
 export function SiteFooter() {
-  return <footer className="experience-footer bento-footer">
-    <div className="footer-bento-grid">
-      <a href="/contact/" className="footer-tile footer-contact-tile"><span className="footer-tile-label">HAVE A PROJECT IN MIND?</span><strong>Let’s talk<span aria-hidden="true">↗</span></strong><p>Film, photography, design, and web.</p></a>
-      <a href="/" className="footer-tile footer-brand-tile" aria-label="Aashish Mahato home"><span className="footer-logo">A/M<span>®</span></span><span>Aashish Mahato</span></a>
-      <nav className="footer-tile footer-nav-tile" aria-label="Footer navigation"><span className="footer-tile-label">EXPLORE</span>{pages.map(page => <a key={page.id} href={page.href}>{page.label}<span aria-hidden="true">↗</span></a>)}</nav>
-      <a className="footer-tile footer-work-tile" href="/work/"><span className="footer-tile-label">THE PORTFOLIO</span><strong>View my<br />work.</strong><span className="footer-big-arrow" aria-hidden="true">↗</span></a>
-      <nav className="footer-tile footer-social-tile" aria-label="Social profiles"><span className="footer-tile-label">FIND ME ONLINE</span>{officialProfiles.map(profile => <a key={profile.url} href={profile.url} target="_blank" rel="noopener noreferrer">{profile.label}<span aria-hidden="true">↗</span></a>)}</nav>
-      <div className="footer-tile footer-location-tile"><span className="footer-tile-label">BASED IN</span><strong>Kathmandu,<br />Nepal.</strong></div>
+  return <footer className="experience-footer creative-end-footer">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap" />
+    <div className="creative-end-top"><span>AASHISH MAHATO / PORTFOLIO</span><span>KATHMANDU, NEPAL</span></div>
+    <div className="creative-end-main">
+      <a className="creative-end-contact" href="/contact/"><span>HAVE A PROJECT IN MIND?</span><strong>LET’S<br />TALK<span className="creative-end-period">.</span></strong><span className="creative-end-arrow" aria-hidden="true">↗</span></a>
+      <div className="creative-end-directory"><nav aria-label="Footer navigation"><span>EXPLORE</span>{pages.map(page => <a key={page.id} href={page.href}>{page.label}<span aria-hidden="true">↗</span></a>)}</nav><nav aria-label="Social profiles"><span>FIND ME ONLINE</span>{officialProfiles.map(profile => <a key={profile.url} href={profile.url} target="_blank" rel="noopener noreferrer">{profile.label}<span aria-hidden="true">↗</span></a>)}</nav></div>
     </div>
-    <div className="footer-bottom"><span>© {new Date().getFullYear()} AASHISH MAHATO</span><a href="/privacy/">Privacy</a></div>
+    <a className="creative-end-name" href="/" aria-label="Aashish Mahato home">AASHISH MAHATO</a>
+    <div className="creative-end-bottom"><span>© {new Date().getFullYear()} AASHISH MAHATO</span><span>FILM / PHOTOGRAPHY / DESIGN / WEB</span><a href="/privacy/">Privacy</a></div>
   </footer>;
 }

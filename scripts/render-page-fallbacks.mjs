@@ -27,7 +27,7 @@ const groups = [
   ['motion', 'Motion graphics', 'Animated visuals and moving-image work by Aashish Mahato.', featuredProjects.filter((item) => item.category === 'Motion Graphics')],
   ['branding', 'Branding projects', 'Identity and brand presentation work by Aashish Mahato.', featuredProjects.filter((item) => item.category === 'Brand & Digital')],
   ['graphic', 'Graphic design projects', 'Campaign and social graphics by Aashish Mahato.', featuredProjects.filter((item) => item.category === 'Graphic Design')],
-  ['digital', 'Digital projects', 'Interface and digital product concepts by Aashish Mahato.', featuredProjects.filter((item) => item.category === 'Brand & Digital')],
+  ['digital', 'UI/UX design projects', 'Interface and digital product concepts by Aashish Mahato.', featuredProjects.filter((item) => item.category === 'Brand & Digital')],
   ['web', 'Web development projects', 'Websites and web applications built by Aashish Mahato.', webProjects],
 ];
 

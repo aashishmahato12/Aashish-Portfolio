@@ -13,6 +13,7 @@ import { SiteHeader as SiteNav, SiteFooter } from './SiteChrome.jsx';
 import { searchMeta, searchImages, structuredData, officialProfiles } from './seo-data.js';
 import HomePanels from './HomePanels.jsx';
 import Masonry from './Masonry.jsx';
+import { Button as AnimatedButton } from './components/animate-ui/components/buttons/button.jsx';
 import HandwrittenText from './HandwrittenText.jsx';
 import ParallaxChapters from './ParallaxChapters.jsx';
 import { PreviewLinkCard, PreviewLinkCardContent, PreviewLinkCardImage, PreviewLinkCardPortal, PreviewLinkCardTrigger } from './components/animate-ui/primitives/radix/preview-link-card.jsx';
@@ -313,9 +314,9 @@ const workSkills = [
   { id: 'film', name: 'FILM', line: 'Travel films, corporate videos, and editing.', cover: filmProjects[0].cover, preview: filmProjects[1].cover, capabilities: ['Videography', 'Editing', 'Visual storytelling'], projects: filmProjects },
   { id: 'photography', name: 'PHOTOGRAPHY', line: 'Portrait, street, nature, and landscape photography.', cover: photographyProjects[0].cover, preview: photographyProjects[1].cover, slides: photographyProjects.slice(0, 5).map((project) => project.cover), capabilities: ['Composition', 'Portraits', 'Landscape'], projects: photographyProjects },
   { id: 'motion', name: 'MOTION GRAPHICS', line: 'Animation and product videos.', cover: featuredProjects[2].cover, preview: featuredProjects[2].cover, capabilities: ['Animation', 'Motion design', 'Editing'], projects: featuredProjects.filter((project) => project.category === 'Motion Graphics') },
-  { id: 'branding', name: 'BRANDING', line: 'Brand identities, business cards, and booklets.', cover: featuredProjects[3].cover, preview: featuredProjects[4].cover, slides: [featuredProjects[3].cover, featuredProjects[4].cover, featuredProjects[3].media[1].src], capabilities: ['Visual identity', 'Art direction', 'Brand mockups'], projects: featuredProjects.filter((project) => project.category === 'Brand & Digital') },
+  { id: 'branding', name: 'BRANDING', line: 'Brand identities, business cards, and booklets.', cover: featuredProjects[3].cover, preview: featuredProjects[4].media.find(item => item.category === 'Branding').src, slides: [featuredProjects[3].cover, featuredProjects[4].cover, featuredProjects[3].media[1].src], capabilities: ['Visual identity', 'Art direction', 'Brand mockups'], projects: featuredProjects.filter((project) => project.category === 'Brand & Digital') },
   { id: 'graphic', name: 'GRAPHIC DESIGN', line: 'Social media posters and campaign graphics.', cover: featuredProjects[5].cover, preview: featuredProjects[5].media[1].src, slides: ['dashain-puja', '162', '158', 'tihar', '25'].map((file) => `/media/design/${file}.webp`), capabilities: ['Campaign graphics', 'Social design', 'Layout'], projects: featuredProjects.filter((project) => project.category === 'Graphic Design') },
-  { id: 'digital', name: 'DIGITAL', line: 'Website, dashboard, and mobile interface designs.', cover: featuredProjects[3].media.find((item) => item.category === 'Digital').src, preview: featuredProjects[4].media.find((item) => item.category === 'Digital').src, slides: [...featuredProjects[3].media, ...featuredProjects[4].media].filter((item) => item.category === 'Digital').map((item) => item.src), capabilities: ['Web design', 'UI concepts', 'Frontend'], projects: featuredProjects.filter((project) => project.category === 'Brand & Digital') },
+  { id: 'digital', name: 'UI/UX DESIGN', line: 'Website, dashboard, and mobile interface designs.', cover: featuredProjects[3].media.find((item) => item.category === 'Digital').src, preview: featuredProjects[4].media.find((item) => item.category === 'Digital').src, slides: [...featuredProjects[3].media, ...featuredProjects[4].media].filter((item) => item.category === 'Digital').map((item) => item.src), capabilities: ['Web design', 'UI concepts', 'Frontend'], projects: featuredProjects.filter((project) => project.category === 'Brand & Digital') },
   { id: 'web', name: 'WEB DEVELOPMENT', line: 'Responsive websites, React interfaces, and web tools.', cover: webProjects[0].mark, preview: webProjects[0].mark, capabilities: ['Responsive websites', 'React interfaces', 'Web tools'], projects: webProjects },
 ];
 const projectHref = (project) => `/work/${workSkills.find((skill) => skill.projects.some((item) => item.id === project.id))?.id || 'film'}/#${project.id}`;
@@ -326,7 +327,7 @@ function WebProjectVisual({ project }) {
 
 const workMasonryVisual = (item) => item.type === 'web' ? <WebProjectVisual project={item.project} /> : null;
 const workMasonryDetails = (item) => <div className="work-masonry-info">
-  <span>{item.category}</span><h3>{item.title}</h3>
+  <span>{item.category === 'Digital' ? 'UI/UX Design' : item.category}</span><h3>{item.title}</h3>
   {item.description && <p>{item.description}</p>}
   {item.type === 'youtube' && <a href={`https://www.youtube.com/watch?v=${item.youtubeId}`} target="_blank" rel="noopener noreferrer">WATCH ON YOUTUBE ↗</a>}
   {item.type === 'web' && <div className="work-masonry-links"><a href={item.project.liveUrl} target="_blank" rel="noopener noreferrer">VISIT WEBSITE ↗</a>{item.project.repoUrl && <a href={item.project.repoUrl} target="_blank" rel="noopener noreferrer">SOURCE CODE ↗</a>}</div>}
@@ -455,78 +456,142 @@ function HomeFilmPreview({ film }) {
 
 function HomeSkills() {
   const sectionRef = useRef(null);
-  const slideRef = useRef(null);
-  const travelRef = useRef(null);
+  const showcaseRef = useRef(null);
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const [interacting, setInteracting] = useState(false);
   const [visible, setVisible] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [alternateSkill, setAlternateSkill] = useState(null);
+  const [photoFrame, setPhotoFrame] = useState(0);
+  const [imageAccent, setImageAccent] = useState(null);
+  const skill = workSkills[active];
+  const service = creativeServices.find(item => item.id === skill.id);
+  const alternate = alternateSkill === skill.id;
+  const photoFrames = skill.projects.flatMap(project => (project.media || [])
+    .filter(item => item.type === 'photo' && (skill.id === 'branding' ? item.category === 'Branding' : skill.id === 'digital' ? item.category === 'Digital' : true))
+    .map(item => ({ ...item, projectId: project.id })));
+  const currentPhoto = photoFrames[photoFrame % photoFrames.length];
+  const nextPhoto = photoFrames[(photoFrame + 1) % photoFrames.length];
+  const canSwitch = skill.id === 'film' || skill.id === 'web' || photoFrames.length > 1;
+  const webPreview = alternate ? webProjects[1] : webProjects[0];
+  const previewImage = skill.id === 'web'
+    ? `/media/web/${alternate ? 'unisync' : 'cosmic'}-website.png`
+    : currentPhoto?.src || (alternate ? skill.preview : skill.cover);
+  const otherImage = skill.id === 'web'
+    ? `/media/web/${alternate ? 'cosmic' : 'unisync'}-website.png`
+    : nextPhoto?.src || (alternate ? skill.cover : skill.preview);
+  const defaultAccent = { film: alternate ? '#245e68' : '#285a91', photography: '#246879', motion: '#254a8b', branding: '#28578a', graphic: '#a83229', digital: '#326347', web: alternate ? '#4e4693' : '#b22f35' }[skill.id];
+  const accent = imageAccent || defaultAccent;
+  const sampleAccent = event => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 12;
+      const context = canvas.getContext('2d', { willReadFrequently: true });
+      context.drawImage(event.currentTarget, 0, 0, 12, 12);
+      const pixels = context.getImageData(0, 0, 12, 12).data;
+      const sums = [0, 0, 0]; let count = 0;
+      for (let i = 0; i < pixels.length; i += 4) {
+        const channels = [pixels[i], pixels[i + 1], pixels[i + 2]];
+        const max = Math.max(...channels), min = Math.min(...channels);
+        if (max < 45 || max - min < 35) continue;
+        channels.forEach((value, channel) => { sums[channel] += value; }); count++;
+      }
+      if (count) {
+        const average = sums.map(value => value / count);
+        const shade = 115 / Math.max(...average);
+        setImageAccent(`rgb(${average.map(value => Math.round(value * shade)).join(',')})`);
+      }
+    } catch { /* Keep the skill colour when a remote image cannot be sampled. */ }
+  };
+  const supportingMedia = skill.projects.flatMap(project => (project.media || [])
+    .filter(item => skill.id === 'branding' ? item.category === 'Branding' : skill.id === 'digital' ? item.category === 'Digital' : true)
+    .map(item => ({ ...item, image: item.type === 'photo' ? item.src : item.poster || project.cover, projectId: project.id })))
+    .find(item => item.image && item.image !== previewImage && item.image !== otherImage);
 
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => setReducedMotion(preference.matches);
     update();
     preference.addEventListener('change', update);
-    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: .25 });
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: .2 });
     observer.observe(sectionRef.current);
     return () => { preference.removeEventListener('change', update); observer.disconnect(); };
   }, []);
-  useLayoutEffect(() => {
-    const track = slideRef.current;
-    const viewport = track.parentElement;
-    const tween = gsap.timeline({
-      repeat: -1, paused: true,
-      onUpdate: () => {
-        const position = Math.abs(Number(gsap.getProperty(track, 'x'))) / viewport.clientWidth;
-        setActive(Math.floor(position + .00001) % workSkills.length);
-      },
-    });
-    // Keep moving gently while a card is readable, then accelerate through
-    // the transition and ease back into the next card's slow drift.
-    const transitionEase = (progress) => .035 * progress + .965 * progress * progress * (3 - 2 * progress);
-    workSkills.forEach((_, index) => {
-      tween.to(track, { x: () => -(index + .12) * viewport.clientWidth, duration: 7, ease: 'none' });
-      tween.to(track, { x: () => -(index + 1) * viewport.clientWidth, duration: 1.8, ease: transitionEase });
-    });
-    travelRef.current = tween;
-    const resize = new ResizeObserver(() => {
-      const progress = tween.progress();
-      tween.invalidate().progress(progress);
-    });
-    resize.observe(viewport);
-    return () => { resize.disconnect(); tween.kill(); travelRef.current = null; gsap.set(track, { clearProps: 'transform' }); };
-  }, []);
   useEffect(() => {
-    const update = () => {
-      if (paused || interacting || !visible || reducedMotion || document.hidden) travelRef.current?.pause();
-      else travelRef.current?.play();
-    };
-    update();
-    document.addEventListener('visibilitychange', update);
-    return () => document.removeEventListener('visibilitychange', update);
-  }, [paused, interacting, visible, reducedMotion]);
-  const selectSkill = (index) => {
-    travelRef.current?.progress(index / workSkills.length);
-    setActive(index);
-  };
+    setPhotoFrame(0);
+    setImageAccent(null);
+  }, [active, alternate]);
+  useEffect(() => {
+    if ((photoFrames.length < 2 && skill.id !== 'web') || paused || interacting || !visible || reducedMotion) return;
+    const timer = window.setInterval(() => {
+      if (document.hidden) return;
+      if (skill.id === 'web') setAlternateSkill(value => value === 'web' ? null : 'web');
+      else setPhotoFrame(index => index + 1);
+    }, 3500);
+    return () => window.clearInterval(timer);
+  }, [active, photoFrames.length, paused, interacting, visible, reducedMotion]);
+  useEffect(() => {
+    if (paused || interacting || !visible || reducedMotion) return;
+    const timer = window.setInterval(() => {
+      if (!document.hidden) setActive(index => (index + 1) % workSkills.length);
+    }, 8000);
+    return () => window.clearInterval(timer);
+  }, [active, paused, interacting, visible, reducedMotion]);
+  useLayoutEffect(() => {
+    if (!visible) return;
+    const media = gsap.matchMedia();
+    media.add('(prefers-reduced-motion: no-preference)', () => {
+      const context = gsap.context(() => {
+        const entrance = gsap.timeline();
+        entrance.from('.skills-showcase-media, .skills-bento-overview, .skills-bento-photo, .skills-bento-preview', {
+          opacity: 0, y: 32, rotationX: 7, scale: .97, transformPerspective: 1000,
+          duration: .85, stagger: .09, ease: 'power3.out',
+        }).from('.skills-bento-overview > *', {
+          opacity: 0, x: -18, duration: .65, stagger: .07, ease: 'power3.out',
+        }, .2);
+      }, showcaseRef);
+      return () => context.revert();
+    });
+    return () => media.revert();
+  }, [active, visible]);
+  const selectSkill = index => setActive((index + workSkills.length) % workSkills.length);
   return <section className="home-skills home-make" id="my-work" ref={sectionRef} aria-labelledby="home-skills-title">
     <div className="experience-shell">
       <SectionTop number="03" label="MY WORK" aside="FILM / DESIGN / WEB" />
       <div className="work-skills-heading" data-reveal><h2 id="home-skills-title">MY <em>SKILLS.</em></h2><p>View my skills and projects in film, photography, design, and web development.</p></div>
-      <div className="make-carousel" aria-roledescription="carousel" aria-label="Creative disciplines" onMouseEnter={() => setInteracting(true)} onMouseLeave={() => setInteracting(false)} onFocusCapture={() => setInteracting(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setInteracting(false); }}>
-        <div className="make-viewport"><div className="make-track" ref={slideRef}>{[...workSkills, ...workSkills].map((skill, index) => {
-          const service = creativeServices.find((item) => item.id === skill.id);
-          return (
-        <div aria-hidden={index >= workSkills.length ? true : undefined} inert={index >= workSkills.length ? true : undefined} className="make-slide" key={`${skill.id}-${index}`} role="group" aria-roledescription="slide" aria-label={`${index % workSkills.length + 1} of ${workSkills.length}: ${skill.name}`}>
-          <div className={`make-image make-slide-piece ${skill.id === 'web' ? 'make-image--web' : ''}`}><>{skill.id === 'film' ? <HomeFilmPreview film={featuredProjects[0].media[0]} /> : <img src={skill.cover} alt={mediaAlt({ src: skill.cover, title: skill.projects[0].title })} loading="lazy" />}</></div>
-          <div className="make-story make-slide-piece"><div className="make-story-top"><span>{String(index % workSkills.length + 1).padStart(2, '0')} / SKILLS</span><h3>{skill.name}</h3><p>{skill.line}</p></div><div className="make-story-body"><p>{service.description}</p><p>{service.evidence}</p><ul>{skill.capabilities.map((item) => <li key={item}>{item}</li>)}</ul><a href={`/work/${skill.id}/`}>EXPLORE {skill.name} <span aria-hidden="true">↗</span></a></div></div>
-          <div className={`make-image make-slide-piece ${skill.id === 'web' ? 'make-image--web' : ''}`}><>{skill.id === 'film' ? <HomeFilmPreview film={featuredProjects[1].media[0]} /> : <img src={skill.preview} alt={mediaAlt({ src: skill.preview, title: skill.projects[1]?.title || skill.projects[0].title })} loading="lazy" />}</></div>
+      <div className="skills-showcase" aria-roledescription="carousel" aria-label="Creative disciplines" onPointerEnter={event => { if (event.pointerType === 'mouse') setInteracting(true); }} onPointerLeave={() => setInteracting(false)} onFocusCapture={() => setInteracting(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setInteracting(false); }}>
+        <div className={`skills-showcase-slide skills-bento skills-bento--${skill.id}${canSwitch ? "" : " skills-bento--single"}`} style={{ '--skill-accent': accent }} ref={showcaseRef} role="group" aria-roledescription="slide" aria-label={`${active + 1} of ${workSkills.length}: ${skill.name}`} key={skill.id}>
+          <div className={`skills-showcase-media${skill.id === 'web' ? ' skills-showcase-media--website' : ''}`}>
+            <a className="skills-preview-main" href={skill.id === 'web' ? `/work/web/#${webPreview.id}` : `/work/${skill.id}/`} aria-label={`Explore ${skill.name.toLowerCase()} projects`}>
+              {skill.id === 'film' ? <HomeFilmPreview key={alternate ? 'manang' : 'mustang'} film={featuredProjects[alternate ? 1 : 0].media[0]} /> : <img key={previewImage} className="skills-frame-image" src={previewImage} onLoad={sampleAccent} alt={skill.id === 'web' ? `${webPreview.title} website preview` : mediaAlt({ src: previewImage, title: currentPhoto?.title || skill.projects[0].title })} />}
+              <span className="skills-preview-cue">VIEW WORK <span aria-hidden="true">↗</span></span>
+            </a>
+            <span className="skills-media-label">{skill.id === 'web' ? webPreview.title : skill.id === 'film' ? `${alternate ? 'MANANG' : 'MUSTANG'} / TRAVEL FILM` : currentPhoto?.title || skill.projects[0].title}{photoFrames.length > 1 && <small>{String(photoFrame % photoFrames.length + 1).padStart(2, '0')} / {String(photoFrames.length).padStart(2, '0')}</small>}</span>
+          </div>
+          <div className="skills-showcase-copy">
+            <div className="skills-bento-overview">
+            <span className="skills-showcase-number">{String(active + 1).padStart(2, '0')} / 07</span>
+            <h3>{skill.name}</h3>
+            <p className="skills-showcase-summary">{skill.line}</p>
+            <p className="skills-bento-context">{service.evidence}</p>
+            <AnimatedButton className="skills-bento-explore" href={`/work/${skill.id}/`} size="lg">Explore {skill.name.toLowerCase()} <span aria-hidden="true">↗</span></AnimatedButton>
+            </div>
+            {supportingMedia ? <a className="skills-bento-photo" href={`/work/${skill.id}/#${supportingMedia.projectId}`}>
+              <img src={supportingMedia.image} alt={mediaAlt({ ...supportingMedia, src: supportingMedia.image })} loading="lazy" />
+              <span>{supportingMedia.title}<span aria-hidden="true">↗</span></span>
+            </a> : <a className="skills-bento-photo skills-bento-photo--link" href={`/work/${skill.id}/`}><span aria-hidden="true">↗</span><span>View the projects</span></a>}
+          </div>
+          {canSwitch && <button type="button" className="skills-bento-preview" onClick={() => photoFrames.length > 1 ? setPhotoFrame(index => index + 1) : setAlternateSkill(alternate ? null : skill.id)} aria-label="Switch project preview">
+            <img src={skill.id === 'film' ? featuredProjects[alternate ? 0 : 1].media[0].poster : otherImage} alt="" />
+            <span>SWITCH PREVIEW <span aria-hidden="true">↔</span></span>
+          </button>}
         </div>
-          );
-        })}</div></div>
-        <div className="make-controls"><div className="make-arrows"><button type="button" aria-label="Previous discipline" onClick={() => selectSkill((active + workSkills.length - 1) % workSkills.length)}>←</button><button type="button" aria-label="Next discipline" onClick={() => selectSkill((active + 1) % workSkills.length)}>→</button>{!reducedMotion && <button className="make-pause" type="button" onClick={() => setPaused(!paused)} aria-label={paused ? 'Enable automatic switching' : 'Pause automatic switching'}>{paused ? 'PLAY' : 'PAUSE'}</button>}</div><span>{String(active + 1).padStart(2, '0')} / 07</span></div>
-        <div className="make-disciplines" aria-label="Choose a discipline">{workSkills.map((item, index) => <button type="button" key={item.id} aria-pressed={active === index} onClick={() => selectSkill(index)}>{item.name}</button>)}</div>
+        <div className="skills-showcase-bottom">
+          <span className={`skills-auto-status${paused || reducedMotion ? ' skills-auto-status--paused' : ''}`}><i aria-hidden="true" />{reducedMotion ? 'Choose a skill to explore' : paused ? 'Auto switching paused' : 'Auto switching · press Pause to stop'}</span>
+          <div className="skills-showcase-tabs" aria-label="Choose a discipline">{workSkills.map((item, index) => <button type="button" key={item.id} aria-pressed={active === index} onClick={() => selectSkill(index)}><span>{String(index + 1).padStart(2, '0')}</span>{item.name}</button>)}</div>
+          <div className="skills-showcase-controls"><AnimatedButton variant="outline" size="icon" aria-label="Previous discipline" onClick={() => selectSkill(active - 1)}>←</AnimatedButton><AnimatedButton variant="outline" size="icon" aria-label="Next discipline" onClick={() => selectSkill(active + 1)}>→</AnimatedButton>{!reducedMotion && <AnimatedButton variant="ghost" size="sm" className="skills-showcase-pause" onClick={() => setPaused(!paused)} aria-label={paused ? 'Enable automatic switching' : 'Pause automatic switching'}>{paused ? 'PLAY' : 'PAUSE'}</AnimatedButton>}</div>
+        </div>
       </div>
     </div>
   </section>;
@@ -704,22 +769,7 @@ function GalleryPage() {
 }
 
 function WorkTitle() {
-  const ref = useRef(null);
-  useLayoutEffect(() => {
-    const media = gsap.matchMedia();
-    media.add('(prefers-reduced-motion: no-preference)', () => {
-      const context = gsap.context(() => {
-        gsap.from(ref.current.querySelectorAll('.work-title-letter'), {
-          yPercent: 110, opacity: 0, rotation: 5,
-          duration: .8, stagger: .09, ease: 'power3.out',
-          scrollTrigger: { trigger: ref.current, start: 'top 95%', once: true },
-        });
-      }, ref);
-      return () => context.revert();
-    });
-    return () => media.revert();
-  }, []);
-  return <h1 ref={ref} className="work-title" aria-label="Selected work"><span className="work-title-word" aria-hidden="true">{'WORK'.split('').map(letter => <span className="work-title-letter" key={letter}>{letter}</span>)}<span className="work-title-letter work-title-dot">.</span></span></h1>;
+  return <GalleryLetterTitle text="WORK" prefix="" className="work-gallery-title" />;
 }
 
 function WorkPage() {

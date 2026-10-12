@@ -7,6 +7,7 @@ import FloppyLibrary from './FloppyLibrary.jsx';
 import { MapPin, GraduationCap, Monitor, Clapperboard, Camera, Sparkles, PenTool, Palette, PanelsTopLeft, Code2, ArrowUpRight } from 'lucide-react';
 import { collaborators, featuredProjects, galleryMedia } from './portfolio-data.js';
 import { officialProfiles } from './seo-data.js';
+import { HoverCard, HoverCardTrigger, HoverCardPortal, HoverCardContent } from './components/animate-ui/primitives/radix/hover-card.jsx';
 import './about-sections.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -16,13 +17,13 @@ const disciplines = [
   { name: 'Motion', description: 'Animated product videos and motion graphics.', href: '/work/motion/', image: featuredProjects[2].cover, video: featuredProjects[2].media[0].src, caption: 'Product Motion / Digital licence' },
   { name: 'Branding', description: 'Brand identities, business cards, and booklets.', href: '/work/branding/', image: featuredProjects[3].cover, caption: 'CIC Nepal / Brand presentation' },
   { name: 'Graphic design', description: 'Campaign graphics and social media posters.', href: '/work/graphic/', image: featuredProjects[5].cover, caption: 'Cosmic Group / Campaign graphics' },
-  { name: 'Digital', description: 'Website and mobile interface designs.', href: '/work/digital/', image: featuredProjects[4].cover, caption: 'Decora / Digital presentation' },
+  { name: 'UI/UX Design', description: 'Website and mobile interface designs.', href: '/work/digital/', image: featuredProjects[4].cover, caption: 'Decora / Interface design' },
   { name: 'Web', description: 'Website designs and web development.', href: '/work/web/', image: '/media/branding/macbook-mockup-3.webp', caption: 'CIC Nepal / Website mockup' },
 ];
 const stillWork = featuredProjects.flatMap(project => project.media).filter(media => media.type === 'photo');
 disciplines.forEach(discipline => {
   if (discipline.video) return;
-  const category = { Photography: 'Photography', Branding: 'Branding', 'Graphic design': 'Graphic Design', Digital: 'Digital', Web: 'Digital' }[discipline.name];
+  const category = { Photography: 'Photography', Branding: 'Branding', 'Graphic design': 'Graphic Design', 'UI/UX Design': 'Digital', Web: 'Digital' }[discipline.name];
   const media = discipline.name === 'Photography' ? galleryMedia : stillWork;
   const slides = media.filter(item => item.type === 'photo' && item.category === category);
   discipline.slides = [...slides.filter(item => item.src === discipline.image), ...slides.filter(item => item.src !== discipline.image)];
@@ -82,6 +83,13 @@ export function AboutOpening() {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" />
     <section className="kinetic-hero kinetic-hero--portrait" aria-labelledby="kinetic-title">
       <img className="about-cover-portrait" src="/media/photos/about-backlight-white.png" alt="Backlit portrait of Aashish Mahato looking over his shoulder" width="1456" height="1080" fetchPriority="high" />
+      <HoverCard openDelay={180} closeDelay={120}>
+        <HoverCardTrigger asChild><button type="button" className="about-portrait-hover" aria-label="About Aashish Mahato" /></HoverCardTrigger>
+        <HoverCardPortal><HoverCardContent className="about-portrait-card" side="right" sideOffset={16} collisionPadding={20}>
+          <img src="/media/photos/tree-final-18.webp" alt="" width="56" height="56" />
+          <div><h2>Aashish Mahato</h2><span>Creative Head · Cosmic Group</span><p>Film, photography, design, and web.</p><small><MapPin size={13} aria-hidden="true" />Kathmandu, Nepal</small></div>
+        </HoverCardContent></HoverCardPortal>
+      </HoverCard>
       <div className="about-cover-top"><span>ABOUT ME</span><span>KATHMANDU, NEPAL</span></div>
       <div className="about-cover-name">
         <div className="about-cover-handwriting" aria-hidden="true"><HandwrittenText>Creative</HandwrittenText></div>

@@ -1,0 +1,12 @@
+.animated-button{display:inline-flex;align-items:center;justify-content:center;gap:14px;min-height:44px;padding:12px 20px;border:1px solid transparent;border-radius:12px;font:500 13px/1.4 'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transform-origin:center;touch-action:manipulation}
+.animated-button--default{background:#111;color:#fff}
+.animated-button--accent,.animated-button--destructive{background:#e34530;color:#fff}
+.animated-button--outline{background:transparent;border-color:#d6d6d2;color:#111}
+.animated-button--secondary{background:#efefec;color:#111}
+.animated-button--ghost,.animated-button--link{background:transparent;color:#111}
+.animated-button--link{text-decoration:underline;text-underline-offset:4px}
+.animated-button--sm{min-height:36px;padding:8px 14px;font-size:12px}
+.animated-button--lg{min-height:48px;padding:14px 24px}
+.animated-button--icon{width:44px;height:44px;padding:0}
+.animated-button:focus-visible{outline:3px solid #e34530;outline-offset:4px}
+.animated-button:disabled{opacity:.5;pointer-events:none}

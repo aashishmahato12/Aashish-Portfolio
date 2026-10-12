@@ -12,7 +12,7 @@ export const officialProfiles = [
 export const searchMeta = {
   privacy: ['Privacy | Aashish Mahato', 'How Aashish Mahato’s portfolio uses analytics, hosting services, external media, and project enquiry information.', '/privacy/'],
   home: ['Aashish Mahato | Film, Photography & Design in Kathmandu', 'Explore filmmaking, photography, motion graphics, branding, graphic design, and web development by Aashish Mahato, based in Kathmandu, Nepal.', '/'],
-  work: ['Work | Film, Photography, Design & Websites by Aashish Mahato', 'Explore Aashish Mahato’s selected projects in filmmaking, photography, motion graphics, branding, graphic design, digital design, and web development.', '/work/'],
+  work: ['Work | Film, Photography, Design & Websites by Aashish Mahato', 'Explore Aashish Mahato’s selected projects in filmmaking, photography, motion graphics, branding, graphic design, UI/UX design, and web development.', '/work/'],
   contact: ['Contact Aashish Mahato | Creative Projects in Kathmandu', 'Contact Aashish Mahato in Kathmandu, Nepal to discuss film, photography, branding, design, and website projects through his official profiles.', '/contact/'],
   about: ['About Aashish Mahato | Creative in Kathmandu, Nepal', 'Meet Aashish Mahato, a Kathmandu-based filmmaker, photographer, designer, and web developer in Nepal. Explore his work and official profiles.', '/about/'],
   gallery: ['Gallery | Films, Photography & Design by Aashish Mahato', 'Browse Aashish Mahato’s visual archive of films, photography, branding, and graphic design projects.', '/gallery/'],
@@ -21,7 +21,7 @@ export const searchMeta = {
   'skill-motion': ['Motion Graphics Designer in Kathmandu | Aashish Mahato', 'Explore animated visuals and product presentations by Aashish Mahato, a motion graphics designer based in Kathmandu, Nepal.', '/work/motion/'],
   'skill-branding': ['Brand Identity Designer in Kathmandu | Aashish Mahato', 'Explore visual identity, business card, and brand presentation projects by Aashish Mahato, a designer based in Kathmandu, Nepal.', '/work/branding/'],
   'skill-graphic': ['Graphic Designer in Kathmandu, Nepal | Aashish Mahato', 'Explore campaign artwork, social graphics, and visual communication by Aashish Mahato, a graphic designer based in Kathmandu, Nepal.', '/work/graphic/'],
-  'skill-digital': ['Interface Designer in Kathmandu | Aashish Mahato', 'Explore website, dashboard, and mobile interface concepts by Aashish Mahato, a designer based in Kathmandu, Nepal.', '/work/digital/'],
+  'skill-digital': ['UI/UX Designer in Kathmandu | Aashish Mahato', 'Explore website, dashboard, and mobile interface concepts by Aashish Mahato, a designer based in Kathmandu, Nepal.', '/work/digital/'],
   'skill-web': ['Web Developer in Kathmandu, Nepal | Aashish Mahato', 'Explore responsive websites and React interfaces by Aashish Mahato, a web developer based in Kathmandu, Nepal.', '/work/web/'],
 };
 export const searchImages = {

@@ -25,7 +25,7 @@ export const creativeServices = [
     evidence: 'The Cosmic Group collection includes anniversary, recruitment, cricket, and festival graphics.',
   },
   {
-    id: 'digital', name: 'Interface design',
+    id: 'digital', name: 'UI/UX design',
     description: 'Website, dashboard, and mobile interface concepts presented through digital product mockups.',
     evidence: 'Browse laptop and mobile mockups to see the interface layouts and visual design details.',
   },
