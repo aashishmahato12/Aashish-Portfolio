@@ -4,6 +4,7 @@ import { creativeServices, projectQuestions } from './services-data.js';
 import { mediaAlt, mediaDescription } from './media-text.js';
 import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
+import { Cake, MapPin, GraduationCap } from 'lucide-react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,6 +14,11 @@ import { SiteHeader as SiteNav, SiteFooter } from './SiteChrome.jsx';
 import { searchMeta, searchImages, structuredData, officialProfiles } from './seo-data.js';
 import HomePanels from './HomePanels.jsx';
 import Masonry from './Masonry.jsx';
+import JellyRadio from './JellyRadio.jsx';
+import GridMotion from './GridMotion.jsx';
+import { PortfolioIcon } from './PortfolioIcons.jsx';
+import FadeContent from './components/FadeContent.jsx';
+import Magnet from './components/Magnet.jsx';
 import { Button as AnimatedButton } from './components/animate-ui/components/buttons/button.jsx';
 import HandwrittenText from './HandwrittenText.jsx';
 import ParallaxChapters from './ParallaxChapters.jsx';
@@ -21,6 +27,7 @@ import { collaborators, featuredProjects, filmProjects, galleryMedia, heroReel, 
 
 gsap.registerPlugin(ScrollTrigger);
 
+const Silk = React.lazy(() => import('./components/Silk.jsx'));
 const AboutTimeline = React.lazy(() => import('./AboutTimeline.jsx'));
 const AboutOpening = React.lazy(() => import('./AboutSections.jsx').then((module) => ({ default: module.AboutOpening })));
 const AboutAfterTimeline = React.lazy(() => import('./AboutSections.jsx').then((module) => ({ default: module.AboutAfterTimeline })));
@@ -299,7 +306,7 @@ function Home({ lenisRef }) {
     <HomePanels lenisRef={lenisRef} />
     <ParallaxChapters />
 
-    <section className="home-about" ref={aboutRef} aria-labelledby="home-about-title"><div className="experience-shell"><SectionTop number="02" label="ABOUT ME" aside="KATHMANDU, NEPAL" /><div className="home-about-photos"><figure className="home-about-photo home-about-photo--portrait"><img src="/media/photos/tree-final-18.webp" alt="Aashish Mahato wearing round glasses in a black and white portrait" width="1200" height="1800" loading="lazy" /><figcaption>AASHISH / KATHMANDU</figcaption></figure><figure className="home-about-photo home-about-photo--field"><img src="/media/posters/manang.jpg" alt="Himalayan landscape from Aashish Mahato’s Manang travel film" loading="lazy" /><figcaption>IN THE FIELD / MANANG</figcaption></figure></div><div className="home-about-grid"><div data-reveal><span className="experience-eyebrow">ABOUT ME</span><HomeIdentityTitle /></div><div className="home-about-copy"><div className="home-about-facts"><span>20 years old</span><span>Kathmandu, Nepal</span></div><p>I’m Aashish Mahato, based in Kathmandu, Nepal. I’m the Creative Head at Cosmic Group. I work in filmmaking, photography, graphic design, and web development.</p><p>My projects include travel films from Mustang and Manang, portraits, social media graphics, brand designs, and websites.</p><p>I started using a computer in 2020 and began graphic design in 2023. I later explored filmmaking and photography. At Herald College Kathmandu, I’m learning web development and motion graphics.</p><p className="official-profile-links">{officialProfiles.map((profile) => <a href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">{profile.label} ↗</a>)}</p><a className="experience-text-link" href="/about/">MORE ABOUT ME <span>↗</span></a></div></div></div></section>
+    <section className="home-about" ref={aboutRef} aria-labelledby="home-about-title"><div className="experience-shell"><SectionTop number="02" label="ABOUT ME" aside="KATHMANDU, NEPAL" /><div className="home-about-photos"><figure className="home-about-photo home-about-photo--portrait"><img src="/media/photos/tree-final-18.webp" alt="Aashish Mahato wearing round glasses in a black and white portrait" width="1200" height="1800" loading="lazy" /><figcaption>AASHISH / KATHMANDU</figcaption></figure><figure className="home-about-photo home-about-photo--field"><img src="/media/posters/manang.jpg" alt="Himalayan landscape from Aashish Mahato’s Manang travel film" loading="lazy" /><figcaption>IN THE FIELD / MANANG</figcaption></figure></div><div className="home-about-grid"><div data-reveal><span className="experience-eyebrow">ABOUT ME</span><HomeIdentityTitle /></div><div className="home-about-copy"><div className="home-about-facts"><span><Cake size={16} strokeWidth={1.6} aria-hidden="true" />20 years old</span><span><MapPin size={16} strokeWidth={1.6} aria-hidden="true" />Kathmandu, Nepal</span><span><GraduationCap size={18} strokeWidth={1.6} aria-hidden="true" />Herald College Kathmandu</span></div><p>I’m Aashish Mahato, based in Kathmandu, Nepal. I’m the Creative Head at Cosmic Group. I work in filmmaking, photography, graphic design, and web development.</p><p>My projects include travel films from Mustang and Manang, portraits, social media graphics, brand designs, and websites.</p><p>I started using a computer in 2020 and began graphic design in 2023. I later explored filmmaking and photography. At Herald College Kathmandu, I’m learning web development and motion graphics.</p><p className="official-profile-links">{officialProfiles.map((profile) => <a href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer"><PortfolioIcon kind="social" name={profile.label} />{profile.label}</a>)}</p><AnimatedButton className="experience-text-link home-about-button" href="/about/" size="lg">MORE ABOUT ME</AnimatedButton></div></div></div></section>
 
     <HomeSkills />
     <HomeCollaborators />
@@ -406,14 +413,70 @@ function WorkSkillCard({ skill, index }) {
   </PreviewLinkCard>;
 }
 
+const serviceSummaries = {
+  film: 'Travel films, corporate videos, and editing.',
+  photography: 'Portraits, street scenes, and landscapes.',
+  motion: 'Product animations and motion graphics.',
+  branding: 'Brand identities, cards, and booklets.',
+  graphic: 'Campaigns, posters, and social graphics.',
+  digital: 'Website, dashboard, and mobile interfaces.',
+  web: 'Responsive websites and React applications.',
+};
+
 function ProjectGuide() {
+  const showcaseRef = useRef(null);
+  useEffect(() => {
+    const grid = showcaseRef.current;
+    if (!grid || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const cards = [...grid.querySelectorAll('.service-showcase-card')];
+    let nextEntrance = 0;
+    const observer = new IntersectionObserver(entries => {
+      const incoming = entries.filter(entry => entry.isIntersecting && !entry.target.classList.contains('is-revealed'))
+        .sort((a, b) => cards.indexOf(a.target) - cards.indexOf(b.target));
+      const now = performance.now();
+      incoming.forEach(({ target }) => {
+        const start = Math.max(now, nextEntrance);
+        const delay = start - now;
+        target.style.setProperty('--service-delay', `${delay}ms`);
+        target.style.setProperty('--icon-delay', `${delay / 1000}s`);
+        target.classList.add('is-revealed');
+        nextEntrance = start + 320;
+        observer.unobserve(target);
+      });
+    }, { threshold: .15 });
+    grid.classList.add('service-motion-ready');
+    cards.forEach(card => observer.observe(card));
+    return () => { observer.disconnect(); grid.classList.remove('service-motion-ready'); };
+  }, []);
+  const serviceImages = {
+    film: featuredProjects[0].cover,
+    photography: '/media/photos/tree-final-27.webp',
+    motion: featuredProjects[2].cover,
+    branding: '/media/branding/mockup23.webp',
+    graphic: '/media/design/dashain-puja.webp',
+    digital: '/media/branding/macbook-mockup-3.webp',
+    web: '/media/web/cosmic-website.png',
+  };
   return <section className="project-guide" id="working-together" aria-labelledby="project-guide-title"><div className="experience-shell">
     <span className="experience-eyebrow">SERVICES / KATHMANDU, NEPAL</span>
     <h2 id="project-guide-title">MY <em>SERVICES.</em></h2>
     <p className="project-guide-intro">I offer filmmaking, photography, design, and web development. View examples below or contact me to discuss a project.</p>
-    <div className="project-guide-services">{creativeServices.map((service) => <a href={`/work/${service.id}/`} key={service.id}><h3>{service.name} <span aria-hidden="true">↗</span></h3><p>{service.description}</p></a>)}</div>
-    <div className="project-guide-questions"><h3>Frequently asked questions</h3>{projectQuestions.map((item) => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div>
-    <div className="project-guide-contact"><span>DISCUSS A PROJECT</span><a href="/contact/">CONTACT AASHISH ↗</a>{officialProfiles.filter((profile) => ['Instagram', 'LinkedIn'].includes(profile.label)).map((profile) => <a href={profile.url} key={profile.url} target="_blank" rel="noopener noreferrer">MESSAGE ME ON {profile.label.toUpperCase()} ↗</a>)}</div>
+    <div className="service-showcase-grid" ref={showcaseRef}>
+      {creativeServices.map(service => <a className={`service-showcase-card service-showcase-card--${service.id}`} href={`/work/${service.id}/`} key={service.id}>
+        <div className="service-showcase-copy"><h3 aria-label={service.name}>{service.name.split(' ').map((word, i) => <span className="service-title-word" aria-hidden="true" key={i} style={{ '--word-delay': `${i * .07}s` }}><span>{word}</span>{' '}</span>)}</h3><p>{serviceSummaries[service.id]}</p></div>
+        <div className="service-showcase-visual" aria-hidden="true">
+          <div className="service-showcase-sheet"><PortfolioIcon name={service.id} animated size={52} strokeWidth={1.4} /></div>
+          <img src={serviceImages[service.id]} alt="" loading="lazy" />
+          <span className="service-showcase-badge"><PortfolioIcon name={service.id} size={25} strokeWidth={1.7} /></span>
+        </div>
+      </a>)}
+      <a className="service-showcase-card service-showcase-card--contact" href="/contact/">
+        <div className="service-showcase-copy"><h3>Have a project in mind?</h3><p>Tell me what you’re working on. Let’s make it happen.</p></div>
+        <div className="service-showcase-visual service-showcase-visual--contact" aria-hidden="true"><div className="service-showcase-sheet"><PortfolioIcon name="contact" kind="page" animated size={64} strokeWidth={1.3} /></div><span className="service-showcase-badge">✦</span></div>
+      </a>
+    </div>
+    <FadeContent duration={700} threshold={.12}><div className="project-guide-questions"><h3>Frequently asked questions</h3>{projectQuestions.map((item) => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div></FadeContent>
+    <div className="project-guide-contact"><span>DISCUSS A PROJECT</span><Magnet padding={35} magnetStrength={5} maxOffset={7}><a className="guide-contact-button" href="/contact/">CONTACT AASHISH ↗</a></Magnet>{officialProfiles.filter((profile) => ['Instagram', 'LinkedIn'].includes(profile.label)).map((profile) => <Magnet padding={25} magnetStrength={6} maxOffset={5} key={profile.url}><a href={profile.url} target="_blank" rel="noopener noreferrer">MESSAGE ME ON {profile.label.toUpperCase()} ↗</a></Magnet>)}</div>
   </div></section>;
 }
 
@@ -457,8 +520,10 @@ function HomeFilmPreview({ film }) {
 function HomeSkills() {
   const sectionRef = useRef(null);
   const showcaseRef = useRef(null);
+  const switchProgressRef = useRef(null);
+  const switchTweenRef = useRef(null);
+  const skillSelectorRef = useRef(null);
   const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [interacting, setInteracting] = useState(false);
   const [visible, setVisible] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -523,21 +588,38 @@ function HomeSkills() {
     setImageAccent(null);
   }, [active, alternate]);
   useEffect(() => {
-    if ((photoFrames.length < 2 && skill.id !== 'web') || paused || interacting || !visible || reducedMotion) return;
+    const container = skillSelectorRef.current;
+    const selected = container?.querySelector('[aria-checked="true"]');
+    if (!selected || container.scrollWidth <= container.clientWidth) return;
+    container.scrollTo({ left: selected.offsetLeft + selected.offsetWidth / 2 - container.clientWidth / 2, behavior: reducedMotion ? 'instant' : 'smooth' });
+  }, [active, reducedMotion]);
+  useEffect(() => {
+    if ((photoFrames.length < 2 && skill.id !== 'web') || interacting || !visible || reducedMotion) return;
     const timer = window.setInterval(() => {
       if (document.hidden) return;
       if (skill.id === 'web') setAlternateSkill(value => value === 'web' ? null : 'web');
       else setPhotoFrame(index => index + 1);
-    }, 3500);
+    }, 2500);
     return () => window.clearInterval(timer);
-  }, [active, photoFrames.length, paused, interacting, visible, reducedMotion]);
+  }, [active, photoFrames.length, interacting, visible, reducedMotion]);
+  useLayoutEffect(() => {
+    if (reducedMotion || !switchProgressRef.current) return;
+    const tween = gsap.fromTo(switchProgressRef.current, { scaleX: 0 }, {
+      scaleX: 1, duration: 5, ease: 'none', paused: true,
+      onComplete: () => setActive(index => (index + 1) % workSkills.length),
+    });
+    switchTweenRef.current = tween;
+    return () => { tween.kill(); switchTweenRef.current = null; };
+  }, [active, reducedMotion]);
   useEffect(() => {
-    if (paused || interacting || !visible || reducedMotion) return;
-    const timer = window.setInterval(() => {
-      if (!document.hidden) setActive(index => (index + 1) % workSkills.length);
-    }, 8000);
-    return () => window.clearInterval(timer);
-  }, [active, paused, interacting, visible, reducedMotion]);
+    const syncTimer = () => {
+      if (visible && !interacting && !reducedMotion && !document.hidden) switchTweenRef.current?.play();
+      else switchTweenRef.current?.pause();
+    };
+    syncTimer();
+    document.addEventListener('visibilitychange', syncTimer);
+    return () => document.removeEventListener('visibilitychange', syncTimer);
+  }, [active, interacting, visible, reducedMotion]);
   useLayoutEffect(() => {
     if (!visible) return;
     const media = gsap.matchMedia();
@@ -561,10 +643,17 @@ function HomeSkills() {
       <SectionTop number="03" label="MY WORK" aside="FILM / DESIGN / WEB" />
       <div className="work-skills-heading" data-reveal><h2 id="home-skills-title">MY <em>SKILLS.</em></h2><p>View my skills and projects in film, photography, design, and web development.</p></div>
       <div className="skills-showcase" aria-roledescription="carousel" aria-label="Creative disciplines" onPointerEnter={event => { if (event.pointerType === 'mouse') setInteracting(true); }} onPointerLeave={() => setInteracting(false)} onFocusCapture={() => setInteracting(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setInteracting(false); }}>
+        <div className="skills-jelly-selector" ref={skillSelectorRef}><JellyRadio
+          items={workSkills.map(item => ({ value: item.id, label: item.name, icon: <PortfolioIcon name={item.id} size={16} /> }))}
+          value={skill.id} onChange={(_, index) => selectSkill(index)} ariaLabel="Choose a discipline"
+          chipColor="#f3f3f0" activeColor="#111111" textColor="#666666" activeTextColor="#ffffff"
+          size="md" radius={999} gap={6} swell={.12} barge={3} shrink={.025} jelly={1} bounce={.25}
+        /></div>
+        {!reducedMotion && <div className="skills-switch-timer" style={{ '--skill-accent': accent }} role="img" aria-label="Next skill switches automatically after five seconds; hover or focus to pause"><span ref={switchProgressRef} /></div>}
         <div className={`skills-showcase-slide skills-bento skills-bento--${skill.id}${canSwitch ? "" : " skills-bento--single"}`} style={{ '--skill-accent': accent }} ref={showcaseRef} role="group" aria-roledescription="slide" aria-label={`${active + 1} of ${workSkills.length}: ${skill.name}`} key={skill.id}>
           <div className={`skills-showcase-media${skill.id === 'web' ? ' skills-showcase-media--website' : ''}`}>
             <a className="skills-preview-main" href={skill.id === 'web' ? `/work/web/#${webPreview.id}` : `/work/${skill.id}/`} aria-label={`Explore ${skill.name.toLowerCase()} projects`}>
-              {skill.id === 'film' ? <HomeFilmPreview key={alternate ? 'manang' : 'mustang'} film={featuredProjects[alternate ? 1 : 0].media[0]} /> : <img key={previewImage} className="skills-frame-image" src={previewImage} onLoad={sampleAccent} alt={skill.id === 'web' ? `${webPreview.title} website preview` : mediaAlt({ src: previewImage, title: currentPhoto?.title || skill.projects[0].title })} />}
+              {skill.id === 'film' || skill.id === 'motion' ? <HomeFilmPreview key={skill.id === 'motion' ? 'product-motion' : alternate ? 'manang' : 'mustang'} film={featuredProjects[skill.id === 'motion' ? 2 : alternate ? 1 : 0].media[0]} /> : <img key={previewImage} className="skills-frame-image" src={previewImage} onLoad={sampleAccent} alt={skill.id === 'web' ? `${webPreview.title} website preview` : mediaAlt({ src: previewImage, title: currentPhoto?.title || skill.projects[0].title })} />}
               <span className="skills-preview-cue">VIEW WORK <span aria-hidden="true">↗</span></span>
             </a>
             <span className="skills-media-label">{skill.id === 'web' ? webPreview.title : skill.id === 'film' ? `${alternate ? 'MANANG' : 'MUSTANG'} / TRAVEL FILM` : currentPhoto?.title || skill.projects[0].title}{photoFrames.length > 1 && <small>{String(photoFrame % photoFrames.length + 1).padStart(2, '0')} / {String(photoFrames.length).padStart(2, '0')}</small>}</span>
@@ -580,18 +669,14 @@ function HomeSkills() {
             {supportingMedia ? <a className="skills-bento-photo" href={`/work/${skill.id}/#${supportingMedia.projectId}`}>
               <img src={supportingMedia.image} alt={mediaAlt({ ...supportingMedia, src: supportingMedia.image })} loading="lazy" />
               <span>{supportingMedia.title}<span aria-hidden="true">↗</span></span>
-            </a> : <a className="skills-bento-photo skills-bento-photo--link" href={`/work/${skill.id}/`}><span aria-hidden="true">↗</span><span>View the projects</span></a>}
+            </a> : <a className={`skills-bento-photo skills-bento-photo--link${skill.id === 'motion' ? ' skills-bento-photo--savari' : ''}`} href={`/work/${skill.id}/`}>{skill.id === 'motion' ? <img src="/media/logos/savari.webp" alt="Savari" /> : <span aria-hidden="true">↗</span>}<span>View the projects</span></a>}
           </div>
           {canSwitch && <button type="button" className="skills-bento-preview" onClick={() => photoFrames.length > 1 ? setPhotoFrame(index => index + 1) : setAlternateSkill(alternate ? null : skill.id)} aria-label="Switch project preview">
             <img src={skill.id === 'film' ? featuredProjects[alternate ? 0 : 1].media[0].poster : otherImage} alt="" />
             <span>SWITCH PREVIEW <span aria-hidden="true">↔</span></span>
           </button>}
         </div>
-        <div className="skills-showcase-bottom">
-          <span className={`skills-auto-status${paused || reducedMotion ? ' skills-auto-status--paused' : ''}`}><i aria-hidden="true" />{reducedMotion ? 'Choose a skill to explore' : paused ? 'Auto switching paused' : 'Auto switching · press Pause to stop'}</span>
-          <div className="skills-showcase-tabs" aria-label="Choose a discipline">{workSkills.map((item, index) => <button type="button" key={item.id} aria-pressed={active === index} onClick={() => selectSkill(index)}><span>{String(index + 1).padStart(2, '0')}</span>{item.name}</button>)}</div>
-          <div className="skills-showcase-controls"><AnimatedButton variant="outline" size="icon" aria-label="Previous discipline" onClick={() => selectSkill(active - 1)}>←</AnimatedButton><AnimatedButton variant="outline" size="icon" aria-label="Next discipline" onClick={() => selectSkill(active + 1)}>→</AnimatedButton>{!reducedMotion && <AnimatedButton variant="ghost" size="sm" className="skills-showcase-pause" onClick={() => setPaused(!paused)} aria-label={paused ? 'Enable automatic switching' : 'Pause automatic switching'}>{paused ? 'PLAY' : 'PAUSE'}</AnimatedButton>}</div>
-        </div>
+
       </div>
     </div>
   </section>;
@@ -604,6 +689,12 @@ function SkillPage({ skillId }) {
   const heroVideoStart = skillId === 'film' ? 0 : 3;
   const heroRef = useRef(null);
   const [heroVideoReady, setHeroVideoReady] = useState(false);
+  useEffect(() => {
+    const nav = heroRef.current?.closest('.skill-page')?.querySelector('.work-detail-switcher');
+    if (!nav || !window.matchMedia('(max-width: 700px)').matches) return;
+    const selected = nav.querySelector('[aria-current="page"]');
+    if (selected) nav.scrollTo({ left: selected.offsetLeft + selected.offsetWidth / 2 - nav.clientWidth / 2 });
+  }, [skillId]);
   usePageMotion(skillId);
   useEffect(() => {
     if (!window.location.hash) return undefined;
@@ -752,12 +843,16 @@ function GalleryPage() {
     return combined.filter((item, index) => combined.findIndex((other) => other.src === item.src) === index);
   }, []);
   const allPhotos = allMedia.filter((item) => item.type === 'photo');
+  const heroPhotos = useMemo(() => allMedia.filter(item => item.type === 'photo').slice(0, 30).map(item => ({ src: item.src, alt: '' })), [allMedia]);
   const items = useMemo(() => allMedia.filter((item) => filter === 'all' || (filter === 'video' && item.type === 'video') || (filter === 'photography' && item.category === 'Photography') || (filter === 'design' && item.type === 'photo' && item.category !== 'Photography')), [allMedia, filter]);
 
   return <div className="inner-page gallery-page" ref={pageRef}>
     <SiteNav current="gallery" />
     <main>
-      <section className="inner-intro gallery-intro experience-shell"><SectionTop number="01" label="GALLERY" aside="WATCH / VIEW / EXPLORE" /><div className="signature-heading signature-page-title"><HandwrittenText className="signature-accent">Explore</HandwrittenText><GalleryLetterTitle /></div><p>Browse my films, photographs, brand designs, and graphic design projects.</p></section>
+      <section className="gallery-motion-hero">
+        <div className="gallery-motion-background" aria-hidden="true"><GridMotion items={heroPhotos} rows={4} aspectRatio={1.33} gap={14} radius={14} angle={-12} speed={10} direction="alternate" parallax={.2} spotlight={.4} dim={.25} fade={.35} /></div>
+        <div className="inner-intro gallery-intro experience-shell"><SectionTop number="01" label="GALLERY" aside="WATCH / VIEW / EXPLORE" /><div className="signature-heading signature-page-title"><HandwrittenText className="signature-accent">Explore</HandwrittenText><GalleryLetterTitle /></div><p>Browse my films, photographs, brand designs, and graphic design projects.</p></div>
+      </section>
       <GalleryCinematic items={allMedia} />
       <section className="gallery-content experience-shell" id="gallery-library"><div className="gallery-library-heading"><span>PHOTOS / FILMS / DESIGN</span><h2>ALL <em>WORK.</em></h2><p>Open a photo, play a video, or filter by category.</p></div><div className="gallery-controls"><span aria-live="polite">{String(items.length).padStart(2, '0')} PIECES</span><div role="group" aria-label="Gallery filter">{[['all','ALL'],['video','FILMS'],['photography','PHOTOS'],['design','DESIGN']].map(([value,label])=><button type="button" key={value} aria-pressed={filter===value} onClick={()=>changeFilter(value)}>{label}</button>)}</div></div><div ref={gridRef}><Masonry items={items} paused={Boolean(photo)} ease="power3.out" duration={.6} stagger={.05} animateFrom="bottom" hoverScale={.97} blurToFocus onOpen={(item, trigger) => { photoTriggerRef.current = trigger; setPhoto(item); }} /></div></section>
       <GalleryIsometricWave items={allMedia} paused={Boolean(photo)} onOpen={(item, trigger) => { photoTriggerRef.current = trigger; setPhoto(item); }} />
@@ -774,7 +869,18 @@ function WorkTitle() {
 
 function WorkPage() {
   usePageMotion('work');
-  return <div className="inner-page work-page"><SiteNav current="work" /><main><section className="inner-intro experience-shell"><SectionTop number="01" label="WORK" aside="SELECTED PROJECTS / KATHMANDU, NEPAL" /><div className="work-hero-layout"><div className="signature-heading signature-page-title"><HandwrittenText className="signature-accent">Selected</HandwrittenText><WorkTitle /></div><div className="work-hero-summary"><p>Film, photography, design, and web projects by Aashish Mahato.</p></div></div></section><ParallaxChapters className="work-parallax-skills" label="MY SKILLS" items={workSkills.map(skill => ({ title: `${skill.name}.`, line: skill.line, image: skill.cover, slides: skill.slides, video: skill.id === 'film' ? filmProjects[1].media[0] : skill.id === 'motion' ? featuredProjects[2].media[0] : null, id: `practice-${skill.id}`, href: `/work/${skill.id}/` }))} /><section className="work-service-context experience-shell"><div><h2>Browse the gallery</h2><p>Browse photographs, film frames, and design projects in the <a href="/gallery/">Gallery</a>, or <a href="/about/">read about me</a> and how I work.</p></div><div><h2>Have a project in mind?</h2><p><a href="/contact/">Contact Aashish Mahato</a> to discuss the scope and delivery plan.</p></div></section></main><SiteFooter /></div>;
+  const [workBackgroundEnabled, setWorkBackgroundEnabled] = useState(false);
+  const [compactBackground, setCompactBackground] = useState(false);
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const compact = window.matchMedia('(max-width: 700px)');
+    const update = () => { setWorkBackgroundEnabled(!reduced.matches); setCompactBackground(compact.matches); };
+    update();
+    reduced.addEventListener('change', update);
+    compact.addEventListener('change', update);
+    return () => { reduced.removeEventListener('change', update); compact.removeEventListener('change', update); };
+  }, []);
+  return <div className="inner-page work-page"><SiteNav current="work" /><main><section className="work-rays-hero"><div className="work-rays-background" aria-hidden="true">{workBackgroundEnabled && <Suspense fallback={null}><Silk color="#5227FF" sheenColor="#ffffff" speed={5} scale={1} rotation={0} sheen={.5} depth={.5} glow={.3} noiseIntensity={1.5} mouseInteraction={!compactBackground} clickRipple={!compactBackground} dpr={compactBackground ? 1 : 1.5} intro /></Suspense>}</div><div className="inner-intro experience-shell"><SectionTop number="01" label="WORK" aside="SELECTED PROJECTS / KATHMANDU, NEPAL" /><div className="work-hero-layout"><div className="signature-heading signature-page-title"><HandwrittenText className="signature-accent">Selected</HandwrittenText><WorkTitle /></div><div className="work-hero-summary"><p>Film, photography, design, and web projects by Aashish Mahato.</p></div></div></div></section><ParallaxChapters className="work-parallax-skills" label="MY SKILLS" items={workSkills.map(skill => ({ title: `${skill.name}.`, line: skill.line, image: skill.cover, slides: skill.slides, video: skill.id === 'film' ? filmProjects[1].media[0] : skill.id === 'motion' ? featuredProjects[2].media[0] : null, id: `practice-${skill.id}`, href: `/work/${skill.id}/` }))} /><section className="work-service-context experience-shell"><div><h2>Browse the gallery</h2><p>Browse photographs, film frames, and design projects in the <a href="/gallery/">Gallery</a>, or <a href="/about/">read about me</a> and how I work.</p></div><div><h2>Have a project in mind?</h2><p><a href="/contact/">Contact Aashish Mahato</a> to discuss the scope and delivery plan.</p></div></section></main><SiteFooter /></div>;
 }
 
 function ContactPage() {

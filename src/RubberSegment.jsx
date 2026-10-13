@@ -345,6 +345,7 @@ export default function RubberSegment({
             itemRefs.current[i] = el;
           }}
           href={item.href}
+          aria-label={item.ariaLabel}
           type={navigation ? undefined : 'button'}
           role={navigation ? undefined : 'radio'}
           aria-checked={navigation ? undefined : i === index}

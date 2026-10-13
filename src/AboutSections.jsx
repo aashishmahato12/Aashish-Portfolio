@@ -37,9 +37,9 @@ function useMotion(ref) {
       const context = gsap.context(() => {
         const cover = ref.current.querySelector('.about-cover-portrait');
         if (cover) {
-          gsap.set(cover, { scale: 1.1, opacity: .55, transformOrigin: 'center 42%' });
+          gsap.set(cover, { opacity: .55 });
           const revealCover = () => gsap.to(cover, {
-            scale: 1, opacity: 1, duration: 1.65, ease: 'power2.out',
+            opacity: 1, duration: 1.65, ease: 'power2.out',
             clearProps: 'transform,opacity,transformOrigin',
           });
           if (cover.complete) revealCover();

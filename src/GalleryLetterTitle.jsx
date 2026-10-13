@@ -18,7 +18,7 @@ export default function GalleryLetterTitle({ text = 'GALLERY', prefix = 'THE', a
   const autoControllerRef = useRef(null);
 
   useEffect(() => {
-    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    if (paused || window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 600px)').matches) return undefined;
     const letters = Array.from(ref.current.querySelectorAll('.gallery-hover-letter'));
     let timeline;
     let delay;
