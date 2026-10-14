@@ -21,7 +21,7 @@ The build generates `public/sitemap.xml`, copies `public/robots.txt`, and checks
 
 ## Media
 
-The homepage hero uses compact local 15-second previews for desktop and phone, with `public/videos/hero-poster.webp` while they load. The complete showreel remains on its watch page via Cloudinary. The horizontal homepage gallery mixes that reel with films and photographs.
+The homepage hero uses the original full-quality Cloudinary video on desktop and phone, with `public/videos/hero-poster.webp` while it loads. The same original showreel is available on its watch page. The horizontal homepage gallery mixes that reel with films and photographs.
 
 The supplied source assets are in `Aashish - Pro/`. Web-sized copies are organized in `public/media/`:
 

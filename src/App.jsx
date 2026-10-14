@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SiteHeader } from './SiteChrome.jsx';
 import { Mouse } from 'lucide-react';
+import { heroReel } from './portfolio-data.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,7 +25,7 @@ function Hero() {
     let readyToLoad = false;
     const sync = () => {
       if (readyToLoad && inView && !document.hidden && !preference.matches) {
-        if (!video.getAttribute('src')) { video.src = matchMedia('(max-width: 700px)').matches ? '/videos/hero-preview-mobile.mp4' : '/videos/hero-preview-desktop.mp4'; }
+        if (!video.getAttribute('src')) { video.src = heroReel.src; }
         video.play().catch(() => {});
       }
       else video.pause();
