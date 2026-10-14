@@ -8,6 +8,16 @@ import { chooseRepresentation, agentResponse } from '../server/agent-response.js
 import middleware from '../middleware.js';
 import { notFoundHtml } from '../server/not-found-page.js';
 
+test('old UI/UX URLs permanently redirect to the new canonical path', () => {
+  for (const path of ['/work/digital', '/work/digital/', '/work/digital/index.html', '/work/digital/index.md']) {
+    for (const accept of ['text/html', 'text/markdown']) {
+      const response = agentResponse(new Request(siteUrl + path + '?source=old-link', { headers: { Accept: accept } }));
+      assert.equal(response.status, 308);
+      assert.equal(response.headers.get('location'), `/work/ui-ux/${path.endsWith('index.md') ? 'index.md' : ''}?source=old-link`);
+    }
+  }
+});
+
 test('HTTP Accept quality values, exclusions, wildcards and HTML default', () => {
   for (const [accept, expected] of [
     [undefined, 'text/html'], ['*/*', 'text/html'], ['text/*', 'text/html'],

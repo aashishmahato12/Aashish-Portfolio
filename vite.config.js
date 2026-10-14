@@ -51,7 +51,7 @@ export default defineConfig({
         motion: path.join(root, 'work/motion/index.html'),
         branding: path.join(root, 'work/branding/index.html'),
         graphic: path.join(root, 'work/graphic/index.html'),
-        digital: path.join(root, 'work/digital/index.html'),
+        digital: path.join(root, 'work/ui-ux/index.html'),
         web: path.join(root, 'work/web/index.html'),
         gallery: path.join(root, 'gallery/index.html'),
         about: path.join(root, 'about/index.html'),

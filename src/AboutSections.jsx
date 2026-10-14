@@ -17,7 +17,7 @@ const disciplines = [
   { name: 'Motion', description: 'Animated product videos and motion graphics.', href: '/work/motion/', image: featuredProjects[2].cover, video: featuredProjects[2].media[0].src, caption: 'Product Motion / Digital licence' },
   { name: 'Branding', description: 'Brand identities, business cards, and booklets.', href: '/work/branding/', image: featuredProjects[3].cover, caption: 'CIC Nepal / Brand presentation' },
   { name: 'Graphic design', description: 'Campaign graphics and social media posters.', href: '/work/graphic/', image: featuredProjects[5].cover, caption: 'Cosmic Group / Campaign graphics' },
-  { name: 'UI/UX Design', description: 'Website and mobile interface designs.', href: '/work/digital/', image: featuredProjects[4].cover, caption: 'Decora / Interface design' },
+  { name: 'UI/UX Design', description: 'Website and mobile interface designs.', href: '/work/ui-ux/', image: featuredProjects[4].cover, caption: 'Decora / Interface design' },
   { name: 'Web', description: 'Website designs and web development.', href: '/work/web/', image: '/media/branding/macbook-mockup-3.webp', caption: 'CIC Nepal / Website mockup' },
 ];
 const stillWork = featuredProjects.flatMap(project => project.media).filter(media => media.type === 'photo');

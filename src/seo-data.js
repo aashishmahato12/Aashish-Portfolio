@@ -24,7 +24,7 @@ export const searchMeta = {
   'skill-motion': ['Motion Graphics Designer in Kathmandu | Aashish Mahato', 'Watch Savari’s product animation and explore motion graphics by Aashish Mahato in Kathmandu, Nepal. Discuss animation and product video projects.', '/work/motion/'],
   'skill-branding': ['Brand Identity Designer in Kathmandu | Aashish Mahato', 'Explore workplace signage, business cards, and brand presentations for Cosmic Electrical, CIC Nepal, and Decora by Aashish Mahato in Kathmandu.', '/work/branding/'],
   'skill-graphic': ['Graphic Designer in Kathmandu, Nepal | Aashish Mahato', 'Explore campaign artwork, social graphics, and visual communication by Aashish Mahato, a graphic designer based in Kathmandu, Nepal.', '/work/graphic/'],
-  'skill-digital': ['UI/UX Designer in Kathmandu | Aashish Mahato', 'Explore Savari dashboard and digital driving licence concepts, plus mobile interface mockups by Aashish Mahato, a UI/UX designer in Kathmandu.', '/work/digital/'],
+  'skill-digital': ['UI/UX Designer in Kathmandu | Aashish Mahato', 'Explore Savari dashboard and digital driving licence concepts, plus mobile interface mockups by Aashish Mahato, a UI/UX designer in Kathmandu.', '/work/ui-ux/'],
   'skill-web': ['Web Developer in Kathmandu, Nepal | Aashish Mahato', 'Explore Cosmic Electrical, UniSync, and portfolio websites by Aashish Mahato in Kathmandu. View responsive React projects and discuss your website.', '/work/web/'],
 };
 export const searchImages = {

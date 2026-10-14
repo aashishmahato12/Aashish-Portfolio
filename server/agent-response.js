@@ -15,6 +15,11 @@ export function agentResponse(request) {
   const path = new URL(request.url).pathname;
   if (isStaticRequest(path)) return null;
   if (!['GET', 'HEAD'].includes(request.method)) return null;
+  if (/^\/work\/digital(?:\/(?:index\.(?:html|md))?)?\/?$/.test(path)) {
+    const url = new URL(request.url);
+    const target = `/work/ui-ux/${path.endsWith('/index.md') ? 'index.md' : ''}${url.search}${url.hash}`;
+    return new Response(null, { status: 308, headers: { Location: target } });
+  }
   const headers = { 'Content-Type': 'text/markdown; charset=utf-8', 'Vary': 'Accept', 'Cache-Control': 'no-store', 'Link': '</llms.txt>; rel="describedby"' };
   const respond = (body, status = 200) => new Response(request.method === 'HEAD' ? null : body, { status, headers });
   if (path === '/llms.txt') return respond(llmsText);

@@ -25,7 +25,7 @@ const pages = [
   ['/work/motion/', [featuredProjects[2].cover]],
   ['/work/branding/', brandProjects.flatMap((project) => project.media.filter((item) => item.category === 'Branding').map((item) => item.src))],
   ['/work/graphic/', featuredProjects.filter((project) => project.category === 'Graphic Design').flatMap((project) => project.media.map((item) => item.src))],
-  ['/work/digital/', brandProjects.flatMap((project) => project.media.filter((item) => item.category === 'Digital').map((item) => item.src))],
+  ['/work/ui-ux/', brandProjects.flatMap((project) => project.media.filter((item) => item.category === 'Digital').map((item) => item.src))],
   ['/work/web/', webProjects.map(project => project.cover)],
 ];
 

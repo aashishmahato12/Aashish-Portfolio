@@ -1,3 +1,5 @@
+export const workPath = id => `/work/${id === 'digital' ? 'ui-ux' : id}/`;
+
 export const creativeServices = [
   {
     id: 'film', name: 'Filmmaking & editing',

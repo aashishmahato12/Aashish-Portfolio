@@ -3,7 +3,7 @@ import { videoPages, videoPageForMedia } from './video-pages.js';
 import { buildProjectEnquiry, buildGmailEnquiry, buildOutlookEnquiry, contactEmail } from './contact-enquiry.js';
 import { privacySections, privacyProviders, privacyUpdated } from './privacy-content.js';
 import { isWebKit } from './browser-performance.js';
-import { creativeServices, projectQuestions } from './services-data.js';
+import { workPath, creativeServices, projectQuestions } from './services-data.js';
 import { mediaAlt, mediaDescription } from './media-text.js';
 import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
@@ -44,8 +44,8 @@ const routeFor = (path) => {
   path = path.replace(/\/index\.html$/, '/');
   const watchPage = videoPages.find(page => page.path === (path.endsWith('/') ? path : path + '/'));
   if (watchPage) return watchPage.route;
-  const skill = path.match(/^\/work\/(film|photography|motion|branding|graphic|digital|web)\/?$/);
-  if (skill) return `skill-${skill[1]}`;
+  const skill = path.match(/^\/work\/(film|photography|motion|branding|graphic|ui-ux|digital|web)\/?$/);
+  if (skill) return `skill-${skill[1] === 'ui-ux' ? 'digital' : skill[1]}`;
   const normalized = path.replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
   return ({ '/': 'home', '/work': 'work', '/gallery': 'gallery', '/about': 'about', '/contact': 'contact', '/privacy': 'privacy' })[normalized] || 'home';
 };
@@ -484,7 +484,7 @@ function ProjectGuide() {
     <h2 id="project-guide-title">MY <em>SERVICES.</em></h2>
     <p className="project-guide-intro">I offer filmmaking, photography, design, and web development. View examples below or contact me to discuss a project.</p>
     <div className="service-showcase-grid" ref={showcaseRef}>
-      {creativeServices.map(service => <a className={`service-showcase-card service-showcase-card--${service.id}`} href={`/work/${service.id}/`} key={service.id}>
+      {creativeServices.map(service => <a className={`service-showcase-card service-showcase-card--${service.id}`} href={workPath(service.id)} key={service.id}>
         <div className="service-showcase-copy"><h3 aria-label={service.name}>{service.name.split(' ').map((word, i) => <span className="service-title-word" aria-hidden="true" key={i} style={{ '--word-delay': `${i * .07}s` }}><span>{word}</span>{' '}</span>)}</h3><p>{serviceSummaries[service.id]}</p></div>
         <div className="service-showcase-visual" aria-hidden="true">
           <div className="service-showcase-sheet"><PortfolioIcon name={service.id} animated size={52} strokeWidth={1.4} /></div>
@@ -674,7 +674,7 @@ function HomeSkills() {
         {!reducedMotion && <div className="skills-switch-timer" style={{ '--skill-accent': accent }} role="img" aria-label="Next skill switches automatically after five seconds; hover or focus to pause"><span ref={switchProgressRef} /></div>}
         <div className={`skills-showcase-slide skills-bento skills-bento--${skill.id}${canSwitch ? "" : " skills-bento--single"}`} style={{ '--skill-accent': accent }} ref={showcaseRef} role="group" aria-roledescription="slide" aria-label={`${active + 1} of ${workSkills.length}: ${skill.name}`} key={skill.id}>
           <div className={`skills-showcase-media${skill.id === 'web' ? ' skills-showcase-media--website' : ''}`}>
-            <a className="skills-preview-main" href={skill.id === 'web' ? `/work/web/#${webPreview.id}` : `/work/${skill.id}/`} aria-label={`Explore ${skill.name.toLowerCase()} projects`}>
+            <a className="skills-preview-main" href={skill.id === 'web' ? `/work/web/#${webPreview.id}` : workPath(skill.id)} aria-label={`Explore ${skill.name.toLowerCase()} projects`}>
               {skill.id === 'film' || skill.id === 'motion' ? <HomeFilmPreview key={skill.id === 'motion' ? 'product-motion' : alternate ? 'manang' : 'mustang'} film={featuredProjects[skill.id === 'motion' ? 2 : alternate ? 1 : 0].media[0]} /> : <img key={previewImage} className="skills-frame-image" src={previewImage} onLoad={sampleAccent} alt={skill.id === 'web' ? `${webPreview.title} website preview` : mediaAlt({ src: previewImage, title: currentPhoto?.title || skill.projects[0].title })} />}
               <span className="skills-preview-cue">VIEW WORK <span aria-hidden="true">↗</span></span>
             </a>
@@ -686,12 +686,12 @@ function HomeSkills() {
             <h3>{skill.name}</h3>
             <p className="skills-showcase-summary">{skill.line}</p>
             <p className="skills-bento-context">{service.evidence}</p>
-            <AnimatedButton className="skills-bento-explore" href={`/work/${skill.id}/`} size="lg">Explore {skill.name.toLowerCase()} <span aria-hidden="true">↗</span></AnimatedButton>
+            <AnimatedButton className="skills-bento-explore" href={workPath(skill.id)} size="lg">Explore {skill.name.toLowerCase()} <span aria-hidden="true">↗</span></AnimatedButton>
             </div>
-            {supportingMedia ? <a className="skills-bento-photo" href={`/work/${skill.id}/#${supportingMedia.projectId}`}>
+            {supportingMedia ? <a className="skills-bento-photo" href={`${workPath(skill.id)}#${supportingMedia.projectId}`}>
               <img src={supportingMedia.image} alt={mediaAlt({ ...supportingMedia, src: supportingMedia.image })} loading="lazy" />
               <span>{supportingMedia.title}<span aria-hidden="true">↗</span></span>
-            </a> : <a className={`skills-bento-photo skills-bento-photo--link${skill.id === 'motion' ? ' skills-bento-photo--savari' : ''}`} href={`/work/${skill.id}/`}>{skill.id === 'motion' ? <img src="/media/logos/savari.webp" alt="Savari" /> : <span aria-hidden="true">↗</span>}<span>View the projects</span></a>}
+            </a> : <a className={`skills-bento-photo skills-bento-photo--link${skill.id === 'motion' ? ' skills-bento-photo--savari' : ''}`} href={workPath(skill.id)}>{skill.id === 'motion' ? <img src="/media/logos/savari.webp" alt="Savari" /> : <span aria-hidden="true">↗</span>}<span>View the projects</span></a>}
           </div>
           {canSwitch && <button type="button" className="skills-bento-preview" onClick={() => photoFrames.length > 1 ? setPhotoFrame(index => index + 1) : setAlternateSkill(alternate ? null : skill.id)} aria-label="Switch project preview">
             <img src={skill.id === 'film' ? featuredProjects[alternate ? 0 : 1].media[0].poster : otherImage} alt="" />
@@ -779,7 +779,7 @@ function SkillPage({ skillId }) {
   const serviceContext = <WorkNextSteps service={service} />;
   return <div className={`inner-page skill-page skill-page--${skill.id}`}><SiteNav current="work" /><main>
     <section className="skill-hero" ref={heroRef} aria-labelledby="skill-title"><div className="skill-hero-image">{skill.slides ? skill.slides.map((src, index) => <picture key={src}>{skill.mobileSlides?.[index] && <source media="(max-width: 700px)" srcSet={skill.mobileSlides[index]} />}<img className="skill-hero-slide" src={src} alt="" loading={index === 0 ? "eager" : "lazy"} /></picture>) : <img src={skill.cover} alt="" />}{heroVideo && <video className={`skill-hero-video ${heroVideoReady ? 'is-ready' : ''}`} src={heroVideo.src} muted playsInline preload={heroVideoStart === 0 ? "auto" : "metadata"} poster={heroVideo.poster || skill.cover} aria-hidden="true" onLoadedData={(event) => { if (heroVideoStart !== 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onLoadedMetadata={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} onSeeked={(event) => { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onEnded={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} />}</div><div className="skill-hero-shade" /><div className="skill-hero-content experience-shell"><div className="skill-hero-overline"><a href="/work/">← ALL SKILLS</a></div><div className="skill-hero-main"><span className="skill-hero-kicker">AASHISH MAHATO / MY WORK</span><MaskedHeroTitle text={skill.name} id="skill-title" /><p>{skill.line}</p></div><div className="skill-hero-bottom"><span>SELECTED PROJECTS BELOW</span><span>SCROLL ↓</span></div></div></section>
-    <section className={`work-detail work-detail--${skill.id}`}><div className="experience-shell"><nav className="work-detail-switcher" aria-label="Explore other skills">{workSkills.map((item) => <a href={`/work/${item.id}/`} key={item.id} aria-current={skill.id === item.id ? 'page' : undefined}>{item.name}</a>)}</nav><div className="work-detail-heading" data-reveal><span>{skill.name} / SKILLS</span><h2>PROJECTS<i>.</i></h2><p>{skill.line}</p>{skill.id === 'branding' ? <p className="work-branding-support">A selection of identity designs and printed materials for CIC Nepal, Decora, and Cosmic Electrical, including business cards, service booklets, brand presentations, and workplace signage.</p> : <div className="work-detail-capabilities" aria-label={`${skill.name} skills`}>{skill.capabilities.map((capability) => <span key={capability}>{capability}</span>)}</div>}</div><WorkMediaGallery skill={skill} key={skill.id} /><div className="skill-page-end"><a href="/work/">← ALL SKILLS</a><a href="/gallery/">FULL GALLERY ↗</a></div>{serviceContext}</div></section>
+    <section className={`work-detail work-detail--${skill.id}`}><div className="experience-shell"><nav className="work-detail-switcher" aria-label="Explore other skills">{workSkills.map((item) => <a href={workPath(item.id)} key={item.id} aria-current={skill.id === item.id ? 'page' : undefined}>{item.name}</a>)}</nav><div className="work-detail-heading" data-reveal><span>{skill.name} / SKILLS</span><h2>PROJECTS<i>.</i></h2><p>{skill.line}</p>{skill.id === 'branding' ? <p className="work-branding-support">A selection of identity designs and printed materials for CIC Nepal, Decora, and Cosmic Electrical, including business cards, service booklets, brand presentations, and workplace signage.</p> : <div className="work-detail-capabilities" aria-label={`${skill.name} skills`}>{skill.capabilities.map((capability) => <span key={capability}>{capability}</span>)}</div>}</div><WorkMediaGallery skill={skill} key={skill.id} /><div className="skill-page-end"><a href="/work/">← ALL SKILLS</a><a href="/gallery/">FULL GALLERY ↗</a></div>{serviceContext}</div></section>
   </main><SiteFooter /></div>;
 }
 
@@ -910,7 +910,7 @@ function WorkPage() {
     compact.addEventListener('change', update);
     return () => { reduced.removeEventListener('change', update); compact.removeEventListener('change', update); };
   }, []);
-  return <div className="inner-page work-page"><SiteNav current="work" /><main><section className="work-rays-hero"><div className="work-rays-background" aria-hidden="true">{workBackgroundEnabled && <Suspense fallback={null}><Silk color="#E34530" sheenColor="#ffffff" speed={5} scale={1} rotation={0} sheen={.5} depth={.5} glow={.3} noiseIntensity={1.5} mouseInteraction={!compactBackground} clickRipple={!compactBackground} dpr={compactBackground ? 1 : 1.5} intro /></Suspense>}</div><div className="inner-intro experience-shell"><SectionTop number="01" label="WORK" aside="SELECTED PROJECTS / KATHMANDU, NEPAL" /><div className="work-hero-layout"><div className="signature-heading signature-page-title"><HandwrittenText className="signature-accent">Selected</HandwrittenText><WorkTitle /></div><div className="work-hero-summary"><p>Film, photography, design, and web projects by Aashish Mahato.</p></div></div></div></section><ParallaxChapters showCount={false} className="work-parallax-skills" label="MY SKILLS" items={workSkills.map(skill => ({ title: `${skill.name}.`, line: skill.line, image: skill.cover, slides: skill.slides, video: skill.id === 'film' ? filmProjects[1].media[0] : skill.id === 'motion' ? featuredProjects[2].media[0] : null, id: `practice-${skill.id}`, href: `/work/${skill.id}/` }))} /><div className="experience-shell"><WorkNextSteps /></div></main><SiteFooter /></div>;
+  return <div className="inner-page work-page"><SiteNav current="work" /><main><section className="work-rays-hero"><div className="work-rays-background" aria-hidden="true">{workBackgroundEnabled && <Suspense fallback={null}><Silk color="#E34530" sheenColor="#ffffff" speed={5} scale={1} rotation={0} sheen={.5} depth={.5} glow={.3} noiseIntensity={1.5} mouseInteraction={!compactBackground} clickRipple={!compactBackground} dpr={compactBackground ? 1 : 1.5} intro /></Suspense>}</div><div className="inner-intro experience-shell"><SectionTop number="01" label="WORK" aside="SELECTED PROJECTS / KATHMANDU, NEPAL" /><div className="work-hero-layout"><div className="signature-heading signature-page-title"><HandwrittenText className="signature-accent">Selected</HandwrittenText><WorkTitle /></div><div className="work-hero-summary"><p>Film, photography, design, and web projects by Aashish Mahato.</p></div></div></div></section><ParallaxChapters showCount={false} className="work-parallax-skills" label="MY SKILLS" items={workSkills.map(skill => ({ title: `${skill.name}.`, line: skill.line, image: skill.cover, slides: skill.slides, video: skill.id === 'film' ? filmProjects[1].media[0] : skill.id === 'motion' ? featuredProjects[2].media[0] : null, id: `practice-${skill.id}`, href: workPath(skill.id) }))} /><div className="experience-shell"><WorkNextSteps /></div></main><SiteFooter /></div>;
 }
 
 function EmailProviderIcon({ provider }) {
@@ -1107,7 +1107,7 @@ export default function Experience() {
       const link = event.target.closest('a[href]');
       if (!link || link.target && link.target !== '_self' || link.hasAttribute('download')) return;
       const url = new URL(link.href, window.location.href);
-      if (url.origin !== window.location.origin || !(/^\/work\/(?:film|photography|motion|branding|graphic|digital|web)\/$/.test(url.pathname) || ['/','/work/','/gallery/','/about/','/contact/','/privacy/'].includes(url.pathname)) || routeFor(url.pathname) === current.current) return;
+      if (url.origin !== window.location.origin || !(/^\/work\/(?:film|photography|motion|branding|graphic|ui-ux|digital|web)\/$/.test(url.pathname) || ['/','/work/','/gallery/','/about/','/contact/','/privacy/'].includes(url.pathname)) || routeFor(url.pathname) === current.current) return;
       event.preventDefault();
       moveTo(url, true);
     };
