@@ -28,10 +28,10 @@ const descriptions = {
   '/media/design/79.webp': 'Red-and-white recruitment poster advertising an Account Officer position',
   '/media/design/92.webp': 'Cosmic Group Tihar campaign graphic featuring a colorful kite',
   '/media/design/146.webp': 'CIC Nepal opening announcement with a building photograph and workspace booking details',
-  '/media/posters/mustang.jpg': 'Mountain landscape thumbnail for the Mustang travel film',
-  '/media/posters/manang.jpg': 'Himalayan landscape thumbnail for the Manang travel film',
-  '/media/posters/product-motion.jpg': 'Digital licence interface thumbnail for the Product Motion film',
-  '/videos/hero-poster.jpg': 'Himalayan mountain landscape used as the portfolio showreel cover',
+  '/media/posters/mustang.webp': 'Mountain landscape thumbnail for the Mustang travel film',
+  '/media/posters/manang.webp': 'Himalayan landscape thumbnail for the Manang travel film',
+  '/media/posters/product-motion.webp': 'Digital licence interface thumbnail for the Product Motion film',
+  '/videos/hero-poster.webp': 'Himalayan mountain landscape used as the portfolio showreel cover',
 };
 
 const videoDescriptions = {

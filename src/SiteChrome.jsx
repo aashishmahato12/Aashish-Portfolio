@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
 import { PortfolioIcon } from './PortfolioIcons.jsx';
 import RubberSegment from './RubberSegment.jsx';
-import GradientBlinds from './GradientBlinds.jsx';
+const GradientBlinds = React.lazy(() => import('./GradientBlinds.jsx'));
 import GlassSurface from './components/GlassSurface.jsx';
 import { officialProfiles } from './seo-data.js';
 
@@ -94,27 +94,35 @@ export function SiteHeader({ current }) {
   </header>{createPortal(<div ref={layerRef} className="mobile-menu-layer" aria-hidden={!menuOpen} data-lenis-prevent="">
     <button ref={backdropRef} className="mobile-menu-backdrop" tabIndex={-1} aria-label="Close navigation menu" onClick={() => setMenuOpen(false)} />
     <div className="mobile-menu-curtain mobile-menu-curtain--red" aria-hidden="true" /><div className="mobile-menu-curtain mobile-menu-curtain--charcoal" aria-hidden="true" />
-    <aside ref={panelRef} className="mobile-menu-panel" id="mobile-navigation-panel" role="dialog" aria-modal={menuOpen || undefined} aria-label="Navigation menu" inert={!menuOpen}>
+    <div ref={panelRef} className="mobile-menu-panel" id="mobile-navigation-panel" role="dialog" aria-modal={menuOpen || undefined} aria-label="Navigation menu" inert={!menuOpen}>
       <div className="mobile-menu-art" aria-hidden="true">{(menuOpen || hasOpened.current) && <Suspense fallback={null}><MenuVeil color="#E34530" speed={.2} scale={1.25} flow={.4} warp={0} sheen={.1} glow={.15} grain={.015} quality={.35} mouseInteraction={false} intro={false} paused={!menuOpen} dpr={1} /></Suspense>}</div>
       <div className="mobile-menu-top"><span className="mobile-menu-brand">A/M<span>®</span></span><button className="mobile-menu-close" type="button" aria-label="Close navigation menu" onClick={() => setMenuOpen(false)}><X size={24} strokeWidth={1.6} /></button></div>
       <p className="mobile-menu-eyebrow">EXPLORE THE PORTFOLIO</p>
       <nav aria-label="Mobile navigation">{pages.map(page => <a className="mobile-menu-page" key={page.id} href={page.href} aria-current={current === page.id ? 'page' : undefined} onClick={() => setMenuOpen(false)}><PortfolioIcon kind="page" name={page.id} size={24} /><span>{page.label}</span></a>)}</nav>
       <div className="mobile-menu-bottom"><span>KATHMANDU, NEPAL</span><div>{officialProfiles.map(profile => <a key={profile.url} href={profile.url} aria-label={profile.label} target="_blank" rel="noopener noreferrer"><GlassSurface className="social-glass-circle" refraction={false} width={44} height={44} borderRadius={999} borderWidth={.12} brightness={60} opacity={.85} blur={12} displace={3} backgroundOpacity={.1} saturation={1.1} distortionScale={-65} redOffset={0} greenOffset={2} blueOffset={4}><PortfolioIcon kind="social" name={profile.label} size={20} /></GlassSurface></a>)}</div><small>Film · Photography · Design · Web</small></div>
-    </aside>
+    </div>
   </div>, document.body)}</>;
 
 }
 
 export function SiteFooter() {
-  return <footer className="experience-footer creative-end-footer creative-end-footer--blinds">
-    <div className="creative-end-background" aria-hidden="true"><GradientBlinds
+  const footerRef = useRef(null);
+  const [showBackground, setShowBackground] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setShowBackground(true); observer.disconnect(); }
+    }, { rootMargin: '600px' });
+    observer.observe(footerRef.current);
+    return () => observer.disconnect();
+  }, []);
+  return <footer ref={footerRef} className="experience-footer creative-end-footer creative-end-footer--blinds">
+    <div className="creative-end-background" aria-hidden="true">{showBackground && <Suspense fallback={null}><GradientBlinds
       gradientColors={['#6b00ff', '#ff0000', '#F97316']}
       angle={20} blindCount={10} blindMinWidth={60} spotlightRadius={.5}
       shine={.37} relief={.14} glow={.73} sway={.35} hoverTilt={.55}
       clickEffect="ripple" noise={.3} spotlightSoftness={1.15} speed={1.55}
       gradientSpeed={1.5} distortAmount={6} intro={false}
-    /></div>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap" />
+    /></Suspense>}</div>
     <div className="creative-end-main">
       <a className="creative-end-contact" href="/contact/"><span>HAVE A PROJECT IN MIND?</span><strong>LET’S<br />TALK<span className="creative-end-period">.</span></strong><div className="creative-end-arrow creative-end-arrow--liquid" aria-hidden="true"><GlassSurface width="100%" height="100%" borderRadius={999} borderWidth={.12} brightness={60} opacity={.85} blur={12} displace={3} backgroundOpacity={.12} saturation={1.15} distortionScale={-100} redOffset={0} greenOffset={3} blueOffset={6}><ArrowUpRight strokeWidth={1.6} /></GlassSurface></div></a>
       <div className="creative-end-directory"><nav aria-label="Footer navigation"><span>EXPLORE</span>{pages.map(page => <a key={page.id} href={page.href}><span className="footer-link-label"><PortfolioIcon kind="page" name={page.id} animated />{page.label}</span></a>)}</nav><nav className="footer-social-nav" aria-label="Social profiles"><span>FIND ME ONLINE</span>{officialProfiles.map(profile => <a key={profile.url} href={profile.url} aria-label={profile.label} title={profile.label} target="_blank" rel="noopener noreferrer"><span className="footer-link-label"><span className="footer-social-glass" aria-hidden="true"><GlassSurface className="social-glass-circle" refraction={false} width="100%" height="100%" borderRadius={999} borderWidth={.12} brightness={60} opacity={.85} blur={12} displace={3} backgroundOpacity={.1} saturation={1.1} distortionScale={-65} redOffset={0} greenOffset={2} blueOffset={4}><PortfolioIcon kind="social" name={profile.label} animated /></GlassSurface></span><PortfolioIcon className="footer-social-desktop-icon" kind="social" name={profile.label} animated /><span className="footer-social-name">{profile.label}</span></span></a>)}</nav></div>

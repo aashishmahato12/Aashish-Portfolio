@@ -41,6 +41,7 @@ export default defineConfig({
     },
   }],
   build: {
+    sourcemap: true,
     rollupOptions: {
       input: {
         ...Object.fromEntries(videoPages.map(video => [video.route, path.join(root, video.path.slice(1), 'index.html')])),

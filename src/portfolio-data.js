@@ -14,27 +14,27 @@ export const heroReel = {
   category: 'Film',
   src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791543451/hero.mp4',
   mobileSrc: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791543451/hero.mp4',
-  poster: '/videos/hero-poster.jpg',
+  poster: '/videos/hero-poster.webp',
 };
 
 export const featuredProjects = [
   {
     id: 'mustang-film', title: 'Mustang', category: 'Travel Film',
     description: 'A travel film through the landscapes of Mustang, Nepal.',
-    cover: `${poster}/mustang.jpg`,
-    media: [{ id: 'mustang-video', type: 'video', title: 'Mustang travel film', category: 'Film', src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791545360/Timeline_1.mp4', poster: `${poster}/mustang.jpg` }],
+    cover: `${poster}/mustang.webp`,
+    media: [{ id: 'mustang-video', type: 'video', title: 'Mustang travel film', category: 'Film', src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791545360/Timeline_1.mp4', poster: `${poster}/mustang.webp` }],
   },
   {
     id: 'manang-film', title: 'Manang', category: 'Travel Film',
     description: 'Moving images of Manang and its Himalayan landscape.',
-    cover: `${poster}/manang-thumbnail.jpg`,
-    media: [{ id: 'manang-video', type: 'video', title: 'Manang travel film', category: 'Film', src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791546684/Manange.mp4', poster: `${poster}/manang-thumbnail.jpg` }],
+    cover: `${poster}/manang-thumbnail.webp`,
+    media: [{ id: 'manang-video', type: 'video', title: 'Manang travel film', category: 'Film', src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791546684/Manange.mp4', poster: `${poster}/manang-thumbnail.webp` }],
   },
   {
     id: 'product-motion', title: 'Product Motion', category: 'Motion Graphics',
     description: 'A promotional product animation made for Savari, presenting its digital licence experience.',
-    cover: `${poster}/product-motion.jpg`,
-    media: [{ id: 'product-motion-video', type: 'video', title: 'Product motion film', category: 'Motion Graphics', src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791546163/Savari_Promo_Video.mp4', poster: `${poster}/product-motion.jpg` }],
+    cover: `${poster}/product-motion.webp`,
+    media: [{ id: 'product-motion-video', type: 'video', title: 'Product motion film', category: 'Motion Graphics', src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791546163/Savari_Promo_Video.mp4', poster: `${poster}/product-motion.webp` }],
   },
   {
     id: 'cic-nepal', title: 'CIC Nepal', category: 'Brand & Digital', company: 'Cosmic Innovation Center',

@@ -3,7 +3,6 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-import { animate } from 'animejs';
 import { galleryMedia } from './portfolio-data.js';
 import './home-panels.css';
 
@@ -24,7 +23,7 @@ function PanelVideo({ item, play }) {
     preference.addEventListener('change', sync);
     return () => { video.pause(); document.removeEventListener('visibilitychange', sync); preference.removeEventListener('change', sync); };
   }, [play]);
-  return <video ref={ref} src={play ? (window.matchMedia('(max-width: 700px)').matches && item.mobileSrc ? item.mobileSrc : item.src) : undefined} poster={item.poster} muted loop playsInline preload="none" aria-label={item.title} title={mediaDescription(item)} />;
+  return <video ref={ref} src={play ? (window.matchMedia('(max-width: 700px)').matches && item.mobileSrc ? item.mobileSrc : item.src) : undefined} poster={item.poster} muted loop playsInline preload="none" aria-hidden="true" title={mediaDescription(item)} />;
 }
 
 export default function HomePanels({ lenisRef }) {
@@ -93,7 +92,7 @@ export default function HomePanels({ lenisRef }) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const label = navRef.current?.querySelector('.home-panel-current');
     if (!label) return;
-    const motion = animate(label, { opacity: [0, 1], translateY: [12, 0], duration: 400, ease: 'out(3)' });
+    const motion = gsap.context(() => gsap.fromTo(label, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .4, ease: 'power2.out' }));
     return () => motion.revert();
   }, [current]);
 

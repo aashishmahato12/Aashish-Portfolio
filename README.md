@@ -21,7 +21,7 @@ The build generates `public/sitemap.xml`, copies `public/robots.txt`, and checks
 
 ## Media
 
-The homepage hero keeps the Cloudinary reel configured in `src/portfolio-data.js`; `public/videos/hero-poster.jpg` appears while it loads. The horizontal homepage gallery mixes that reel with films and photographs.
+The homepage hero uses compact local 15-second previews for desktop and phone, with `public/videos/hero-poster.webp` while they load. The complete showreel remains on its watch page via Cloudinary. The horizontal homepage gallery mixes that reel with films and photographs.
 
 The supplied source assets are in `Aashish - Pro/`. Web-sized copies are organized in `public/media/`:
 
@@ -57,3 +57,7 @@ Protocols: [Markdown negotiation](https://acceptmarkdown.com/guides/accept-parsi
 ## Video search
 
 Each film and motion video has a dedicated `/watch/` page with a visible player in its initial HTML, a stable thumbnail, unique page metadata, and an entry in the video sitemap extension of `/sitemap.xml`. Existing project titles link to their watch pages. Original publication dates have not been confirmed, so they are not invented for structured data. Google decides whether to index a video and show it in video results.
+
+## Loading and accessibility
+
+Fonts are hosted locally as WOFF2. Google tracking initializes on interaction or idle after initial rendering. The footer shader loads near the viewport. Hero text is visible immediately; its entrance moves without hiding it. Decorative silent previews are hidden from assistive technology; watch-page players remain accessible. Image variants provide smaller fallback thumbnails and avatars.

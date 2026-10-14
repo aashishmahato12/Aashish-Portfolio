@@ -22,15 +22,20 @@ function Hero() {
     const video = videoRef.current;
     const preference = matchMedia('(prefers-reduced-motion: reduce)');
     let inView = false;
+    let readyToLoad = false;
     const sync = () => {
-      if (inView && !document.hidden && !preference.matches) video.play().catch(() => {});
+      if (readyToLoad && inView && !document.hidden && !preference.matches) {
+        if (!video.getAttribute('src')) { video.src = matchMedia('(max-width: 700px)').matches ? '/videos/hero-preview-mobile.mp4' : '/videos/hero-preview-desktop.mp4'; }
+        video.play().catch(() => {});
+      }
       else video.pause();
     };
     const observer = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; sync(); });
     observer.observe(heroRef.current);
+    const timer = setTimeout(() => { readyToLoad = true; sync(); }, 1200);
     document.addEventListener('visibilitychange', sync);
     preference.addEventListener('change', sync);
-    return () => { observer.disconnect(); video.pause(); document.removeEventListener('visibilitychange', sync); preference.removeEventListener('change', sync); };
+    return () => { clearTimeout(timer); observer.disconnect(); video.pause(); document.removeEventListener('visibilitychange', sync); preference.removeEventListener('change', sync); };
   }, []);
 
   useLayoutEffect(() => {
@@ -50,33 +55,12 @@ function Hero() {
             .fromTo(accent, { scaleX: 0 }, { scaleX: 1, duration: .65, ease: 'power3.out' })
             .to(accent, { opacity: 0, duration: .35, delay: .25 });
 
-          if (window.matchMedia('(max-width: 640px)').matches) {
-            gsap.from([...first, ...second], {
-              autoAlpha: 0, yPercent: 55, duration: .48, stagger: .025,
-              ease: 'power3.out', clearProps: 'opacity,visibility,transform',
-            });
-            gsap.from(period, {
-              autoAlpha: 0, scale: 0, duration: .35, delay: .3,
-              ease: 'back.out(2)', clearProps: 'opacity,visibility,transform',
-            });
-          } else {
-            gsap.timeline({ defaults: { ease: 'power4.out' } })
-              .from(first, {
-                autoAlpha: 0, yPercent: 130, rotationX: -70, transformOrigin: '50% 100%',
-                stagger: .045, duration: 1.15, force3D: true,
-                clearProps: 'opacity,visibility,transform',
-              }, 0)
-              .from(second, {
-                autoAlpha: 0, yPercent: 130, rotationX: -70, transformOrigin: '50% 100%',
-                stagger: .045, duration: 1.15, force3D: true,
-                clearProps: 'opacity,visibility,transform',
-              }, .27)
-              .from(period, {
-                autoAlpha: 0, scale: 0, rotation: -75, transformOrigin: '50% 75%',
-                duration: .65, ease: 'back.out(2.2)',
-                clearProps: 'opacity,visibility,transform',
-              }, .85);
-          }
+          // Keep the name visible from the first paint; animate only its position.
+          gsap.from([...first, ...second], {
+            yPercent: 10, duration: .35, stagger: .012,
+            ease: 'power3.out', clearProps: 'transform',
+          });
+          gsap.from(period, { scale: .9, duration: .3, clearProps: 'transform' });
         }
 
         gsap.to('.hero h1', {
@@ -138,9 +122,7 @@ function Hero() {
   return (
     <section ref={heroRef} className="hero" id="top" aria-labelledby="hero-title">
       <div className="hero-fallback" aria-hidden="true"><div className="fallback-light" /></div>
-      <video ref={videoRef} className={`hero-video ${videoReady ? 'is-ready' : ''}`} muted loop playsInline preload="metadata" poster={heroReel.poster} aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)}>
-        <source src={heroReel.mobileSrc} media="(max-width: 700px)" type="video/mp4" />
-        <source src={heroReel.src} type="video/mp4" />
+      <video ref={videoRef} className={`hero-video ${videoReady ? 'is-ready' : ''}`} muted loop playsInline preload="none" poster={heroReel.poster} aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)}>
       </video>
       <div className="hero-shade" aria-hidden="true" />
       <SiteHeader current="home" />

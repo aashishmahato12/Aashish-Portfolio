@@ -6,7 +6,7 @@ export function canonicalPage(path) {
   return normalized.endsWith('/') ? normalized : normalized + '/';
 }
 export function isStaticRequest(path) {
-  return /^\/(?:assets|media|videos|_vercel|@vite|@id|@fs|src|node_modules)(?:\/|$)/.test(path) || path === '/favicon.png' || path === '/robots.txt' || path === '/sitemap.xml';
+  return /^\/(?:assets|media|videos|fonts|_vercel|@vite|@id|@fs|src|node_modules)(?:\/|$)/.test(path) || path === '/deferred-analytics.js' || path === '/favicon.png' || path === '/robots.txt' || path === '/sitemap.xml';
 }
 export function chooseRepresentation(accept) {
   return new Negotiator({ headers: { ...(accept == null ? {} : { accept }) } }).mediaType(['text/html', 'text/markdown']);
