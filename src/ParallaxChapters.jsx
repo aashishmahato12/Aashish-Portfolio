@@ -7,7 +7,7 @@ import GlassSurface from './components/GlassSurface.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 const chapters = [
-  { title: 'PLACES.', line: 'Travel films from Mustang and Manang.', image: '/media/posters/places-landscape.jpg' },
+  { title: 'PLACES.', line: 'Travel films from Mustang and Manang.', image: galleryMedia.find((item) => item.id === 'birds-above-the-city').src },
   { title: 'PEOPLE.', line: 'Portrait and street photography.', image: galleryMedia.find((item) => item.id === 'street-portrait').src },
   { title: 'DESIGN.', line: 'Brand identities and graphic design.', image: featuredProjects[3].cover },
 ];
