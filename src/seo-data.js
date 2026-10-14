@@ -28,10 +28,10 @@ export const searchMeta = {
 };
 export const searchImages = {
   privacy: '/media/photos/tree-final-18.webp',
-  home: '/media/photos/tree-final-18.webp',
+  home: '/media/photos/about-backlight-white.webp',
   work: '/media/social/work-preview.webp',
   contact: '/media/social/contact-preview.webp',
-  about: '/media/photos/tree-final-18.webp',
+  about: '/media/photos/about-backlight-white.webp',
   gallery: '/media/social/gallery-preview.webp',
   'skill-film': '/media/posters/mustang.jpg',
   'skill-photography': '/media/photos/tree-final-27.webp',
@@ -44,8 +44,8 @@ export const searchImages = {
 
 
 export const searchImageAlts = {
-  home: 'Portrait of Aashish Mahato, filmmaker and designer in Kathmandu',
-  about: 'Black and white portrait of Aashish Mahato wearing round glasses',
+  home: 'Backlit portrait of Aashish Mahato looking over his shoulder',
+  about: 'Backlit portrait of Aashish Mahato looking over his shoulder',
   contact: 'Aashish Mahato’s Let’s Talk contact page with red beams and his portrait',
   work: 'Selected Work page featuring Aashish Mahato’s film, design, and web projects',
   gallery: 'Gallery of photographs, film frames, and brand design by Aashish Mahato',
@@ -79,7 +79,7 @@ export function structuredData(route) {
   const websiteId = `${siteUrl}/#website`;
   const person = {
     '@type': 'Person', '@id': personId, name: 'Aashish Mahato',
-    url: `${siteUrl}/about/`, image: `${siteUrl}/media/photos/tree-final-18.webp`,
+    url: `${siteUrl}/about/`, image: `${siteUrl}/media/photos/about-backlight-white.webp`,
     description: creativeBio,
     worksFor: { '@type': 'Organization', name: 'Cosmic Group' },
     jobTitle: ['Creative Head', 'Filmmaker', 'Photographer', 'Designer', 'Web Developer'],

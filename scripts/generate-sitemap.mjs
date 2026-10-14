@@ -13,11 +13,11 @@ const brandProjects = featuredProjects.filter((project) => project.category === 
 const escapeXml = (value) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 
 const pages = [
-  ['/', ['/media/photos/tree-final-18.webp', heroReel.poster, ...featuredProjects.map((project) => project.cover)]],
+  ['/', ['/media/photos/about-backlight-white.webp', heroReel.poster, ...featuredProjects.map((project) => project.cover)]],
   ['/work/', featuredProjects.map(project => project.cover)],
   ['/contact/', []],
   ['/privacy/', []],
-  ['/about/', ['/media/photos/tree-final-18.webp']],
+  ['/about/', ['/media/photos/about-backlight-white.webp']],
   ['/gallery/', [...galleryMedia, ...projectMedia].map(mediaImage)],
   ['/work/film/', [heroReel.poster, ...featuredProjects.filter((project) => project.category === 'Travel Film').map((project) => project.cover)]],
   ['/work/photography/', photos.map((item) => item.src)],

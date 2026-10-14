@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://aashish-mahato.com.np/</loc>
-    <image:image><image:loc>https://aashish-mahato.com.np/media/photos/tree-final-18.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/photos/about-backlight-white.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/videos/hero-poster.jpg</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/posters/mustang.jpg</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/posters/manang-thumbnail.jpg</image:loc></image:image>
@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>https://aashish-mahato.com.np/about/</loc>
-    <image:image><image:loc>https://aashish-mahato.com.np/media/photos/tree-final-18.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/photos/about-backlight-white.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://aashish-mahato.com.np/gallery/</loc>
