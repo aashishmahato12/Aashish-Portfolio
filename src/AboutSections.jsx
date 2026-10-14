@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CreativeTV from './CreativeTV.jsx';
 import HandwrittenText from './HandwrittenText.jsx';
 import FloppyLibrary from './FloppyLibrary.jsx';
-import { MapPin, GraduationCap, Monitor, Clapperboard, Camera, Sparkles, PenTool, Palette, PanelsTopLeft, Code2, ArrowUpRight } from 'lucide-react';
+import { MapPin, GraduationCap, Monitor, Palette, ArrowUpRight } from 'lucide-react';
 import { featuredProjects, galleryMedia } from './portfolio-data.js';
 import { officialProfiles } from './seo-data.js';
 import { HoverCard, HoverCardTrigger, HoverCardPortal, HoverCardContent } from './components/animate-ui/primitives/radix/hover-card.jsx';
@@ -82,7 +82,7 @@ export function AboutOpening() {
   return <div className="kinetic-about" ref={ref}>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap" />
     <section className="kinetic-hero kinetic-hero--portrait" aria-labelledby="kinetic-title">
-      <img className="about-cover-portrait" src="/media/photos/about-backlight-white.png" alt="Backlit portrait of Aashish Mahato looking over his shoulder" width="1456" height="1080" fetchPriority="high" />
+      <img className="about-cover-portrait" src="/media/photos/about-backlight-white.webp" alt="Backlit portrait of Aashish Mahato looking over his shoulder" width="1456" height="1080" fetchPriority="high" />
       <HoverCard openDelay={180} closeDelay={120}>
         <HoverCardTrigger asChild><button type="button" className="about-portrait-hover" aria-label="About Aashish Mahato" /></HoverCardTrigger>
         <HoverCardPortal><HoverCardContent className="about-portrait-card" side="right" sideOffset={16} collisionPadding={20}>

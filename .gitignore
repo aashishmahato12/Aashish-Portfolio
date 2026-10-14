@@ -2,3 +2,5 @@ node_modules/
 dist/
 .npm-cache/
 source-videos/*.mov
+.DS_Store
+.vercel/

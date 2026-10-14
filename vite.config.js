@@ -2,13 +2,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { agentReadinessPlugin } from './server/vite-agent-plugin.js';
-import tailwindcss from '@tailwindcss/vite';
-import { searchMeta, searchImages, siteUrl, structuredData } from './src/seo-data.js';
+import { searchMeta, searchImages, searchImageAlts, siteUrl, structuredData } from './src/seo-data.js';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [agentReadinessPlugin(), tailwindcss(), {
+  plugins: [agentReadinessPlugin(), {
     name: 'portfolio-identity',
     transformIndexHtml(html, context) {
       const relativeFile = path.relative(root, context.filename).split(path.sep).join('/');
@@ -31,7 +30,7 @@ export default defineConfig({
         { tag: 'meta', attrs: { name: 'twitter:image', content: `${siteUrl}${searchImages[route]}` }, injectTo: 'head' },
         { tag: 'meta', attrs: { name: 'twitter:title', content: title }, injectTo: 'head' },
         { tag: 'meta', attrs: { name: 'twitter:description', content: description }, injectTo: 'head' },
-        { tag: 'meta', attrs: { property: 'og:image:alt', content: route.startsWith('skill-') ? title : 'Aashish Mahato — creative in film, photography, design, and code' }, injectTo: 'head' },
+        { tag: 'meta', attrs: { property: 'og:image:alt', content: searchImageAlts[route] }, injectTo: 'head' },
         { tag: 'script', attrs: { id: 'portfolio-structured-data', type: 'application/ld+json' },
           children: JSON.stringify(structuredData(route)).replaceAll('<', '\\u003c'), injectTo: 'head' },
         { tag: 'meta', attrs: { property: 'og:site_name', content: 'Aashish Mahato' }, injectTo: 'head' },

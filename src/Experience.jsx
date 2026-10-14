@@ -9,10 +9,9 @@ import { Cake, MapPin, GraduationCap, Mail, Plus, Copy, Check } from 'lucide-rea
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { animate, stagger } from 'animejs';
 import App from './App.jsx';
 import { SiteHeader as SiteNav, SiteFooter } from './SiteChrome.jsx';
-import { searchMeta, searchImages, structuredData, officialProfiles } from './seo-data.js';
+import { searchMeta, searchImages, searchImageAlts, structuredData, officialProfiles } from './seo-data.js';
 import HomePanels from './HomePanels.jsx';
 import Masonry from './Masonry.jsx';
 import JellyRadio from './JellyRadio.jsx';
@@ -23,7 +22,6 @@ import Magnet from './components/Magnet.jsx';
 import { Button as AnimatedButton } from './components/animate-ui/components/buttons/button.jsx';
 import HandwrittenText from './HandwrittenText.jsx';
 import ParallaxChapters from './ParallaxChapters.jsx';
-import { PreviewLinkCard, PreviewLinkCardContent, PreviewLinkCardImage, PreviewLinkCardPortal, PreviewLinkCardTrigger } from './components/animate-ui/primitives/radix/preview-link-card.jsx';
 import { collaborators, featuredProjects, filmProjects, galleryMedia, heroReel, webProjects } from './portfolio-data.js';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -70,7 +68,7 @@ function updateSearchMeta(route) {
   document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', `https://aashish-mahato.com.np${searchImages[route]}`);
   document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', title);
   document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', description);
-  document.querySelector('meta[property="og:image:alt"]')?.setAttribute('content', route.startsWith('skill-') ? title : 'Aashish Mahato — creative in film, photography, design, and code');
+  document.querySelector('meta[property="og:image:alt"]')?.setAttribute('content', searchImageAlts[route]);
 }
 
 function usePageMotion(dependency) {
@@ -177,11 +175,11 @@ const clientTestimonials = [
   { discipline: 'Web', emphasis: ['clean, user-friendly website', 'overall user experience', 'polished final product'], quote: 'Aashish transformed our ideas into a clean, user-friendly website for Savari. He paid close attention to both the visual details and the overall user experience, resulting in a polished final product.' },
   { discipline: 'Videos', emphasis: ['creativity and strong storytelling', 'framing, editing, and detail'], quote: 'Aashish brought creativity and strong storytelling to Savari’s visual content. His attention to framing, editing, and detail helped create videos that effectively represented our project.' },
   {
-    discipline: 'Web development & design', author: 'Hardik Maharjan', avatar: '/media/photos/hardik-maharjan.png', wide: true,
+    discipline: 'Web development & design', author: 'Hardik Maharjan', avatar: '/media/photos/hardik-maharjan.webp', wide: true,
     emphasis: ['technical expertise, creativity, and design skills', 'dedicated, creative, and willing to go the extra mile', 'bright future ahead of him'],
     quote: 'Aashish has helped me on several of my projects, including Dream Chasers and the “Will You Go on a Date With Me?” website, and his contribution has been exceptional.\n\nAashish has a strong combination of technical expertise, creativity, and design skills. His ability to bring ideas to life through web development and thoughtful design has helped me tremendously across these projects. He is not only highly skilled but also dedicated, creative, and willing to go the extra mile to make sure the final result is something to be proud of.\n\nI genuinely appreciate all the support and hard work he has put into the projects we’ve worked on together. I have no doubt that Aashish has a bright future ahead of him, and with his talent and passion for technology, I believe he will go very far.',
   },
-  {"discipline": "Cosmic Electrical Limited", "author": "Mahesh Mahato", "avatar": "/media/photos/mahesh-mahato.png", "role": "Founder & Managing Director", "company": "Cosmic Electrical Limited", "logo": "/media/logos/cosmic-electrical.webp", "emphasis": ["attention to detail"], "quote": "Aashish brings a unique combination of creativity, technical understanding, and dedication to his work. From visual storytelling and video production to graphic design and digital presentation, he has consistently demonstrated the ability to translate our company’s vision into meaningful creative work. His attention to detail, willingness to learn, and commitment to quality make him a promising young creative professional."},
+  {"discipline": "Cosmic Electrical Limited", "author": "Mahesh Mahato", "avatar": "/media/photos/mahesh-mahato.webp", "role": "Founder & Managing Director", "company": "Cosmic Electrical Limited", "logo": "/media/logos/cosmic-electrical.webp", "emphasis": ["attention to detail"], "quote": "Aashish brings a unique combination of creativity, technical understanding, and dedication to his work. From visual storytelling and video production to graphic design and digital presentation, he has consistently demonstrated the ability to translate our company’s vision into meaningful creative work. His attention to detail, willingness to learn, and commitment to quality make him a promising young creative professional."},
   {"discipline": "Cosmic Group", "author": "Cosmic Group", "role": "Corporate Team", "company": "Cosmic Group", "logo": "/media/logos/cosmic-group.webp", "emphasis": ["creative"], "quote": "Aashish has contributed to strengthening our digital and visual identity across multiple businesses. His versatility in website development, graphic design, and multimedia production allows him to approach projects with both creative vision and technical precision. He brings fresh perspectives, thoughtful execution, and a strong sense of responsibility to every assignment."},
   {"discipline": "Cosmic Innovation Center (CIC Nepal)", "author": "CIC Nepal", "role": "Management Team", "company": "Cosmic Innovation Center (CIC Nepal)", "logo": "/media/logos/cic.webp", "emphasis": ["attention to detail"], "quote": "Creativity and innovation go hand in hand, and Aashish demonstrates both. His contributions to our visual identity, digital presence, and promotional materials reflect a strong understanding of modern design and communication. He approaches creative challenges with curiosity, initiative, and a genuine interest in technology, making him a valuable contributor to our innovation-driven environment."},
   {"discipline": "Cosmic Foundation", "author": "Cosmic Foundation", "role": "Management Team", "company": "Cosmic Foundation", "logo": "/media/logos/cosmic-foundation.webp", "emphasis": ["attention to detail"], "quote": "Aashish understands that effective design is not simply about aesthetics, but about communicating purpose. His creative contributions have helped us present our initiatives with clarity and visual impact. Through thoughtful design and storytelling, he demonstrates an ability to connect meaningful ideas with audiences in an engaging and professional way."},
@@ -236,7 +234,7 @@ function HomeTestimonials({ number = "05" }) {
           const words = part.split(/(\s+)/).map((word, wordIndex) => /\s+/.test(word) ? word : <span className="testimonial-word" aria-hidden="true" key={wordIndex}>{word}</span>);
           return item.emphasis.includes(part) ? <strong key={partIndex}>{words}</strong> : <React.Fragment key={partIndex}>{words}</React.Fragment>;
         })}</p>)}</blockquote>
-        <figcaption><div className="testimonial-author">{item.avatar ? <img className="testimonial-avatar" src={item.avatar} alt={item.author} width="40" height="40" loading="lazy" /> : item.author ? <span className="testimonial-avatar testimonial-initials" aria-hidden="true">{item.author.split(/\s+/).map((word) => word[0]).slice(0, 2).join('')}</span> : <img className="testimonial-avatar" src="/media/photos/biraj-sharma.png" alt="Biraj Sharma" width="40" height="40" loading="lazy" />}<div><strong>{item.author || "Biraj Sharma"}</strong><span>{item.role || (item.author ? "Developer, Dream Chasers" : "Project Manager, The Cyberians")}</span></div></div><img className="testimonial-company-logo" src={item.logo || (item.author ? "/media/logos/dream-chaser.jpg" : "/media/logos/savari.webp")} alt={item.company || (item.author ? "Dream Chaser" : "Savari")} width="72" height="40" loading="lazy" /></figcaption>
+        <figcaption><div className="testimonial-author">{item.avatar ? <img className="testimonial-avatar" src={item.avatar} alt={item.author} width="40" height="40" loading="lazy" /> : item.author ? <span className="testimonial-avatar testimonial-initials" aria-hidden="true">{item.author.split(/\s+/).map((word) => word[0]).slice(0, 2).join('')}</span> : <img className="testimonial-avatar" src="/media/photos/biraj-sharma.webp" alt="Biraj Sharma" width="40" height="40" loading="lazy" />}<div><strong>{item.author || "Biraj Sharma"}</strong><span>{item.role || (item.author ? "Developer, Dream Chasers" : "Project Manager, The Cyberians")}</span></div></div><img className="testimonial-company-logo" src={item.logo || (item.author ? "/media/logos/dream-chaser.jpg" : "/media/logos/savari.webp")} alt={item.company || (item.author ? "Dream Chaser" : "Savari")} width="72" height="40" loading="lazy" /></figcaption>
       </figure>);
   return <section ref={sectionRef} className="home-testimonials home-testimonials--reference" id="client-voices" aria-labelledby="testimonials-title">
     <div className="experience-shell"><div className="reviews-panel">
@@ -336,7 +334,7 @@ const workSkills = [
   { id: 'digital', name: 'UI/UX DESIGN', line: 'Website, dashboard, and mobile interface designs.', cover: '/media/branding/macbook-mockup-3.webp', preview: featuredProjects[4].media.find((item) => item.category === 'Digital').src, slides: featuredProjects.flatMap(project => project.media).filter(item => item.category === 'Digital').map(item => item.src), capabilities: ['Web design', 'UI concepts', 'Frontend'], projects: featuredProjects.filter((project) => project.category === 'Brand & Digital') },
   { id: 'web', name: 'WEB DEVELOPMENT', line: 'Responsive websites, React interfaces, and web tools.', cover: '/media/web/cosmic-homepage.webp', preview: '/media/web/unisync-dashboard.webp', slides: ['/media/web/cosmic-homepage.webp', '/media/web/unisync-dashboard.webp'], mobileSlides: ['/media/web/cosmic-mobile.webp', '/media/web/unisync-mobile.webp'], capabilities: ['Responsive websites', 'React interfaces', 'Web tools'], projects: webProjects },
 ];
-const projectHref = (project) => `/work/${workSkills.find((skill) => skill.projects.some((item) => item.id === project.id))?.id || 'film'}/#${project.id}`;
+
 
 function WebProjectVisual({ project }) {
   return <div className="web-project-screenshot"><div className="web-project-browser"><span /><span /><span /><small>{new URL(project.liveUrl).hostname}</small></div><img src={project.cover} alt={`${project.title} website screenshot`} loading="lazy" /></div>;
@@ -416,13 +414,7 @@ function WorkMediaGallery({ skill }) {
   </div>;
 }
 
-function WorkSkillCard({ skill, index }) {
-  const href = `/work/${skill.id}/`;
-  return <PreviewLinkCard href={href} src={skill.preview} width={320} height={200} followCursor="x" openDelay={120} closeDelay={80}>
-    <PreviewLinkCardTrigger asChild><a className="work-skill-card" href={href}><span className="work-skill-card-media"><img src={skill.cover} alt="" loading="lazy" /></span><span className="work-skill-card-meta"><span>{String(index + 1).padStart(2, '0')} / {String(skill.projects.length).padStart(2, '0')} WORKS</span><span aria-hidden="true">↗</span></span><strong>{skill.name}</strong><span className="work-skill-card-line">{skill.line}</span></a></PreviewLinkCardTrigger>
-    <PreviewLinkCardPortal><PreviewLinkCardContent side="top" sideOffset={16} className="work-skill-preview"><PreviewLinkCardImage alt={`${skill.name} work preview`} /><span className="work-skill-preview-info"><strong>{skill.name}</strong><span>EXPLORE {String(skill.projects.length).padStart(2, '0')} WORKS ↗</span></span></PreviewLinkCardContent></PreviewLinkCardPortal>
-  </PreviewLinkCard>;
-}
+
 
 const serviceSummaries = {
   film: 'Travel films, corporate videos, and editing.',

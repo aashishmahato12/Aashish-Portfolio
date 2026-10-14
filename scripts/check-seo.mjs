@@ -40,6 +40,10 @@ for (const [route, [title, description, path]] of Object.entries(searchMeta)) {
   assert.ok(graph.some(item => item.url === `${siteUrl}${path}` && item['@id'].endsWith('#webpage')));
   assert.ok(existsSync(`dist${searchImages[route]}`), `${route}: missing search preview image`);
   assert.ok(html.includes(`property="og:image" content="${siteUrl}${searchImages[route]}"`), `${route}: stale share image`);
+  assert.ok(html.includes(`name="twitter:image" content="${siteUrl}${searchImages[route]}"`), `${route}: stale social card image`);
+  const webpage = graph.find(item => item['@id'] === `${siteUrl}${path}#webpage`);
+  const primaryImage = graph.find(item => item['@id'] === webpage.primaryImageOfPage['@id']);
+  assert.equal(primaryImage.contentUrl, `${siteUrl}${searchImages[route]}`, `${route}: primary image does not match preview`);
   if (route === 'contact') assert.ok(html.includes(contactEmail), 'Contact email must be present in readable HTML');
   if (route.startsWith('skill-')) {
     const list = graph.find(item => item['@type'] === 'ItemList');

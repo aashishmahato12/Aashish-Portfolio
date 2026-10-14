@@ -13,7 +13,7 @@ Open the local URL shown by Vite. To make a production build, run `npm run build
 
 ## Search structure
 
-Main navigation links to `/work/`, `/gallery/`, `/about/`, and `/contact/`. The Work page links to seven discipline pages; Contact uses the confirmed Instagram and LinkedIn profiles.
+Main navigation links to `/work/`, `/gallery/`, `/about/`, and `/contact/`. The Work page links to seven discipline pages; Contact prepares email enquiries for Gmail, Outlook, and other email apps, with direct email and social links.
 
 `src/seo-data.js` is the source for page titles, descriptions, canonical URLs, social previews, and WebSite/Person structured data. Vite injects this metadata into every HTML entry and the app updates it on navigation. `scripts/render-page-fallbacks.mjs` supplies readable content and ordinary links in the built HTML before JavaScript runs.
 
@@ -26,12 +26,14 @@ The homepage hero keeps the Cloudinary reel configured in `src/portfolio-data.js
 The supplied source assets are in `Aashish - Pro/`. Web-sized copies are organized in `public/media/`:
 
 - `photos/` — photography
-- `videos/` and `posters/` — full travel and motion films, plus preview frames
-- `branding/` — CIC Nepal and Decora mockups
+- `posters/` — preview frames for films streamed from Cloudinary
+- `branding/` — Cosmic Electrical office branding, CIC Nepal, Decora, and Savari mockups
 - `design/` — Cosmic Group campaign graphics
-- `logos/` — 12 company marks as compact transparent WebP files
+- `logos/` — company marks as compact transparent WebP files
+- `web/` — desktop and phone website screenshots
+- `social/` — optimized page preview images
 
-The original media is untouched. The three supplied full-length films are converted to 720p H.264 MP4 for playback; they are still roughly 24–42 MB each. The `Video/Cosmic Promo/` source folder is empty, so no film from that folder is shown.
+Original source media stays outside the deployment. Full-length films stream from Cloudinary; unused local video duplicates are removed. Portraits use lossless WebP with identical decoded pixels.
 
 The refreshed company logo originals are saved with descriptive names in `Aashish - Pro/Photo/company logos/updated/`. Their matching web copies are in `public/media/logos/`.
 

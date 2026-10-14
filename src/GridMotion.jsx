@@ -1,4 +1,3 @@
-'use client';
 
 import React, { isValidElement, useEffect, useMemo, useRef, useState } from 'react';
 

@@ -21,7 +21,7 @@ test('HTTP Accept quality values, exclusions, wildcards and HTML default', () =>
 });
 
 test('Vercel middleware preserves static delivery and marks HTML variants', () => {
-  for (const path of ['/media/videos/mustang.mp4', '/assets/main.js', '/robots.txt', '/sitemap.xml', '/_vercel/insights/script.js']) {
+  for (const path of ['/videos/hero-poster.jpg', '/assets/main.js', '/robots.txt', '/sitemap.xml', '/_vercel/insights/script.js']) {
     assert.equal(agentResponse(new Request(siteUrl + path)), null);
   }
   const html = middleware(new Request(siteUrl, { headers: { accept: 'text/html' } }));
@@ -108,7 +108,7 @@ test('every built public page and machine file is served correctly over HTTP', a
       assert.equal(result.status, 200, path);
       assert.ok((await result.text()).length > 20);
     }
-    const media = await fetch(base + '/media/videos/mustang.mp4', { headers: { Range: 'bytes=0-31' } });
+    const media = await fetch(base + '/videos/hero-poster.jpg', { headers: { Range: 'bytes=0-31' } });
     assert.equal(media.status, 206);
     assert.equal((await media.arrayBuffer()).byteLength, 32);
     const favicon = await get('/favicon.png', 'image/png');

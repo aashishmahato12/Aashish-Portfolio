@@ -1,4 +1,3 @@
-'use client';
 
 import React, { forwardRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { animate, motion, motionValue, useReducedMotion, useTransform } from 'motion/react';

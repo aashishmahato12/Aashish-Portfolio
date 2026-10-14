@@ -1,6 +1,6 @@
 // Web-sized copies of the supplied source work in Aashish - Pro/.
 // Originals remain untouched. Add verified client/project details as they arrive.
-const video = '/media/videos';
+
 const poster = '/media/posters';
 const photo = '/media/photos';
 const brand = '/media/branding';

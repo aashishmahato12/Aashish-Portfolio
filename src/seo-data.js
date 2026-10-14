@@ -27,12 +27,12 @@ export const searchMeta = {
   'skill-web': ['Web Developer in Kathmandu, Nepal | Aashish Mahato', 'Explore Cosmic Electrical, UniSync, and portfolio websites by Aashish Mahato in Kathmandu. View responsive React projects and discuss your website.', '/work/web/'],
 };
 export const searchImages = {
-  privacy: '/media/social/aashish-mahato-preview.jpg',
+  privacy: '/media/photos/tree-final-18.webp',
   home: '/media/photos/tree-final-18.webp',
-  work: '/media/social/aashish-mahato-preview.jpg',
-  contact: '/media/social/aashish-mahato-preview.jpg',
+  work: '/media/social/work-preview.webp',
+  contact: '/media/social/contact-preview.webp',
   about: '/media/photos/tree-final-18.webp',
-  gallery: '/media/social/aashish-mahato-preview.jpg',
+  gallery: '/media/social/gallery-preview.webp',
   'skill-film': '/media/posters/mustang.jpg',
   'skill-photography': '/media/photos/tree-final-27.webp',
   'skill-motion': '/media/posters/product-motion.jpg',
@@ -40,6 +40,23 @@ export const searchImages = {
   'skill-graphic': '/media/design/162.webp',
   'skill-digital': '/media/branding/macbook-mockup-3.webp',
   'skill-web': '/media/web/cosmic-homepage.webp',
+};
+
+
+export const searchImageAlts = {
+  home: 'Portrait of Aashish Mahato, filmmaker and designer in Kathmandu',
+  about: 'Black and white portrait of Aashish Mahato wearing round glasses',
+  contact: 'Aashish Mahato’s Let’s Talk contact page with red beams and his portrait',
+  work: 'Selected Work page featuring Aashish Mahato’s film, design, and web projects',
+  gallery: 'Gallery of photographs, film frames, and brand design by Aashish Mahato',
+  privacy: 'Portrait of Aashish Mahato, owner of this portfolio',
+  'skill-film': 'Himalayan mountain landscape from the Mustang travel film',
+  'skill-photography': 'Colourful prayer flags photographed in Nepal',
+  'skill-motion': 'Savari digital driving licence interface from its product animation',
+  'skill-branding': 'Cosmic Electrical values wall showcasing its OPCE culture signage',
+  'skill-graphic': 'Cosmic Electrical anniversary graphic celebrating 25 years',
+  'skill-digital': 'Savari driving licence interface displayed on a laptop above stone blocks',
+  'skill-web': 'Cosmic Electrical homepage, a website developed by Aashish Mahato',
 };
 
 export function searchProjects(route) {
@@ -75,7 +92,7 @@ export function structuredData(route) {
     '@context': 'https://schema.org',
     '@graph': [
       person,
-      { '@type': 'ImageObject', '@id': `${siteUrl}${path}#primaryimage`, url: `${siteUrl}${searchImages[route]}`, contentUrl: `${siteUrl}${searchImages[route]}`, caption: name },
+      { '@type': 'ImageObject', '@id': `${siteUrl}${path}#primaryimage`, url: `${siteUrl}${searchImages[route]}`, contentUrl: `${siteUrl}${searchImages[route]}`, caption: searchImageAlts[route] },
       ...(route.startsWith('skill-') ? [{ '@type': 'ItemList', '@id': `${siteUrl}${path}#projects`, name: `Selected ${creativeServices.find(service => route === `skill-${service.id}`).name} projects`, itemListElement: searchProjects(route).map((project, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@type': 'CreativeWork', name: project.title, description: project.description || project.category, url: `${siteUrl}${path}#${project.id}`, image: new URL(project.cover || project.src, siteUrl).href, creator: { '@id': personId }, ...(project.liveUrl ? { sameAs: project.liveUrl } : {}) } })) }] : []),
       ...(route !== 'home' ? [{ '@type': 'BreadcrumbList', '@id': `${siteUrl}${path}#breadcrumb`, itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
