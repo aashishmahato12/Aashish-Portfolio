@@ -244,7 +244,7 @@ html.lenis{scroll-behavior:auto}
 .work-skill-card[href="/work/web/"] .work-skill-card-media{display:grid;place-items:center;background:radial-gradient(circle at 75% 20%,#e3453043,transparent 45%),#111111}
 .work-skill-card[href="/work/web/"] .work-skill-card-media img{width:65%;height:65%;object-fit:contain;border-radius:8px;background:#ffffff;padding:18px}
 .skill-page--web .skill-hero-image{background:radial-gradient(circle at 80% 40%,#e3453066,transparent 34%),repeating-linear-gradient(90deg,transparent 0,transparent 79px,#ffffff0d 80px),#111111}
-.skill-page--web .skill-hero-image img{display:none}
+.skill-page--web .skill-hero-image img{display:block;object-position:center top}
 .web-project-art{height:100%;padding:16px;background:#111111;color:#ffffff}
 .web-project-art--cosmic{background:linear-gradient(130deg,#111111,#414141)}
 .web-project-art--unisync{background:linear-gradient(130deg,#111111,#606060)}
@@ -1518,7 +1518,7 @@ button.skills-media-inset:hover{transform:translateY(-5px);box-shadow:0 12px 30p
 .service-title-word{margin-right:.25em}.service-title-word:last-child{margin-right:0}
 
 /* React Bits Silk frames the Selected Work opening. */
-.work-rays-hero{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 85% 0,#211b3c 0,transparent 62%),#111}
+.work-rays-hero{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 85% 0,#321b18 0,transparent 62%),#111}
 .work-rays-background{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.85}
 .work-rays-hero:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#1118,transparent 75%),linear-gradient(0deg,#111 0,transparent 40%)}
 .work-rays-hero>.inner-intro{position:relative}
@@ -1597,3 +1597,269 @@ button.skills-media-inset:hover{transform:translateY(-5px);box-shadow:0 12px 30p
 /* Lift the portrait's focal point slightly within the About cover. */
 .about-page .about-cover-portrait{object-position:center 22%}
 @media(max-width:600px){.about-page .about-cover-portrait{inset:-24px 0 auto;height:calc(100% + 24px);object-position:center top}}
+
+/* Mobile navigation opens as a GSAP drawer from the right. */
+.mobile-menu-trigger{display:none}
+.mobile-menu-lock{overflow:hidden}
+.mobile-menu-layer{position:fixed;inset:0;z-index:200;visibility:hidden;opacity:0}
+.mobile-menu-backdrop{position:absolute;inset:0;border:0;background:#0008;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);padding:0;cursor:pointer}
+.mobile-menu-panel{position:absolute;inset:0 0 0 auto;width:min(100%,420px);height:100dvh;overflow-y:auto;overscroll-behavior:contain;padding:22px 26px 28px;display:flex;flex-direction:column;background:radial-gradient(ellipse at 100% 0,#e345301a,transparent 45%),#111;color:#fff;box-shadow:-15px 0 50px #0004;font-family:'Manrope',sans-serif}
+.mobile-menu-top{display:flex;justify-content:space-between;align-items:center}
+.mobile-menu-brand{font:750 30px/1 'Manrope',sans-serif;letter-spacing:-.07em}.mobile-menu-brand>span{font:600 7px/1 'DM Sans',sans-serif;vertical-align:top;margin-left:3px}
+.mobile-menu-close,.mobile-menu-trigger{width:44px;height:44px;align-items:center;justify-content:center;border:0;border-radius:50%;background:#ffffff0a;color:inherit;cursor:pointer}
+.mobile-menu-eyebrow{margin:40px 0 22px;font:600 9px/1.5 'DM Sans',sans-serif;letter-spacing:.16em;color:#999}
+.mobile-menu-panel nav{display:flex;flex-direction:column;gap:4px}
+.mobile-menu-page{display:flex;align-items:center;gap:17px;min-height:68px;padding:8px 0;color:#eee;font:500 clamp(32px,10vw,42px)/1.2 'Manrope',sans-serif;letter-spacing:-.045em}
+.mobile-menu-number{font:500 10px/1 'DM Sans',sans-serif;letter-spacing:.08em;color:#777}
+.mobile-menu-page>svg{margin-left:auto;color:#888}
+.mobile-menu-page[aria-current=page],.mobile-menu-page[aria-current=page]>svg{color:#e34530}
+.mobile-menu-bottom{margin-top:auto;padding-top:34px;display:flex;flex-direction:column;gap:15px}
+.mobile-menu-bottom>span{font:500 9px/1.5 'DM Sans',sans-serif;letter-spacing:.13em;color:#aaa}
+.mobile-menu-bottom>div{display:flex;gap:9px}
+.mobile-menu-bottom a{width:40px;height:40px;display:flex;align-items:center;justify-content:center;color:#ddd}
+.mobile-menu-bottom small{font:400 11px/1.5 'DM Sans',sans-serif;color:#777}
+@media(max-width:700px){
+ .inner-nav.creative-header,.about-page .inner-nav.creative-header{min-height:68px;height:68px;flex-direction:row;align-items:center;padding:12px 20px;gap:16px}
+ .creative-header .header-identity{justify-content:flex-start}
+ .creative-header .inner-logo{font-size:27px}
+ .creative-header nav.header-desktop-nav{display:none}
+ .mobile-menu-trigger{display:inline-flex}
+ .about-page .about-cover-top{top:86px}
+}
+@media(max-height:650px){.mobile-menu-panel{padding:14px 24px 20px}.mobile-menu-eyebrow{margin:18px 0 12px}.mobile-menu-page{min-height:55px;font-size:32px}.mobile-menu-bottom{padding-top:20px}}
+
+.work-rays-hero:after{background:linear-gradient(90deg,#00000088,transparent 85%),linear-gradient(0deg,#111 0%,#00000035 45%,#00000060 100%),#00000060}
+@media(max-width:700px){.work-rays-hero:after{background:linear-gradient(0deg,#111 0%,transparent 60%),#00000077}}
+
+/* Layered curtains reveal the menu before each page link arrives. */
+.mobile-menu-curtain{position:absolute;inset:0 0 0 auto;width:min(100%,420px);height:100dvh;pointer-events:none}
+.mobile-menu-curtain--red{background:#e34530;z-index:1}
+.mobile-menu-curtain--charcoal{background:#201b1a;z-index:2}
+.mobile-menu-panel{z-index:3}
+.mobile-menu-backdrop{z-index:0}
+.mobile-menu-page{gap:18px}
+.mobile-menu-page>svg{margin-left:0;flex-shrink:0;color:#999}
+.mobile-menu-bottom{text-align:center}
+.mobile-menu-bottom>div{justify-content:center;gap:12px}
+.mobile-menu-bottom a{width:44px;height:44px}
+.mobile-menu-bottom .glass-surface{color-scheme:dark;box-shadow:inset 0 1px 0 #ffffff35,0 0 10px #ffffff08,0 5px 14px #00000030}
+.mobile-menu-bottom .glass-surface__content{padding:0}
+
+/* The Work opening fills the first viewport below its header. */
+.work-page>.inner-nav.creative-header.creative-header--solid{position:absolute;inset:0 0 auto;z-index:20;background:transparent}
+.gallery-page>.inner-nav.creative-header.creative-header--solid{position:absolute;inset:0 0 auto;z-index:20;background:transparent}
+.gallery-motion-hero{min-height:100svh;min-height:100dvh;display:flex;align-items:center}
+.gallery-motion-hero .gallery-intro{width:min(100% - clamp(40px,10vw,184px),1500px);padding-top:100px;padding-bottom:64px}
+.gallery-motion-hero .signature-page-title{margin:clamp(32px,6vh,64px) 0 28px}
+@media(max-width:700px){.gallery-motion-hero .gallery-intro{width:calc(100% - 40px);padding-top:100px;padding-bottom:48px}}
+.work-rays-hero{min-height:100svh;min-height:100dvh;display:flex;align-items:center}
+.work-rays-hero>.inner-intro{width:min(100% - clamp(40px,10vw,184px),1500px);padding-top:100px;padding-bottom:64px}
+@media(max-width:700px){.work-rays-hero>.inner-intro{width:calc(100% - 40px);padding-top:100px;padding-bottom:48px}}
+
+/* A restrained React Bits veil sits beneath a dark navigation scrim. */
+.mobile-menu-panel{isolation:isolate;background:#111}
+.mobile-menu-art{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.65}
+.mobile-menu-art:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#111111d9 0%,#111111c9 60%,#11111177 100%)}
+
+/* Social buttons use a complete frosted circle with no distorted edge. */
+.mobile-menu-bottom .social-glass-circle,.footer-social-glass>.social-glass-circle{background:#05050970;border:1px solid #ffffff18;backdrop-filter:blur(10px) saturate(1.1);-webkit-backdrop-filter:blur(10px) saturate(1.1);box-shadow:inset 0 1px 0 #ffffff18,0 5px 14px #00000030}
+.social-glass-circle .glass-surface__rim{display:none}
+.social-glass-circle .glass-surface__sheen{display:none}
+
+/* Contact: a personal opening, direct channels, and a concise project guide. */
+.contact-studio-hero{background:radial-gradient(ellipse at 0 40%,#642c252f,transparent 60%),#111;color:#fff;padding:32px 0 70px}
+.contact-studio-overline{display:flex;justify-content:space-between;gap:20px;font:600 9px/1.5 'DM Sans',sans-serif;letter-spacing:.16em;color:#aaa}
+.contact-studio-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(40px,7vw,110px);align-items:center;margin-top:65px}
+.contact-studio-script{display:block;font:400 clamp(42px,5vw,76px)/1 'Mr Dafoe','Brush Script MT',cursive;color:#e34530;transform:rotate(-7deg);margin:0 0 -15px 3px;width:fit-content}
+.contact-studio-copy h1{margin:0;font:650 clamp(90px,12vw,180px)/.89 'Manrope',sans-serif;letter-spacing:-.075em}
+.contact-title-mask{display:block;overflow:hidden;padding:.05em 0}
+.contact-title-word{display:inline-block;transform-origin:center bottom}
+.contact-title-period{color:#e34530}
+.contact-studio-copy>p{margin:30px 0 27px;max-width:35ch;font:400 clamp(17px,1.6vw,21px)/1.6 'DM Sans',sans-serif;color:#b6b6b6}
+.contact-studio-actions{display:flex;gap:12px;flex-wrap:wrap}
+.contact-studio-actions>a{display:flex;align-items:center;gap:12px;padding:16px 20px;min-height:68px;border:1px solid #ffffff1f;border-radius:999px;background:#ffffff05;color:#fff;transition:background .25s,border-color .25s}
+.contact-studio-actions>a:hover{background:#e345301c;border-color:#e3453080}
+.contact-platform-icon{display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.contact-studio-actions strong{display:block;font:600 14px/1.3 'Manrope',sans-serif}
+.contact-studio-actions small{display:block;margin-top:4px;font:400 10px/1.4 'DM Sans',sans-serif;color:#929292}
+.contact-studio-note{display:block;margin-top:18px;font:400 11px/1.5 'DM Sans',sans-serif;color:#777}
+.contact-studio-portrait{position:relative;margin:0;align-self:stretch;min-height:500px;border-radius:16px;overflow:hidden;background:#262626}
+.contact-studio-portrait>img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 32%;filter:grayscale(1)}
+.contact-studio-portrait:after{content:'';position:absolute;inset:45% 0 0;background:linear-gradient(0deg,#000b,transparent);pointer-events:none}
+.contact-studio-portrait figcaption{position:absolute;inset:auto 24px 24px;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:20px;color:#fff;font:600 14px/1.5 'Manrope',sans-serif}
+.contact-studio-portrait small{display:block;font:400 10px/1.5 'DM Sans',sans-serif;color:#bbb;margin-top:3px}
+.contact-project-start{background:#f6f5f2;color:#111;padding:95px 0}
+.contact-project-start-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.contact-project-start .experience-eyebrow{color:#777}
+.contact-project-start h2{margin:25px 0 20px;font:600 clamp(38px,5vw,70px)/1.08 'Manrope',sans-serif;letter-spacing:-.055em}
+.contact-project-start h2>span{color:#e34530}
+.contact-project-start p{max-width:36ch;margin:0;font:400 16px/1.65 'DM Sans',sans-serif;color:#777}
+.contact-work-link{display:inline-flex;align-items:center;min-height:44px;margin-top:20px;color:#e34530;font:600 13px/1.5 'DM Sans',sans-serif}
+.contact-project-prompts{display:flex;flex-direction:column;gap:35px;padding-top:10px}
+.contact-project-prompts article{display:flex;gap:20px;align-items:flex-start}
+.contact-project-prompts article>svg{color:#e34530;flex-shrink:0;margin-top:2px}
+.contact-project-prompts h3{margin:0 0 8px;font:600 22px/1.3 'Manrope',sans-serif;letter-spacing:-.03em}
+.contact-project-prompts p{font-size:15px}
+@media(max-width:900px){.contact-studio-grid{gap:32px}.contact-studio-actions{flex-direction:column;align-items:flex-start}.contact-studio-actions>a{min-width:225px}.contact-studio-portrait{min-height:550px}}
+@media(max-width:700px){.contact-studio-hero{padding:24px 0 45px}.contact-studio-overline{font-size:8px}.contact-studio-grid{grid-template-columns:1fr;gap:35px;margin-top:44px}.contact-studio-script{font-size:47px}.contact-studio-copy h1{font-size:clamp(82px,23vw,145px)}.contact-studio-copy>p{font-size:17px;margin:24px 0}.contact-studio-actions{flex-direction:row;align-items:stretch;gap:10px}.contact-studio-actions>a{min-width:0;flex:1;padding:15px 16px;gap:10px}.contact-studio-actions strong{font-size:13px}.contact-studio-actions small{font-size:9px}.contact-studio-note{margin-top:15px}.contact-studio-portrait{min-height:0;height:310px;aspect-ratio:1.2}.contact-studio-portrait>img{object-position:center 29%}.contact-project-start{padding:60px 0}.contact-project-start-grid{grid-template-columns:1fr;gap:35px}.contact-project-start h2{font-size:44px;margin-top:20px}.contact-project-prompts{gap:28px;padding:0}.contact-project-prompts h3{font-size:20px}}
+@media(max-width:360px){.contact-studio-actions{flex-direction:column}.contact-studio-actions>a{flex:auto;width:100%;min-height:60px}.contact-studio-portrait{height:270px}}
+@media(prefers-reduced-motion:reduce){.contact-studio-actions>a{transition:none}}
+@media(max-width:700px){.contact-studio-portrait{width:100%;min-width:0;aspect-ratio:auto}}
+
+.contact-studio-actions>a.contact-email-button{background:#e34530;border-color:#e34530;padding:17px 25px;gap:14px;min-height:72px;min-width:275px}
+.contact-studio-actions>a.contact-email-button:hover{background:#cc3926;border-color:#cc3926}
+.contact-email-button strong{font-size:16px}
+.contact-email-button small{color:#ffffffc9;font-size:11px}
+.contact-email-button>svg{flex-shrink:0}
+.contact-secondary-profiles{display:flex;align-items:center;gap:24px;margin-top:15px}
+.contact-secondary-profiles a{display:inline-flex;align-items:center;gap:7px;min-height:44px;font:500 12px/1.5 'DM Sans',sans-serif;color:#aaa}
+.contact-secondary-profiles a:hover{color:#fff}
+@media(max-width:700px){.contact-studio-actions>a.contact-email-button{flex:0 1 auto;width:fit-content;max-width:100%;min-width:0;min-height:58px;padding:12px 18px;gap:10px}.contact-email-button>svg{width:20px;height:20px}.contact-email-button strong{font-size:14px}.contact-email-button small{font-size:10px;margin-top:3px}.contact-secondary-profiles{margin-top:10px}}
+
+/* A short enquiry becomes an email draft in the visitor's email app. */
+.contact-project-start{scroll-margin-top:24px}
+.contact-enquiry-form{display:flex;flex-direction:column;gap:22px;min-width:0}
+.contact-form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.contact-enquiry-form label{display:block;font:600 13px/1.5 'DM Sans',sans-serif;color:#333}
+.contact-enquiry-form label>span{display:inline;color:#888;font-weight:400}
+.contact-enquiry-form :is(input,select,textarea){display:block;margin-top:10px;width:100%;min-width:0;padding:14px 16px;min-height:48px;border:1px solid #d9d8d4;border-radius:10px;background:#ffffffb3;color:#111;font:400 15px/1.5 'DM Sans',sans-serif;transition:border-color .2s,box-shadow .2s}
+.contact-enquiry-form textarea{resize:vertical;min-height:145px}
+.contact-enquiry-form :is(input,textarea)::placeholder{color:#999}
+.contact-enquiry-form :is(input,select,textarea):focus{outline:none;border-color:#e34530;box-shadow:0 0 0 3px #e3453014}
+.contact-enquiry-submit{display:inline-flex;align-items:center;justify-content:center;gap:10px;align-self:flex-start;min-height:52px;padding:16px 24px;border:0;border-radius:999px;background:#e34530;color:#fff;font:600 14px/1.4 'DM Sans',sans-serif;cursor:pointer;transition:background .2s}
+.contact-enquiry-submit:hover{background:#c93a27}
+.contact-enquiry-form .contact-form-help{max-width:42ch;margin-top:-9px;font-size:12px;line-height:1.6;color:#888}
+.contact-direct-email{width:fit-content;min-height:44px;display:inline-flex;align-items:center;color:#333;font:500 13px/1.5 'DM Sans',sans-serif;margin-top:-10px}
+.contact-enquiry-form .contact-form-status{font-size:13px;color:#355c46}
+@media(max-width:700px){.contact-enquiry-form{gap:20px}.contact-form-row{gap:12px}.contact-enquiry-form :is(input,select,textarea){font-size:16px;padding:13px 14px}.contact-enquiry-submit{width:100%;align-self:stretch}.contact-project-start-grid{gap:30px}}
+@media(max-width:380px){.contact-form-row{grid-template-columns:1fr;gap:20px}}
+.contact-gmail-button{display:inline-flex;align-items:center;justify-content:center;gap:9px;align-self:flex-start;min-height:44px;padding:10px 18px;border:1px solid #d9d8d4;border-radius:999px;background:transparent;color:#111;font:600 14px/1.4 'DM Sans',sans-serif;cursor:pointer;transition:border-color .2s,background .2s}
+.contact-gmail-button:hover{border-color:#e34530;background:#e3453009}
+.contact-gmail-button:focus-visible{outline:2px solid #e34530;outline-offset:3px}
+.contact-email-choice{border:0;padding:0;margin:0;min-width:0}
+.contact-email-choice legend{padding:0;margin-bottom:10px;font:600 13px/1.5 'DM Sans',sans-serif;color:#333}
+.contact-email-choice>div{display:flex;flex-wrap:wrap;gap:10px}
+.contact-enquiry-form .contact-email-choice label{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 14px;border:1px solid #d9d8d4;border-radius:999px;background:#ffffff80;cursor:pointer}
+.contact-enquiry-form .contact-email-choice input{width:16px;height:16px;min-height:0;margin:0;padding:0;accent-color:#e34530}
+.contact-email-choice label:has(input:checked){border-color:#e34530;background:#e345300a}
+.contact-enquiry-form .contact-email-choice label{position:relative;gap:10px;transition:background .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease}
+.contact-enquiry-form .contact-email-choice input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.email-provider-icon{width:22px;height:22px;flex-shrink:0;overflow:visible;transform-origin:center}
+.contact-email-choice label:has(input:checked){box-shadow:0 3px 12px #e3453010}
+.contact-email-choice label:has(input:focus-visible){outline:2px solid #e34530;outline-offset:3px}
+.contact-email-choice label:has(input:checked) .email-provider-icon{animation:email-provider-select .45s cubic-bezier(.22,1,.36,1) both}
+.contact-email-choice label:has(input:checked)>span{animation:email-provider-text .35s ease-out both}
+.contact-enquiry-submit{transition:background .25s ease,transform .3s ease,box-shadow .3s ease}
+.contact-enquiry-submit svg{transition:transform .3s ease}
+@media(hover:hover){.contact-email-choice label:hover{transform:translateY(-2px);box-shadow:0 5px 14px #0000000a}.contact-enquiry-submit:hover{transform:translateY(-2px);box-shadow:0 6px 18px #e3453025}.contact-enquiry-submit:hover svg{transform:translateX(2px) rotate(-8deg)}}
+.contact-enquiry-submit:active{transform:translateY(0)}
+@keyframes email-provider-select{0%{transform:scale(.85) rotate(-8deg)}60%{transform:scale(1.08) rotate(3deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes email-provider-text{from{transform:translateX(3px);opacity:.65}to{transform:translateX(0);opacity:1}}
+@media(prefers-reduced-motion:reduce){.contact-email-choice label,.contact-enquiry-submit,.contact-enquiry-submit svg{transition:none}.contact-email-choice label:has(input:checked) .email-provider-icon,.contact-email-choice label:has(input:checked)>span{animation:none}}
+.contact-direct-section{background:#111315;color:#fff;padding:clamp(70px,9vw,150px) 0}
+.contact-direct-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,100px);align-items:center}
+.contact-direct-section .experience-eyebrow{color:#e34530}
+.contact-direct-section h2{margin:26px 0 0;font:600 clamp(48px,5vw,88px)/1.03 'Manrope',sans-serif;letter-spacing:-.065em}
+.contact-direct-section h2 span{color:#e34530}
+.contact-visible-email{display:inline;color:#fff;font:500 clamp(22px,2.35vw,40px)/1.4 'Manrope',sans-serif;letter-spacing:-.045em;text-decoration:underline;text-decoration-color:#e34530;text-decoration-thickness:2px;text-underline-offset:9px;overflow-wrap:anywhere;transition:color .25s ease}
+.contact-visible-email:hover{color:#e34530}
+.contact-visible-email:focus-visible{outline:2px solid #e34530;outline-offset:8px}
+.contact-direct-details p{max-width:38ch;margin:30px 0 0;color:#b5b5b5;font-size:15px;line-height:1.8}
+@media(max-width:700px){.contact-direct-grid{grid-template-columns:1fr;gap:36px}.contact-direct-section h2{font-size:clamp(48px,12vw,68px)}.contact-visible-email{font-size:clamp(20px,5.5vw,30px)}.contact-direct-details p{margin-top:24px}}
+.contact-direct-section{position:relative;isolation:isolate;overflow:hidden}
+.contact-direct-background{position:absolute;inset:0;z-index:-2;pointer-events:none;opacity:.7}
+.contact-direct-section:before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#111315d9,#11131580 65%,#11131566),linear-gradient(0deg,#111315a6,transparent 60%)}
+.contact-studio-hero{position:relative;isolation:isolate;overflow:hidden}
+.contact-hero-beams{position:absolute;inset:0;z-index:-2;pointer-events:none;transform:scale(1.45);transform-origin:center}
+.contact-studio-hero:before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#0000008c,#00000040 65%),linear-gradient(0deg,#111111a6,transparent 60%),#00000055}
+/* Give the contact opening a calmer rhythm between each piece of content. */
+.contact-studio-hero{padding-top:44px;padding-bottom:96px}
+.contact-studio-grid{margin-top:84px}
+.contact-studio-copy>p{margin-top:40px;margin-bottom:36px}
+.contact-secondary-profiles{margin-top:24px}
+.contact-studio-note{margin-top:22px}
+@media(max-width:700px){
+ .contact-studio-hero{padding-top:32px;padding-bottom:64px}
+ .contact-studio-grid{margin-top:64px;gap:52px}
+ .contact-studio-copy>p{margin-top:32px;margin-bottom:32px;line-height:1.7}
+ .contact-secondary-profiles{margin-top:24px}
+ .contact-studio-note{margin-top:20px}
+}
+.experience-section-top,.contact-studio-overline,.kinetic-section-label{justify-content:flex-end}
+.project-faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(40px,7vw,110px);margin-top:90px;align-items:start}
+.project-faq-heading .experience-eyebrow{color:#e34530}
+.project-faq-heading h3{font:600 clamp(48px,5vw,78px)/1.04 'Manrope',sans-serif;letter-spacing:-.06em;margin:20px 0}
+.project-faq-heading h3>span{color:#e34530}
+.project-faq-heading>p{color:#777;font-size:15px;line-height:1.7;margin:0}
+.project-faq-contact{display:inline-flex;align-items:center;gap:9px;min-height:44px;margin-top:24px;color:#111;font:600 13px/1.5 'DM Sans',sans-serif;text-decoration:none}
+.project-faq-contact:hover{color:#e34530}
+.project-faq-list{display:flex;flex-direction:column;gap:12px}
+.project-faq-item{border-radius:18px;background:#f5f5f3;transition:background .35s ease,box-shadow .35s ease}
+.project-faq-item.is-open{background:#fceeea;box-shadow:inset 0 0 0 1px #e3453014}
+.project-faq-item h4{margin:0}
+.project-faq-item h4>button{display:flex;align-items:center;justify-content:space-between;gap:22px;width:100%;padding:24px 26px;text-align:left;border:0;border-radius:18px;background:transparent;color:#111;cursor:pointer;font:600 17px/1.5 'Manrope',sans-serif;letter-spacing:-.02em}
+.project-faq-item h4>button:focus-visible{outline:2px solid #e34530;outline-offset:3px}
+.project-faq-toggle{display:flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;border-radius:50%;background:#fff;color:#555;transition:transform .4s cubic-bezier(.22,1,.36,1),background .3s,color .3s}
+.project-faq-item.is-open .project-faq-toggle{transform:rotate(45deg);background:#e34530;color:#fff}
+.project-faq-answer{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .4s cubic-bezier(.22,1,.36,1),opacity .3s ease}
+.project-faq-item.is-open .project-faq-answer{grid-template-rows:1fr;opacity:1}
+.project-faq-answer>div{overflow:hidden;min-height:0}
+.project-faq-answer p{margin:0;padding:0 26px 26px;color:#666;font-size:15px;line-height:1.8;max-width:58ch}
+@media(hover:hover){.project-faq-item:not(.is-open):hover{background:#eeeeeb}}
+@media(max-width:700px){.project-faq{grid-template-columns:1fr;gap:30px;margin-top:64px}.project-faq-heading h3{font-size:52px}.project-faq-item h4>button{padding:20px;gap:15px;font-size:15px}.project-faq-answer p{padding:0 20px 22px;font-size:14px}.project-faq-toggle{width:30px;height:30px}}
+@media(prefers-reduced-motion:reduce){.project-faq-item,.project-faq-toggle,.project-faq-answer{transition:none}}
+.project-guide-contact .guide-secondary-contact{font-size:13px;font-weight:400;color:#777;text-decoration:none;transition:color .2s ease}
+.project-guide-contact .guide-secondary-contact:hover{color:#111}
+.project-guide-contact .guide-contact-button{background:#e34530;font-weight:600;padding:16px 24px;transition:background .2s ease}
+.project-guide-contact .guide-contact-button:hover{background:#c93a27}
+.work-next-steps{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:clamp(36px,7vw,110px);margin:64px 0;padding:clamp(32px,5vw,70px);border-radius:28px;background:#191919;color:#fff}
+.work-next-main .experience-eyebrow{color:#aaa}
+.work-next-main h2{margin:22px 0;font:600 clamp(38px,4.2vw,66px)/1.07 'Manrope',sans-serif;letter-spacing:-.055em}
+.work-next-main h2 em{font-style:normal;color:#e34530}
+.work-next-main>p,.work-next-explore>p{color:#a9a9a9;font:400 15px/1.8 'DM Sans',sans-serif;max-width:43ch;margin:0}
+.work-next-contact{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:14px 24px;margin-top:28px;border-radius:999px;background:#e34530;font:600 14px/1.5 'DM Sans',sans-serif;color:#fff;transition:background .25s ease,transform .25s ease}
+.work-next-contact:hover{background:#c93a27;transform:translateY(-2px)}
+.work-next-explore>svg{color:#e34530;display:block;margin-bottom:22px}
+.work-next-explore h3{margin:0 0 16px;font:500 clamp(25px,2.5vw,38px)/1.2 'Manrope',sans-serif;letter-spacing:-.04em}
+.work-next-gallery{display:inline-flex;align-items:center;min-height:46px;margin-top:24px;padding:10px 20px;border:1px solid #ffffff30;border-radius:999px;color:#fff;font:500 13px/1.5 'DM Sans',sans-serif;transition:background .25s ease,border-color .25s ease}
+.work-next-gallery:hover{background:#ffffff0a;border-color:#ffffff70}
+.work-next-about{display:block;width:fit-content;min-height:44px;padding-top:14px;color:#888;font:400 13px/1.5 'DM Sans',sans-serif}
+.work-next-about:hover{color:#fff}
+@media(max-width:700px){.work-next-steps{grid-template-columns:1fr;gap:42px;margin:40px 0;padding:30px 24px;border-radius:24px}.work-next-main h2{font-size:42px}.work-next-main>p,.work-next-explore>p{font-size:14px}.work-next-explore h3{font-size:28px}.work-next-explore>svg{width:30px;height:30px;margin-bottom:18px}}
+@media(prefers-reduced-motion:reduce){.work-next-contact,.work-next-gallery{transition:none}.work-next-contact:hover{transform:none}}
+.web-project-screenshot{width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;background:#eee;border:1px solid #00000010;border-radius:12px}
+.web-project-screenshot .web-project-browser{position:relative;flex:0 0 30px;height:30px;display:flex;align-items:center;gap:5px;padding:0 12px;background:#f3f3f1;color:#777;border-bottom:1px solid #00000010}
+.web-project-screenshot .web-project-browser>span{width:5px;height:5px;border-radius:50%;background:#bbb}
+.web-project-screenshot .web-project-browser small{margin-left:9px;font:400 8px/1.4 'DM Sans',sans-serif;letter-spacing:.02em}
+.web-project-screenshot>img{display:block;width:100%;height:calc(100% - 30px);flex:1;min-height:0;object-fit:cover;object-position:center top}
+.work-next-steps{position:relative;isolation:isolate;overflow:hidden}
+.work-next-background{position:absolute;inset:0;z-index:-2;pointer-events:none}
+.work-next-steps:before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#151515b3,#15151566),#00000026}
+@media(max-width:700px){
+ .skill-hero-content{justify-content:flex-start}
+ .skill-hero-overline{margin-bottom:auto}
+ .skill-hero-main{align-self:flex-start;width:100%;margin-bottom:32px;text-align:left}
+ .skill-hero-main p{text-shadow:0 2px 15px #000000bb}
+ .skill-hero-bottom{flex-shrink:0}
+}
+.work-masonry-gallery.motion-project-gallery{max-width:none;display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);align-items:center;gap:clamp(32px,5vw,80px);padding:40px;background:#f6f6f3;border-radius:24px}
+.motion-client-story>.experience-eyebrow{color:#777}
+.motion-client-story>img{display:block;object-fit:contain;object-position:left center;width:160px;height:65px;margin:20px 0 28px;mix-blend-mode:multiply}
+.motion-client-story h3{margin:0 0 22px;color:#111;font:600 clamp(32px,3.5vw,52px)/1.05 'Manrope',sans-serif;letter-spacing:-.055em}
+.motion-client-story h3>span{color:#e34530}
+.motion-client-story>p{font-size:14px;line-height:1.8;color:#777;max-width:34ch}
+.motion-project-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.motion-project-tags>span{font-size:11px;color:#666;padding:7px 11px;background:#fff;border-radius:999px}
+.motion-client-story .motion-watch-hint{font-size:12px;margin-top:24px;color:#999}
+.work-project-media{min-width:0}
+@media(max-width:700px){.work-masonry-gallery.motion-project-gallery{grid-template-columns:1fr;padding:24px 18px;gap:28px}.motion-client-story>img{width:140px;height:55px;margin:16px 0 22px}.motion-client-story h3{font-size:38px}.motion-client-story>p{max-width:100%}.motion-client-story .motion-watch-hint{margin-top:18px}}
+/* Section boundaries use spacing instead of horizontal rules. */
+.experience-section-top,.work-detail-heading,.work-feature-heading,.work-feature-meta,.skill-page-end,.project-story,.gallery-controls,.gallery-piece-caption,.gallery-note,.capability-line,.capability-line:last-child,.work-service-context,.github-proof,.home-feature-info,.home-project-list,.home-project-list a,.home-proof-card,.about-age,.identity-status,.collaboration-card figcaption,.collaboration-total,.skills-showcase-bottom,.kinetic-topline,.kinetic-hero-bottom,.about-cover-footer,.about-conversation,.experience-footer{border-top:0;border-bottom:0}
+.skill-hero-overline a,.experience-text-link,.work-gallery-link{border-top:0;border-bottom:0}
+.contact-copy-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:20px}
+.contact-copy-email{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 16px;background:transparent;border:1px solid #ffffff30;border-radius:999px;color:inherit;font:500 13px/1.5 'DM Sans',sans-serif;cursor:pointer;transition:background .2s ease,border-color .2s ease}
+.contact-copy-email:hover{background:#ffffff0a;border-color:#e34530}
+.contact-copy-status{font-size:12px;line-height:1.6;color:#aaa;overflow-wrap:anywhere}
+.contact-enquiry-form .contact-copy-wrap{margin-top:-12px}
+.contact-enquiry-form .contact-copy-email{color:#333;border-color:#d9d8d4}
+.contact-enquiry-form .contact-copy-status{color:#777}

@@ -39,6 +39,6 @@ export const creativeServices = [
 export const projectQuestions = [
   { question: 'Where is Aashish Mahato based?', answer: 'I am based in Kathmandu, Nepal. This is my portfolio of film, photography, design, and web development work.' },
   { question: 'What work can I discuss with you?', answer: 'You can discuss filmmaking, editing, photography, motion graphics, brand identity, graphic design, interface design, and web development. The work pages show examples for each discipline.' },
-  { question: 'How do I start a project conversation?', answer: 'Contact me through my official Instagram or LinkedIn profile. Share what you want to make, the intended audience, your timeline, and your budget so we can discuss the scope.' },
+  { question: 'How do I start a project conversation?', answer: 'Use the enquiry form on my Contact page, or message me on Instagram or LinkedIn. Tell me what you want to make and who it is for. You can include your timeline and budget if you have them.' },
   { question: 'Where can I see your work?', answer: 'Explore the work pages for selected projects, the Gallery for photos and films, and GitHub for public web projects. My official profiles are linked on this website.' },
 ];

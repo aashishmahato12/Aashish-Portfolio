@@ -31,3 +31,7 @@
 .home-panels-intro h2 em{display:inline;font-size:inherit;line-height:inherit}
 .home-panels-intro>p{max-width:740px;line-height:1.75;margin-top:26px}
 @media(max-width:700px){.home-panels-intro h2{font-size:clamp(26px,7.6vw,52px);letter-spacing:-.065em}.home-panels-intro>p{margin-top:22px;font-size:14px}}
+.home-panel-nav{display:grid;grid-template-columns:1fr auto 1fr}
+.home-panel-nav>div{grid-column:2}
+.home-panel-nav>span:last-child{text-align:right}
+@media(max-width:700px),(prefers-reduced-motion:reduce){.home-panel-nav{display:flex;justify-content:center}}

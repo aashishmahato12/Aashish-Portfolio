@@ -75,7 +75,7 @@ function ChapterSlideshow({ images }) {
   </div>;
 }
 
-export default function ParallaxChapters({ items = chapters, label = 'FILM / PHOTOGRAPHY / DESIGN', className = '', depthTitles = true }) {
+export default function ParallaxChapters({ items = chapters, label = 'FILM / PHOTOGRAPHY / DESIGN', className = '', depthTitles = true, showCount = true }) {
   const ref = useRef(null);
   useEffect(() => {
     const videos = [...ref.current.querySelectorAll('video')];
@@ -140,6 +140,6 @@ export default function ParallaxChapters({ items = chapters, label = 'FILM / PHO
       {!chapter.video && chapter.slides?.length > 1 && <ChapterSlideshow images={[chapter.image, ...chapter.slides]} />}
     </div>
     <div className="parallax-chapter-shade" />
-    <div className="parallax-chapter-content"><span>{String(index + 1).padStart(2, '0')} / {label}</span><h2 className={depthTitles ? 'chapter-depth-title' : undefined} aria-label={depthTitles ? chapter.title : undefined}>{depthTitles ? Array.from(chapter.title).map((letter, letterIndex) => <span className="chapter-depth-char" aria-hidden="true" key={letterIndex}>{letter}</span>) : chapter.title}</h2><p>{chapter.line}</p>{chapter.href && <a className="parallax-chapter-link parallax-chapter-link--glass" href={chapter.href}><GlassSurface width="auto" height="auto" borderRadius={999} borderWidth={.1} brightness={60} opacity={.85} blur={12} displace={3} backgroundOpacity={.12} saturation={1.15} distortionScale={-65} redOffset={0} greenOffset={2} blueOffset={4}>EXPLORE THE WORK ↗</GlassSurface></a>}</div>
+    <div className="parallax-chapter-content">{showCount && <span>{String(index + 1).padStart(2, '0')} / {label}</span>}<h2 className={depthTitles ? 'chapter-depth-title' : undefined} aria-label={depthTitles ? chapter.title : undefined}>{depthTitles ? Array.from(chapter.title).map((letter, letterIndex) => <span className="chapter-depth-char" aria-hidden="true" key={letterIndex}>{letter}</span>) : chapter.title}</h2><p>{chapter.line}</p>{chapter.href && <a className="parallax-chapter-link parallax-chapter-link--glass" href={chapter.href}><GlassSurface width="auto" height="auto" borderRadius={999} borderWidth={.1} brightness={60} opacity={.85} blur={12} displace={3} backgroundOpacity={.12} saturation={1.15} distortionScale={-65} redOffset={0} greenOffset={2} blueOffset={4}>EXPLORE THE WORK ↗</GlassSurface></a>}</div>
   </section>)}</div>;
 }

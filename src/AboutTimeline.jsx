@@ -50,7 +50,7 @@ export default function AboutTimeline() {
     return () => media.revert();
   }, []);
   return <section className="about-timeline experience-shell" ref={ref} aria-labelledby="about-timeline-title">
-    <div className="experience-section-top"><span>02 / MY JOURNEY</span><span>2020 / STILL EXPLORING</span></div>
+    <div className="experience-section-top"><span>2020 / STILL EXPLORING</span></div>
     <div className="about-timeline-heading"><span>MY EXPERIENCE</span><h2 id="about-timeline-title">ALWAYS<br /><em>IN MOTION.</em></h2><p>My experience in design, video, photography, and web development.</p></div>
     <div className="about-timeline-stage"><svg className="about-journey-path" viewBox="0 0 600 1200" aria-hidden="true" preserveAspectRatio="none"><path className="about-timeline-guide" d={path} /><path className="about-timeline-path" d={path} /><circle className="about-timeline-ball" r="15" cx="0" cy="0" />{milestones.map((item, index) => <circle className="about-timeline-marker" key={item.year} cx={[280,315,295,310,310][index]} cy={155 + index * 220} r="11" />)}</svg>
       <div className="about-timeline-list">{milestones.map((item, index) => <article className="about-timeline-entry" key={`${item.year}-${index}`}><div className="about-milestone-top"><div className="about-milestone-icon">{React.createElement(milestoneIcons[index], { size: 23, 'aria-hidden': true })}</div><span>{item.year}</span></div><h3>{item.title}</h3><p>{item.detail}</p>{item.href && <a className="about-timeline-link" href={item.href} {...(item.href.startsWith('https://') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{item.link}<ArrowUpRight size={15} aria-hidden="true" /></a>}</article>)}</div>

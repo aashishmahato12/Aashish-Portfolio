@@ -5,7 +5,7 @@ import CreativeTV from './CreativeTV.jsx';
 import HandwrittenText from './HandwrittenText.jsx';
 import FloppyLibrary from './FloppyLibrary.jsx';
 import { MapPin, GraduationCap, Monitor, Clapperboard, Camera, Sparkles, PenTool, Palette, PanelsTopLeft, Code2, ArrowUpRight } from 'lucide-react';
-import { collaborators, featuredProjects, galleryMedia } from './portfolio-data.js';
+import { featuredProjects, galleryMedia } from './portfolio-data.js';
 import { officialProfiles } from './seo-data.js';
 import { HoverCard, HoverCardTrigger, HoverCardPortal, HoverCardContent } from './components/animate-ui/primitives/radix/hover-card.jsx';
 import './about-sections.css';
@@ -98,7 +98,7 @@ export function AboutOpening() {
       </div>
     </section>
     <section className="kinetic-intro" id="kinetic-intro" aria-labelledby="kinetic-intro-title">
-      <div className="kinetic-section-label"><span>01 / ABOUT ME</span><span>BACKGROUND</span></div>
+      <div className="kinetic-section-label"><span>BACKGROUND</span></div>
       <div className="kinetic-intro-grid">
         <h2 id="kinetic-intro-title" data-reveal>About me.</h2>
         <div className="about-person-summary" data-reveal>
@@ -118,7 +118,7 @@ export function AboutOpening() {
   </div>;
 }
 
-export function AboutAfterTimeline() {
+export function AboutAfterTimeline({ clientsSection }) {
   const ref = useRef(null);
   const [active, setActive] = useState(null);
   const toolkitRef = useRef(null);
@@ -133,10 +133,10 @@ export function AboutAfterTimeline() {
     return { ...disciplines[0], image: film.cover, video: film.media[0].src, caption: `${film.title} / Travel film`, rotateFilms: true };
   }, [active, filmIndex]);
   return <div className="kinetic-about" ref={ref}>
-    <section className="kinetic-practice" aria-labelledby="kinetic-practice-title"><div className="kinetic-section-label"><span>03 / MY SKILLS</span><span>SELECT A SKILL</span></div><h2 id="kinetic-practice-title" data-reveal>MY <em>SKILLS.</em></h2>
+    <section className="kinetic-practice" aria-labelledby="kinetic-practice-title"><div className="kinetic-section-label"><span>SELECT A SKILL</span></div><h2 id="kinetic-practice-title" data-reveal>MY <em>SKILLS.</em></h2>
       <div className="kinetic-playground"><FloppyLibrary controlRef={toolkitRef} items={disciplines} active={active} onSelect={selectChannel} /><div className="kinetic-preview"><CreativeTV item={selected} channel={active} count={disciplines.length} onChannel={selectChannel} onVideoEnd={nextFilm} onEject={origin => toolkitRef.current?.eject(origin)} /><div className="kinetic-preview-caption" aria-live="polite">{selected ? <><span>{selected.caption}</span><p>{selected.description}</p><a href={selected.href}>Explore {selected.name.toLowerCase()} <span aria-hidden="true">↗</span></a></> : <><span>CRT / WAITING FOR A DISK</span><p>Open the toolkit and choose a disk to see what I make.</p></>}</div></div></div>
     </section>
-    <section className="kinetic-partners" aria-labelledby="kinetic-partner-title"><div className="kinetic-section-label"><span>04 / COLLABORATIONS</span><span>BRANDS AND TEAMS</span></div><h2 id="kinetic-partner-title" data-reveal>Clients &amp; <em>teams.</em></h2><div className="kinetic-logos">{collaborators.map(company => <div key={company.name}><img src={company.logo} alt={company.name} loading="lazy" /></div>)}</div></section>
+    {clientsSection}
     <section className="about-conversation" aria-labelledby="about-conversation-title"><span>CONTACT ME</span><h2 id="about-conversation-title" data-reveal>Have a project in mind?</h2><div className="about-conversation-copy"><p>Tell me what you want to make, who it’s for, and when you need it.</p><a href="/contact/">Contact me <ArrowUpRight size={16} aria-hidden="true" /></a></div></section>
   </div>;
 }

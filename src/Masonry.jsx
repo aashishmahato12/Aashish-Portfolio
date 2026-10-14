@@ -7,7 +7,7 @@ import './Masonry.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Masonry({ items, onOpen, paused = false, renderVisual, renderDetails, maxColumns = 5, ease = 'power3.out', duration = .6,
+export default function Masonry({ items, onOpen, paused = false, autoplayVideos = false, renderVisual, renderDetails, maxColumns = 5, ease = 'power3.out', duration = .6,
   stagger = .05, animateFrom = 'bottom', scaleOnHover = true, hoverScale = .97,
   blurToFocus = true, colorShiftOnHover = false }) {
   const containerRef = useRef(null);
@@ -104,9 +104,30 @@ export default function Masonry({ items, onOpen, paused = false, renderVisual, r
     if (paused) containerRef.current.querySelectorAll('video').forEach(video => video.pause());
   }, [paused]);
 
+  useEffect(() => {
+    if (!autoplayVideos) return undefined;
+    const videos = Array.from(containerRef.current.querySelectorAll('video'));
+    const visible = new Set();
+    const sync = () => videos.forEach(video => {
+      if (visible.has(video) && !paused && !reducedMotion && !document.hidden) video.play().catch(() => {});
+      else video.pause();
+    });
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => entry.isIntersecting ? visible.add(entry.target) : visible.delete(entry.target));
+      sync();
+    }, { threshold: .25 });
+    videos.forEach(video => { observer.observe(video); video.addEventListener('loadeddata', sync); });
+    document.addEventListener('visibilitychange', sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', sync);
+      videos.forEach(video => { video.removeEventListener('loadeddata', sync); video.pause(); });
+    };
+  }, [autoplayVideos, paused, reducedMotion, grid]);
+
   const hover = (event, active) => {
     const video = event.currentTarget.querySelector('video');
-    if (video) {
+    if (video && !autoplayVideos) {
       if (active && !paused && !reducedMotion) video.play().catch(() => {});
       else video.pause();
     }

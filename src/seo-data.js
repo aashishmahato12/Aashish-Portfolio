@@ -1,4 +1,6 @@
 import { creativeServices } from './services-data.js';
+import { featuredProjects, filmProjects, galleryMedia, webProjects } from './portfolio-data.js';
+import { contactEmail } from './contact-enquiry.js';
 export const siteUrl = 'https://aashish-mahato.com.np';
 export const creativeBio = 'Aashish Mahato is the Creative Head at Cosmic Group and a filmmaker, photographer, designer, and web developer based in Kathmandu, Nepal. His portfolio includes travel films, photography, motion graphics, branding, graphic design, and websites.';
 export const officialProfiles = [
@@ -12,34 +14,47 @@ export const officialProfiles = [
 export const searchMeta = {
   privacy: ['Privacy | Aashish Mahato', 'How Aashish Mahato’s portfolio uses analytics, hosting services, external media, and project enquiry information.', '/privacy/'],
   home: ['Aashish Mahato | Film, Photography & Design in Kathmandu', 'Explore filmmaking, photography, motion graphics, branding, graphic design, and web development by Aashish Mahato, based in Kathmandu, Nepal.', '/'],
-  work: ['Work | Film, Photography, Design & Websites by Aashish Mahato', 'Explore Aashish Mahato’s selected projects in filmmaking, photography, motion graphics, branding, graphic design, UI/UX design, and web development.', '/work/'],
-  contact: ['Contact Aashish Mahato | Creative Projects in Kathmandu', 'Contact Aashish Mahato in Kathmandu, Nepal to discuss film, photography, branding, design, and website projects through his official profiles.', '/contact/'],
-  about: ['About Aashish Mahato | Creative in Kathmandu, Nepal', 'Meet Aashish Mahato, a Kathmandu-based filmmaker, photographer, designer, and web developer in Nepal. Explore his work and official profiles.', '/about/'],
-  gallery: ['Gallery | Films, Photography & Design by Aashish Mahato', 'Browse Aashish Mahato’s visual archive of films, photography, branding, and graphic design projects.', '/gallery/'],
+  work: ['Selected Work | Film, Design & Web by Aashish Mahato', 'Explore Aashish Mahato’s selected projects in filmmaking, photography, motion graphics, branding, graphic design, UI/UX design, and web development.', '/work/'],
+  contact: ['Contact Aashish Mahato | Creative Projects in Kathmandu', 'Start a film, photography, design, or website project with Aashish Mahato in Kathmandu. Prepare an email enquiry or contact him directly.', '/contact/'],
+  about: ['About Aashish Mahato | Creative Head at Cosmic Group', 'Meet Aashish Mahato, Creative Head at Cosmic Group and a filmmaker, photographer, designer, and web developer based in Kathmandu, Nepal.', '/about/'],
+  gallery: ['Photo, Film & Design Gallery | Aashish Mahato', 'Browse Aashish Mahato’s visual archive of films, photography, branding, and graphic design projects.', '/gallery/'],
   'skill-film': ['Filmmaker & Videographer in Kathmandu | Aashish Mahato', 'Explore travel films, videography, editing, and visual storytelling by Aashish Mahato, a filmmaker based in Kathmandu, Nepal.', '/work/film/'],
   'skill-photography': ['Photographer in Kathmandu, Nepal | Aashish Mahato', 'Explore portrait, street, nature, and landscape photography by Aashish Mahato, a photographer based in Kathmandu, Nepal.', '/work/photography/'],
-  'skill-motion': ['Motion Graphics Designer in Kathmandu | Aashish Mahato', 'Explore animated visuals and product presentations by Aashish Mahato, a motion graphics designer based in Kathmandu, Nepal.', '/work/motion/'],
-  'skill-branding': ['Brand Identity Designer in Kathmandu | Aashish Mahato', 'Explore visual identity, business card, and brand presentation projects by Aashish Mahato, a designer based in Kathmandu, Nepal.', '/work/branding/'],
+  'skill-motion': ['Motion Graphics Designer in Kathmandu | Aashish Mahato', 'Watch Savari’s product animation and explore motion graphics by Aashish Mahato in Kathmandu, Nepal. Discuss animation and product video projects.', '/work/motion/'],
+  'skill-branding': ['Brand Identity Designer in Kathmandu | Aashish Mahato', 'Explore workplace signage, business cards, and brand presentations for Cosmic Electrical, CIC Nepal, and Decora by Aashish Mahato in Kathmandu.', '/work/branding/'],
   'skill-graphic': ['Graphic Designer in Kathmandu, Nepal | Aashish Mahato', 'Explore campaign artwork, social graphics, and visual communication by Aashish Mahato, a graphic designer based in Kathmandu, Nepal.', '/work/graphic/'],
-  'skill-digital': ['UI/UX Designer in Kathmandu | Aashish Mahato', 'Explore website, dashboard, and mobile interface concepts by Aashish Mahato, a designer based in Kathmandu, Nepal.', '/work/digital/'],
-  'skill-web': ['Web Developer in Kathmandu, Nepal | Aashish Mahato', 'Explore responsive websites and React interfaces by Aashish Mahato, a web developer based in Kathmandu, Nepal.', '/work/web/'],
+  'skill-digital': ['UI/UX Designer in Kathmandu | Aashish Mahato', 'Explore Savari dashboard and digital driving licence concepts, plus mobile interface mockups by Aashish Mahato, a UI/UX designer in Kathmandu.', '/work/digital/'],
+  'skill-web': ['Web Developer in Kathmandu, Nepal | Aashish Mahato', 'Explore Cosmic Electrical, UniSync, and portfolio websites by Aashish Mahato in Kathmandu. View responsive React projects and discuss your website.', '/work/web/'],
 };
 export const searchImages = {
   privacy: '/media/social/aashish-mahato-preview.jpg',
-  home: '/media/social/aashish-mahato-preview.jpg',
+  home: '/media/photos/tree-final-18.webp',
   work: '/media/social/aashish-mahato-preview.jpg',
   contact: '/media/social/aashish-mahato-preview.jpg',
-  about: '/media/social/aashish-mahato-preview.jpg',
+  about: '/media/photos/tree-final-18.webp',
   gallery: '/media/social/aashish-mahato-preview.jpg',
   'skill-film': '/media/posters/mustang.jpg',
   'skill-photography': '/media/photos/tree-final-27.webp',
   'skill-motion': '/media/posters/product-motion.jpg',
-  'skill-branding': '/media/branding/document.webp',
+  'skill-branding': '/media/branding/cosmic-values-wall.webp',
   'skill-graphic': '/media/design/162.webp',
-  'skill-digital': '/media/branding/mockup5.webp',
-  'skill-web': '/media/logos/cosmic-electrical.webp',
+  'skill-digital': '/media/branding/macbook-mockup-3.webp',
+  'skill-web': '/media/web/cosmic-homepage.webp',
 };
 
+export function searchProjects(route) {
+  const skill = route.replace('skill-', '');
+  if (skill === 'film') return filmProjects;
+  if (skill === 'web') return webProjects;
+  if (skill === 'photography') return galleryMedia.filter(item => item.category === 'Photography');
+  if (['branding', 'digital'].includes(skill)) {
+    const category = skill === 'branding' ? 'Branding' : 'Digital';
+    return featuredProjects.map(project => ({ ...project, media: project.media.filter(item => item.category === category) }))
+      .filter(project => project.media.length)
+      .map(project => ({ ...project, cover: project.media[0].src }));
+  }
+  return featuredProjects.filter(project => project.category === (skill === 'motion' ? 'Motion Graphics' : 'Graphic Design'));
+}
 
 export function structuredData(route) {
   const [name, description, path] = searchMeta[route];
@@ -54,11 +69,14 @@ export function structuredData(route) {
     knowsAbout: creativeServices.map((service) => service.name),
     homeLocation: { '@type': 'City', name: 'Kathmandu', containedInPlace: { '@type': 'Country', name: 'Nepal' } },
     sameAs: officialProfiles.map((profile) => profile.url),
+    email: contactEmail,
   };
   return {
     '@context': 'https://schema.org',
     '@graph': [
       person,
+      { '@type': 'ImageObject', '@id': `${siteUrl}${path}#primaryimage`, url: `${siteUrl}${searchImages[route]}`, contentUrl: `${siteUrl}${searchImages[route]}`, caption: name },
+      ...(route.startsWith('skill-') ? [{ '@type': 'ItemList', '@id': `${siteUrl}${path}#projects`, name: `Selected ${creativeServices.find(service => route === `skill-${service.id}`).name} projects`, itemListElement: searchProjects(route).map((project, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@type': 'CreativeWork', name: project.title, description: project.description || project.category, url: `${siteUrl}${path}#${project.id}`, image: new URL(project.cover || project.src, siteUrl).href, creator: { '@id': personId }, ...(project.liveUrl ? { sameAs: project.liveUrl } : {}) } })) }] : []),
       ...(route !== 'home' ? [{ '@type': 'BreadcrumbList', '@id': `${siteUrl}${path}#breadcrumb`, itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
         ...(route.startsWith('skill-') ? [{ '@type': 'ListItem', position: 2, name: 'Work', item: `${siteUrl}/work/` }] : []),
@@ -76,9 +94,10 @@ export function structuredData(route) {
         publisher: { '@id': personId } },
       { '@type': route === 'about' ? 'ProfilePage' : route === 'contact' ? 'ContactPage' : ['work', 'gallery'].includes(route) ? 'CollectionPage' : 'WebPage',
         '@id': `${siteUrl}${path}#webpage`, url: `${siteUrl}${path}`,
-        name, description, primaryImageOfPage: `${siteUrl}${searchImages[route]}`, inLanguage: 'en', isPartOf: { '@id': websiteId },
+        name, description, primaryImageOfPage: { '@id': `${siteUrl}${path}#primaryimage` }, inLanguage: 'en', isPartOf: { '@id': websiteId },
         about: { '@id': personId },
-        ...(route === 'about' || route === 'contact' ? { mainEntity: { '@id': personId } } : {}),
+        ...(['home', 'about', 'contact'].includes(route) ? { mainEntity: { '@id': personId } } : {}),
+        ...(route.startsWith('skill-') ? { mainEntity: { '@id': `${siteUrl}${path}#projects` } } : {}),
         ...(route !== 'home' ? { breadcrumb: { '@id': `${siteUrl}${path}#breadcrumb` } } : {}),
       },
     ],

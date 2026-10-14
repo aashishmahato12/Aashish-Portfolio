@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { heroReel } from './portfolio-data.js';
 import { SiteHeader } from './SiteChrome.jsx';
+import { Mouse } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -149,7 +150,7 @@ function Hero() {
         <h1 id="hero-title" aria-label="Aashish Mahato"><span className="hero-name-line" aria-hidden="true"><HeroLetters text="AASHISH" /></span>{' '}<span className="hero-name-line" aria-hidden="true"><HeroLetters text="MAHATO." /></span></h1>
         <p><span>FILM</span> <i>•</i> <span>PHOTOGRAPHY</span> <i>•</i> <span>DESIGN</span> <i>•</i> <span>WEB</span></p>
       </div>
-      <a className="hero-scroll" href="#home-gallery"><span>SCROLL TO EXPLORE</span><span aria-hidden="true">↘</span></a>
+      <a className="hero-scroll" href="#home-gallery"><span>SCROLL TO EXPLORE</span><Mouse className="hero-scroll-icon" size={24} strokeWidth={1.5} aria-hidden="true" /></a>
       <span className="hero-edition">PORTFOLIO / 2026</span>
     </section>
   );

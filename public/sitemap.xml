@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://aashish-mahato.com.np/</loc>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/photos/tree-final-18.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/videos/hero-poster.jpg</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/posters/mustang.jpg</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/posters/manang-thumbnail.jpg</image:loc></image:image>
@@ -9,6 +10,8 @@
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/document.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/mockup5.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/design/162.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-dna-lobby.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/macbook-mockup-3.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://aashish-mahato.com.np/work/</loc>
@@ -18,6 +21,8 @@
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/document.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/mockup5.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/design/162.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-dna-lobby.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/macbook-mockup-3.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://aashish-mahato.com.np/contact/</loc>
@@ -47,8 +52,6 @@
     <image:image><image:loc>https://aashish-mahato.com.np/media/photos/tree-final-5.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/document.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/document2.webp</image:loc></image:image>
-    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/macbook-mockup-3.webp</image:loc></image:image>
-    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/macbook-mockup-10.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/mockup5.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/mockup23.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/mockup4-medium.webp</image:loc></image:image>
@@ -63,6 +66,13 @@
     <image:image><image:loc>https://aashish-mahato.com.np/media/design/79.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/design/92.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/design/146.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-dna-lobby.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-quality-policy.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-values-wall.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-growth-workspace.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-mission-vision.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/macbook-mockup-3.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/macbook-mockup-10.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://aashish-mahato.com.np/work/film/</loc>
@@ -93,6 +103,11 @@
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/document2.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/mockup23.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/mockup4-medium.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-dna-lobby.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-quality-policy.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-values-wall.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-growth-workspace.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/cosmic-mission-vision.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://aashish-mahato.com.np/work/graphic/</loc>
@@ -109,13 +124,15 @@
   </url>
   <url>
     <loc>https://aashish-mahato.com.np/work/digital/</loc>
-    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/macbook-mockup-3.webp</image:loc></image:image>
-    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/macbook-mockup-10.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/mockup5.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/branding/document0.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/macbook-mockup-3.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/branding/macbook-mockup-10.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://aashish-mahato.com.np/work/web/</loc>
-    <image:image><image:loc>https://aashish-mahato.com.np/media/logos/cosmic-electrical.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/web/cosmic-homepage.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/web/unisync-dashboard.webp</image:loc></image:image>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/web/portfolio-website.webp</image:loc></image:image>
   </url>
 </urlset>

@@ -4,12 +4,11 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { animate } from 'animejs';
-import { featuredProjects, galleryMedia } from './portfolio-data.js';
+import { galleryMedia } from './portfolio-data.js';
 import './home-panels.css';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-const manang = featuredProjects.find(project => project.id === 'manang-film');
-const panels = [{ ...manang.media[0], title: manang.title }, ...galleryMedia.slice(1, 5)];
+const panels = galleryMedia.slice(1, 5);
 
 function PanelVideo({ item, play }) {
   const ref = useRef(null);
@@ -114,14 +113,14 @@ export default function HomePanels({ lenisRef }) {
   }, [current, stageVisible]);
 
   return <section className="home-panels" ref={rootRef} id="home-gallery" aria-labelledby="home-gallery-title">
-    <div className="experience-shell home-panels-intro"><div className="experience-section-top"><span>01 / SELECTED WORK</span><span>FILM / PHOTOGRAPHY / DESIGN</span></div><span className="home-panels-kicker">MY PORTFOLIO</span><h2 id="home-gallery-title">SELECTED <em>WORK.</em></h2><p>Browse my travel films, photographs, brand designs, and websites. Scroll to view selected projects, or visit the Work page for more details.</p></div>
+    <div className="experience-shell home-panels-intro"><div className="experience-section-top"><span>FILM / PHOTOGRAPHY / DESIGN</span></div><span className="home-panels-kicker">MY PORTFOLIO</span><h2 id="home-gallery-title">SELECTED <em>WORK.</em></h2><p>Browse my travel films, photographs, brand designs, and websites. Scroll to view selected projects, or visit the Work page for more details.</p></div>
     <div className="home-panel-stage">
       <div className="home-panel-track">{panels.map((item, index) => <article className="home-panel" id={`work-panel-${index + 1}`} key={item.id}>
         <div className="home-panel-media">{item.type === 'video' ? <PanelVideo item={item} play={stageVisible && current === index} /> : <img src={item.src} alt={mediaAlt(item)} loading="lazy" />}</div>
         <div className="home-panel-shade" />
-        <div className="home-panel-content"><span>FRAME {String(index + 1).padStart(2, '0')} / {String(panels.length).padStart(2, '0')} · {item.category || item.type.toUpperCase()}</span><h3>{item.title}</h3><p>{item.type === 'video' ? 'Video project.' : 'Photography and design.'}</p></div>
+        <div className="home-panel-content"><span>{item.category || item.type.toUpperCase()}</span><h3>{item.title}</h3><p>{item.type === 'video' ? 'Video project.' : 'Photography and design.'}</p></div>
       </article>)}</div>
-      <nav className="home-panel-nav" ref={navRef} aria-label="Portfolio frame navigation"><span className="home-panel-current">{String(current + 1).padStart(2, '0')} / {String(panels.length).padStart(2, '0')}</span><div><button type="button" aria-label="Previous frame" disabled={current === 0} onClick={() => scrollToRef.current(current - 1)}>←</button>{panels.map((item, index) => <a href={`#work-panel-${index + 1}`} key={item.id} className={current === index ? 'is-active' : ''} aria-label={`Go to ${item.title}`} aria-current={current === index ? 'step' : undefined} onClick={(event) => { event.preventDefault(); scrollToRef.current(index); }}><i /></a>)}<button type="button" aria-label="Next frame" disabled={current === panels.length - 1} onClick={() => scrollToRef.current(current + 1)}>→</button></div><span>SCROLL TO EXPLORE ↓</span></nav>
+      <nav className="home-panel-nav" ref={navRef} aria-label="Portfolio frame navigation"><div><button type="button" aria-label="Previous frame" disabled={current === 0} onClick={() => scrollToRef.current(current - 1)}>←</button>{panels.map((item, index) => <a href={`#work-panel-${index + 1}`} key={item.id} className={current === index ? 'is-active' : ''} aria-label={`Go to ${item.title}`} aria-current={current === index ? 'step' : undefined} onClick={(event) => { event.preventDefault(); scrollToRef.current(index); }}><i /></a>)}<button type="button" aria-label="Next frame" disabled={current === panels.length - 1} onClick={() => scrollToRef.current(current + 1)}>→</button></div><span>SCROLL TO EXPLORE ↓</span></nav>
     </div>
     <div className="experience-shell home-panels-end"><a className="experience-text-link" href="/gallery/">ENTER THE FULL GALLERY <span>↗</span></a></div>
   </section>;

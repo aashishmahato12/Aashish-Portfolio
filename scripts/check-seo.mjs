@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
-import { searchMeta, siteUrl } from '../src/seo-data.js';
+import { searchMeta, siteUrl, searchImages, searchProjects } from '../src/seo-data.js';
+import { contactEmail } from '../src/contact-enquiry.js';
 
 // Check the actual published HTML, including content available without JavaScript.
 const titles = new Set();
@@ -37,9 +38,26 @@ for (const [route, [title, description, path]] of Object.entries(searchMeta)) {
   assert.ok(graph.some(item => item['@type'] === 'Person'));
   assert.ok(graph.some(item => item['@type'] === 'WebSite'));
   assert.ok(graph.some(item => item.url === `${siteUrl}${path}` && item['@id'].endsWith('#webpage')));
+  assert.ok(existsSync(`dist${searchImages[route]}`), `${route}: missing search preview image`);
+  assert.ok(html.includes(`property="og:image" content="${siteUrl}${searchImages[route]}"`), `${route}: stale share image`);
+  if (route === 'contact') assert.ok(html.includes(contactEmail), 'Contact email must be present in readable HTML');
+  if (route.startsWith('skill-')) {
+    const list = graph.find(item => item['@type'] === 'ItemList');
+    assert.equal(list.itemListElement.length, searchProjects(route).length);
+    for (const entry of list.itemListElement) {
+      assert.ok(html.includes(escapeHtml(entry.item.name)), `${route}: schema project missing from readable content`);
+      assert.ok(!entry.item.image.includes('/https://'), `${route}: malformed project image URL`);
+      const imageUrl = new URL(entry.item.image);
+      if (imageUrl.origin === siteUrl) assert.ok(existsSync(`dist${imageUrl.pathname}`), `${route}: missing project image`);
+    }
+  }
   for (const [, href] of html.matchAll(/<a\b[^>]*href="(\/[^"#?]*)/g)) {
     assert.ok(existsSync(`dist${href.endsWith('/') ? href + 'index.html' : href}`), `${route}: broken internal link ${href}`);
   }
 }
 assert.equal([...sitemap.matchAll(/<loc>/g)].length, Object.keys(searchMeta).length);
 console.log(`SEO checks passed: ${titles.size} crawlable pages, unique metadata, canonical URLs, navigation, schema, sitemap, and robots.txt.`);
+
+function escapeHtml(value) {
+  return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+}

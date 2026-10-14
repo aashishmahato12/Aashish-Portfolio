@@ -5,7 +5,7 @@ import { featuredProjects, galleryMedia, heroReel, webProjects } from '../src/po
 
 const base = 'https://aashish-mahato.com.np';
 const publicDir = resolve(dirname(fileURLToPath(import.meta.url)), '../public');
-const image = (src) => `${base}${src}`;
+const image = (src) => new URL(src, base).href;
 const mediaImage = (item) => item.type === 'video' ? item.poster : item.src;
 const photos = galleryMedia.filter((item) => item.category === 'Photography');
 const projectMedia = featuredProjects.flatMap((project) => project.media);
@@ -13,7 +13,7 @@ const brandProjects = featuredProjects.filter((project) => project.category === 
 const escapeXml = (value) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 
 const pages = [
-  ['/', [heroReel.poster, ...featuredProjects.map((project) => project.cover)]],
+  ['/', ['/media/photos/tree-final-18.webp', heroReel.poster, ...featuredProjects.map((project) => project.cover)]],
   ['/work/', featuredProjects.map(project => project.cover)],
   ['/contact/', []],
   ['/privacy/', []],
@@ -25,7 +25,7 @@ const pages = [
   ['/work/branding/', brandProjects.flatMap((project) => project.media.filter((item) => item.category === 'Branding').map((item) => item.src))],
   ['/work/graphic/', featuredProjects.filter((project) => project.category === 'Graphic Design').flatMap((project) => project.media.map((item) => item.src))],
   ['/work/digital/', brandProjects.flatMap((project) => project.media.filter((item) => item.category === 'Digital').map((item) => item.src))],
-  ['/work/web/', webProjects.filter((project) => project.mark).map((project) => project.mark)],
+  ['/work/web/', webProjects.map(project => project.cover)],
 ];
 
 const entries = pages.map(([path, sources]) => {

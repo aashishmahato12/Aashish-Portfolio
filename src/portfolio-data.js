@@ -32,19 +32,17 @@ export const featuredProjects = [
   },
   {
     id: 'product-motion', title: 'Product Motion', category: 'Motion Graphics',
-    description: 'An animated presentation of a digital licence experience.',
+    description: 'A promotional product animation made for Savari, presenting its digital licence experience.',
     cover: `${poster}/product-motion.jpg`,
     media: [{ id: 'product-motion-video', type: 'video', title: 'Product motion film', category: 'Motion Graphics', src: 'https://res.cloudinary.com/ghmgpvvn/video/upload/v1791546163/Savari_Promo_Video.mp4', poster: `${poster}/product-motion.jpg` }],
   },
   {
     id: 'cic-nepal', title: 'CIC Nepal', category: 'Brand & Digital', company: 'Cosmic Innovation Center',
-    description: 'Brand and website mockups for Cosmic Innovation Center.',
+    description: 'Brand presentations and service booklets for Cosmic Innovation Center.',
     cover: `${brand}/document.webp`,
     media: [
       { type: 'photo', title: 'CIC brand presentation', category: 'Branding', src: `${brand}/document.webp` },
       { type: 'photo', title: 'CIC service booklet', category: 'Branding', src: `${brand}/document2.webp` },
-      { type: 'photo', title: 'CIC website mockup', category: 'Digital', src: `${brand}/macbook-mockup-3.webp` },
-      { type: 'photo', title: 'CIC dashboard mockup', category: 'Digital', src: `${brand}/macbook-mockup-10.webp` },
     ],
   },
   {
@@ -69,6 +67,29 @@ export const featuredProjects = [
       ['25', 'New year graphic'], ['79', 'Hiring graphic'],
       ['92', 'Tihar campaign'], ['146', 'CIC opening graphic'],
     ].map(([file, title]) => ({ type: 'photo', title, category: 'Graphic Design', src: `${design}/${file}.webp` })),
+  },
+
+  {
+    id: 'cosmic-workplace-branding', title: 'Cosmic Electrical workplace branding', category: 'Brand & Digital', company: 'Cosmic Electrical',
+    description: 'Corporate signage presenting Cosmic Electrical’s values, quality policy, growth process, mission, and vision.',
+    cover: `${brand}/cosmic-dna-lobby.webp`,
+    media: [
+      { type: 'photo', title: 'Cosmic DNA lobby sign', category: 'Branding', src: `${brand}/cosmic-dna-lobby.webp`, aspectRatio: 0.75 },
+      { type: 'photo', title: 'Cosmic Electrical quality policy', category: 'Branding', src: `${brand}/cosmic-quality-policy.webp`, aspectRatio: 0.75 },
+      { type: 'photo', title: 'Cosmic Electrical values wall', category: 'Branding', src: `${brand}/cosmic-values-wall.webp`, aspectRatio: 1.3333333333333333 },
+      { type: 'photo', title: 'Cosmic Way growth workspace', category: 'Branding', src: `${brand}/cosmic-growth-workspace.webp`, aspectRatio: 0.75 },
+      { type: 'photo', title: 'Cosmic Electrical mission and vision', category: 'Branding', src: `${brand}/cosmic-mission-vision.webp`, aspectRatio: 1.3333333333333333 },
+    ],
+  },
+
+  {
+    id: 'savari-ui', title: 'Savari', category: 'Brand & Digital', company: 'Savari',
+    description: 'Digital driving licence and dashboard interface concepts for Savari.',
+    cover: `${brand}/macbook-mockup-3.webp`,
+    media: [
+      { type: 'photo', title: 'Savari driving licence interface', category: 'Digital', src: `${brand}/macbook-mockup-3.webp` },
+      { type: 'photo', title: 'Savari dashboard mockup', category: 'Digital', src: `${brand}/macbook-mockup-10.webp` },
+    ],
   },
 ];
 
@@ -99,33 +120,27 @@ export const filmProjects = [
 
 export const webProjects = [
   {
-    id: 'cosmic-electrical-web', title: 'Cosmic Electrical', category: 'Client website',
+    id: 'cosmic-electrical-web', cover: '/media/web/cosmic-homepage.webp', title: 'Cosmic Electrical', category: 'Client website',
     description: 'A website for Cosmic Electrical Limited, presenting its transmission, distribution, substation, and electrification work.',
     liveUrl: 'https://cosmic-electrical-six.vercel.app/',
     mark: `${logo}/cosmic-electrical.webp`,
     theme: 'cosmic',
   },
   {
-    id: 'unisync-web', title: 'UniSync', category: 'Student dashboard',
+    id: 'unisync-web', cover: '/media/web/unisync-dashboard.webp', title: 'UniSync', category: 'Student dashboard',
     description: 'A responsive React dashboard for college notices, events, payments, documents, and a student assistant.',
     liveUrl: 'https://unisync-dun.vercel.app/',
     repoUrl: 'https://github.com/aashishmahato12/UniSync',
     theme: 'unisync',
   },
   {
-    id: 'portfolio-web', title: 'Aashish Portfolio', category: 'Creative portfolio',
+    id: 'portfolio-web', cover: '/media/web/portfolio-website.webp', title: 'Aashish Portfolio', category: 'Creative portfolio',
     description: 'A responsive portfolio bringing film, photography, design, and code into one experience.',
     liveUrl: 'https://aashish-mahato.com.np/',
     repoUrl: 'https://github.com/aashishmahato12/Aashish-Portfolio',
     theme: 'portfolio',
   },
-  {
-    id: 'n8n-oauth-web', title: 'n8n OAuth Site', category: 'Web utility',
-    description: 'A small deployed site for an n8n OAuth project.',
-    liveUrl: 'https://n8n-oauth-site.vercel.app/',
-    repoUrl: 'https://github.com/aashishmahato12/n8n-oauth-site',
-    theme: 'oauth',
-  },
+
 ];
 
 export const galleryMedia = [

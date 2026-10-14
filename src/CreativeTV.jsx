@@ -395,6 +395,6 @@ export default function CreativeTV({ item, channel, count, onChannel, onVideoEnd
     </div>
     {item && <div className="creative-tv-preview-tools"><span>{item.slides?.length ? `${slide + 1} / ${item.slides.length} · SLIDESHOW` : 'FILM PREVIEW'} · {item.name}</span></div>}
     <p className="creative-tv-hint">Choose a disk to change the channel. Drag the TV to look around.</p>
-    {expanded && item && <ExpandedTVMedia item={item} slide={slide} origin={expandedOrigin.current} startTime={expandedTime.current} onVideoEnd={onVideoEnd} muted={muted} playing={playing} onClose={time => { engineRef.current?.seek(time); setExpanded(false); }} />}
+    {expanded && item && <ExpandedTVMedia item={item} slide={slide} origin={expandedOrigin.current} startTime={expandedTime.current} onVideoEnd={onVideoEnd} muted={false} playing={true} onClose={time => { engineRef.current?.seek(time); setExpanded(false); }} />}
   </div>;
 }
