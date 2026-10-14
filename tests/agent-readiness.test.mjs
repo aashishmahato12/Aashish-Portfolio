@@ -40,6 +40,14 @@ test('Vercel middleware preserves static delivery and marks HTML variants', () =
   assert.match(html.headers.get('link'), /llms.txt/);
 });
 
+test('homepage is delivered with its real hero and a hydration marker', () => {
+  const html = readFileSync('dist/index.html', 'utf8');
+  assert.match(html, /id="root" data-ssr="home"/);
+  assert.match(html, /id="hero-title"/);
+  assert.match(html, /class="hero-content"/);
+  assert.doesNotMatch(html, /Switched to client rendering/);
+});
+
 test('built discovery files follow llms.txt structure and point to real outputs', () => {
   assert.equal(readFileSync('dist/llms.txt', 'utf8'), llmsText);
   assert.equal(readFileSync('dist/agent-instructions.md', 'utf8'), agentInstructions);

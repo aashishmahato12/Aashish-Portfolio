@@ -1,0 +1,89 @@
+{
+  "/media/photos/tree-final-18.webp": {
+    "srcSet": "/media/photos/tree-final-18-medium.webp 960w, /media/photos/tree-final-18.webp 1200w"
+  },
+  "/media/photos/sun-set-21.webp": {
+    "srcSet": "/media/photos/sun-set-21-medium.webp 960w, /media/photos/sun-set-21.webp 1800w"
+  },
+  "/media/photos/tree-final-28.webp": {
+    "srcSet": "/media/photos/tree-final-28-medium.webp 960w, /media/photos/tree-final-28.webp 1800w"
+  },
+  "/media/photos/tree-final-27.webp": {
+    "srcSet": "/media/photos/tree-final-27-medium.webp 960w, /media/photos/tree-final-27.webp 1200w"
+  },
+  "/media/photos/tree-final-26.webp": {
+    "srcSet": "/media/photos/tree-final-26-medium.webp 960w, /media/photos/tree-final-26.webp 1800w"
+  },
+  "/media/photos/collaboration-hills.webp": {
+    "srcSet": "/media/photos/collaboration-hills-medium.webp 960w, /media/photos/collaboration-hills.webp 1264w"
+  },
+  "/media/photos/about-backlight-white.webp": {
+    "srcSet": "/media/photos/about-backlight-white-medium.webp 960w, /media/photos/about-backlight-white.webp 1456w"
+  },
+  "/media/photos/sun-set-3.webp": {
+    "srcSet": "/media/photos/sun-set-3-medium.webp 960w, /media/photos/sun-set-3.webp 1200w"
+  },
+  "/media/photos/tree-final-117.webp": {
+    "srcSet": "/media/photos/tree-final-117-medium.webp 960w, /media/photos/tree-final-117.webp 1800w"
+  },
+  "/media/photos/tree-final-5.webp": {
+    "srcSet": "/media/photos/tree-final-5-medium.webp 960w, /media/photos/tree-final-5.webp 1440w"
+  },
+  "/media/photos/6934.webp": {
+    "srcSet": "/media/photos/6934-medium.webp 960w, /media/photos/6934.webp 1800w"
+  },
+  "/media/photos/tree-final-16.webp": {
+    "srcSet": "/media/photos/tree-final-16-medium.webp 960w, /media/photos/tree-final-16.webp 1440w"
+  },
+  "/media/branding/macbook-mockup-10.webp": {
+    "srcSet": "/media/branding/macbook-mockup-10-medium.webp 960w, /media/branding/macbook-mockup-10.webp 1800w"
+  },
+  "/media/branding/cosmic-growth-workspace.webp": {
+    "srcSet": "/media/branding/cosmic-growth-workspace-medium.webp 960w, /media/branding/cosmic-growth-workspace.webp 1086w"
+  },
+  "/media/branding/document0.webp": {
+    "srcSet": "/media/branding/document0-medium.webp 960w, /media/branding/document0.webp 1800w"
+  },
+  "/media/branding/document.webp": {
+    "srcSet": "/media/branding/document-medium.webp 960w, /media/branding/document.webp 1800w"
+  },
+  "/media/branding/macbook-mockup-3.webp": {
+    "srcSet": "/media/branding/macbook-mockup-3-medium.webp 960w, /media/branding/macbook-mockup-3.webp 1800w"
+  },
+  "/media/branding/document2.webp": {
+    "srcSet": "/media/branding/document2-medium.webp 960w, /media/branding/document2.webp 1800w"
+  },
+  "/media/branding/cosmic-mission-vision.webp": {
+    "srcSet": "/media/branding/cosmic-mission-vision-medium.webp 960w, /media/branding/cosmic-mission-vision.webp 1448w"
+  },
+  "/media/branding/mockup5.webp": {
+    "srcSet": "/media/branding/mockup5-medium.webp 960w, /media/branding/mockup5.webp 1800w"
+  },
+  "/media/branding/cosmic-values-wall.webp": {
+    "srcSet": "/media/branding/cosmic-values-wall-medium.webp 960w, /media/branding/cosmic-values-wall.webp 1448w"
+  },
+  "/media/branding/mockup23.webp": {
+    "srcSet": "/media/branding/mockup23-medium.webp 960w, /media/branding/mockup23.webp 1800w"
+  },
+  "/media/branding/cosmic-dna-lobby.webp": {
+    "srcSet": "/media/branding/cosmic-dna-lobby-medium.webp 960w, /media/branding/cosmic-dna-lobby.webp 1086w"
+  },
+  "/media/branding/cosmic-quality-policy.webp": {
+    "srcSet": "/media/branding/cosmic-quality-policy-medium.webp 960w, /media/branding/cosmic-quality-policy.webp 1086w"
+  },
+  "/media/design/dashain-puja.webp": {
+    "srcSet": "/media/design/dashain-puja-medium.webp 960w, /media/design/dashain-puja.webp 1080w"
+  },
+  "/media/design/dashain-greeting.webp": {
+    "srcSet": "/media/design/dashain-greeting-medium.webp 960w, /media/design/dashain-greeting.webp 1080w"
+  },
+  "/media/web/unisync-dashboard.webp": {
+    "srcSet": "/media/web/unisync-dashboard-medium.webp 960w, /media/web/unisync-dashboard.webp 3024w"
+  },
+  "/media/web/portfolio-website.webp": {
+    "srcSet": "/media/web/portfolio-website-medium.webp 960w, /media/web/portfolio-website.webp 1265w"
+  },
+  "/media/web/cosmic-homepage.webp": {
+    "srcSet": "/media/web/cosmic-homepage-medium.webp 960w, /media/web/cosmic-homepage.webp 3024w"
+  }
+}

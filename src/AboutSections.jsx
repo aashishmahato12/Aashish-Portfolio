@@ -1,3 +1,4 @@
+import ResponsiveImage from './ResponsiveImage.jsx';
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -81,11 +82,11 @@ export function AboutOpening() {
   useMotion(ref);
   return <div className="kinetic-about" ref={ref}>
     <section className="kinetic-hero kinetic-hero--portrait" aria-labelledby="kinetic-title">
-      <img className="about-cover-portrait" src="/media/photos/about-backlight-white.webp" alt="Backlit portrait of Aashish Mahato looking over his shoulder" width="1456" height="1080" fetchPriority="high" />
+      <ResponsiveImage className="about-cover-portrait" src="/media/photos/about-backlight-white.webp" alt="Backlit portrait of Aashish Mahato looking over his shoulder" width="1456" height="1080" fetchPriority="high" />
       <HoverCard openDelay={180} closeDelay={120}>
         <HoverCardTrigger asChild><button type="button" className="about-portrait-hover" aria-label="About Aashish Mahato" /></HoverCardTrigger>
         <HoverCardPortal><HoverCardContent className="about-portrait-card" side="right" sideOffset={16} collisionPadding={20}>
-          <img src="/media/photos/tree-final-18.webp" alt="" width="56" height="56" />
+          <ResponsiveImage src="/media/photos/tree-final-18.webp" alt="" width="56" height="56" />
           <div><h2>Aashish Mahato</h2><span>Creative Head · Cosmic Group</span><p>Film, photography, design, and web.</p><small><MapPin size={13} aria-hidden="true" />Kathmandu, Nepal</small></div>
         </HoverCardContent></HoverCardPortal>
       </HoverCard>
@@ -111,7 +112,7 @@ export function AboutOpening() {
         <article className="about-story-card" data-reveal><div className="about-card-icon"><GraduationCap aria-hidden="true" /></div><span>COLLEGE / 2026</span><h3>Studying at Herald.</h3><p>I joined Herald College Kathmandu in June 2026. My college projects include web applications and motion graphics.</p><a href="/work/">Explore my work <ArrowUpRight size={16} aria-hidden="true" /></a></article>
       </div>
       <div className="kinetic-socials about-profile-row">{officialProfiles.map(profile => <a key={profile.url} href={profile.url} target="_blank" rel="noopener noreferrer">{profile.label}<ArrowUpRight size={14} aria-hidden="true" /></a>)}</div>
-      <div className="kinetic-fieldwork"><figure><div className="kinetic-fieldwork-image"><img src="/media/posters/manang.webp" alt="Himalayan landscape from Aashish Mahato’s Manang travel film" loading="lazy" /></div><figcaption>IN THE FIELD / MANANG</figcaption></figure><figure><div className="kinetic-fieldwork-image"><img src="/media/branding/document.webp" alt="CIC Nepal brand presentation designed by Aashish Mahato" loading="lazy" /></div><figcaption>AT THE DESK / CIC NEPAL</figcaption></figure></div>
+      <div className="kinetic-fieldwork"><figure><div className="kinetic-fieldwork-image"><ResponsiveImage src="/media/posters/manang.webp" alt="Himalayan landscape from Aashish Mahato’s Manang travel film" loading="lazy" /></div><figcaption>IN THE FIELD / MANANG</figcaption></figure><figure><div className="kinetic-fieldwork-image"><ResponsiveImage src="/media/branding/document.webp" alt="CIC Nepal brand presentation designed by Aashish Mahato" loading="lazy" /></div><figcaption>AT THE DESK / CIC NEPAL</figcaption></figure></div>
     </section>
     <section className="kinetic-manifesto" aria-labelledby="kinetic-quote-title"><div className="kinetic-manifesto-inner"><h2 id="kinetic-quote-title">{'Film, photography, design, and web development.'.split(' ').map((word, index) => <span className="kinetic-quote-word" key={index}>{word} </span>)}</h2><div><p>My portfolio includes travel films, portraits, brand identities, graphics, and websites.</p><a href="/gallery/">View my gallery <ArrowUpRight size={16} aria-hidden="true" /></a></div></div></section>
   </div>;

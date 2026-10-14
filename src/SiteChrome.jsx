@@ -20,6 +20,7 @@ const pages = [
 
 export function SiteHeader({ current }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [portalReady, setPortalReady] = useState(false);
   const menuButtonRef = useRef(null);
   const layerRef = useRef(null);
   const panelRef = useRef(null);
@@ -27,6 +28,7 @@ export function SiteHeader({ current }) {
   const menuTween = useRef(null);
   const hasOpened = useRef(false);
   useLayoutEffect(() => {
+    if (!portalReady) return;
     const context = gsap.context(() => {
       gsap.set(layerRef.current, { autoAlpha: 0 });
       gsap.set(panelRef.current, { xPercent: 100 });
@@ -34,8 +36,9 @@ export function SiteHeader({ current }) {
       gsap.set(backdropRef.current, { opacity: 0 });
     });
     return () => { menuTween.current?.kill(); context.revert(); };
-  }, []);
+  }, [portalReady]);
   useLayoutEffect(() => {
+    if (!portalReady) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     menuTween.current?.kill();
     const timeline = gsap.timeline({ defaults: { ease: 'sine.inOut' } });
@@ -60,7 +63,7 @@ export function SiteHeader({ current }) {
         .set(layerRef.current, { autoAlpha: 0 })
         .call(() => { if (hasOpened.current) menuButtonRef.current?.focus({ preventScroll: true }); });
     }
-  }, [menuOpen]);
+  }, [menuOpen, portalReady]);
   useEffect(() => {
     if (!menuOpen) return;
     document.body.classList.add('mobile-menu-lock');
@@ -90,8 +93,8 @@ export function SiteHeader({ current }) {
         aria-label="Main navigation"
       /> : pages.map(page => <a className="header-plain-link" key={page.id} href={page.href} aria-current={current === page.id ? 'page' : undefined}><PortfolioIcon kind="page" name={page.id} size={15} />{page.label}</a>)}
     </nav>
-    <button ref={menuButtonRef} className="mobile-menu-trigger" type="button" aria-label="Open navigation menu" aria-expanded={menuOpen} aria-controls="mobile-navigation-panel" onClick={() => setMenuOpen(true)}><Menu size={24} strokeWidth={1.6} /></button>
-  </header>{createPortal(<div ref={layerRef} className="mobile-menu-layer" aria-hidden={!menuOpen} data-lenis-prevent="">
+    <button ref={menuButtonRef} className="mobile-menu-trigger" type="button" aria-label="Open navigation menu" aria-expanded={menuOpen} aria-controls={portalReady ? "mobile-navigation-panel" : undefined} onClick={() => { setPortalReady(true); setMenuOpen(true); }}><Menu size={24} strokeWidth={1.6} /></button>
+  </header>{portalReady && createPortal(<div ref={layerRef} className="mobile-menu-layer" aria-hidden={!menuOpen} data-lenis-prevent="">
     <button ref={backdropRef} className="mobile-menu-backdrop" tabIndex={-1} aria-label="Close navigation menu" onClick={() => setMenuOpen(false)} />
     <div className="mobile-menu-curtain mobile-menu-curtain--red" aria-hidden="true" /><div className="mobile-menu-curtain mobile-menu-curtain--charcoal" aria-hidden="true" />
     <div ref={panelRef} className="mobile-menu-panel" id="mobile-navigation-panel" role="dialog" aria-modal={menuOpen || undefined} aria-label="Navigation menu" inert={!menuOpen}>

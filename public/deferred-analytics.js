@@ -21,5 +21,5 @@
   timer = setTimeout(() => {
     if ('requestIdleCallback' in window) window.requestIdleCallback(start, { timeout: 2000 });
     else start();
-  }, 5000);
+  }, 10000);
 })();

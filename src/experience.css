@@ -1246,3 +1246,5 @@ html.lenis{scroll-behavior:auto}
 .reviews-panel .testimonial-category>span{color:#666}
 .project-guide-contact .guide-secondary-contact{color:#595959}
 .project-guide-contact .guide-contact-button{background:#c63826;color:#fff}
+
+.reviews-panel .testimonial-card blockquote p{color:#333;background:#fff}

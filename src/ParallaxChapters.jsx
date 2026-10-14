@@ -1,3 +1,4 @@
+import { useNearViewport } from './use-near-viewport.js';
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -77,6 +78,7 @@ function ChapterSlideshow({ images }) {
 
 export default function ParallaxChapters({ items = chapters, label = 'FILM / PHOTOGRAPHY / DESIGN', className = '', depthTitles = true, showCount = true }) {
   const ref = useRef(null);
+  const near = useNearViewport(ref);
   useEffect(() => {
     const videos = [...ref.current.querySelectorAll('video')];
     const visible = new Set();
@@ -109,6 +111,7 @@ export default function ParallaxChapters({ items = chapters, label = 'FILM / PHO
     };
   }, [items]);
   useLayoutEffect(() => {
+    if (!near) return;
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
       const context = gsap.context(() => {
@@ -133,7 +136,7 @@ export default function ParallaxChapters({ items = chapters, label = 'FILM / PHO
       return () => context.revert();
     });
     return () => media.revert();
-  }, [depthTitles]);
+  }, [depthTitles, near]);
   return <div className={`parallax-chapters ${className}`} ref={ref}>{items.map((chapter, index) => <section className="parallax-chapter" key={chapter.title} id={chapter.id} aria-label={chapter.title}>
     <div className="parallax-chapter-image" style={{ backgroundImage: `url(${chapter.video?.poster || chapter.image})` }}>
       {chapter.video && <video data-src={chapter.video.src} poster={chapter.video.poster || chapter.image} muted loop playsInline preload="none" aria-hidden="true" />}

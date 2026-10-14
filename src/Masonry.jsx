@@ -1,3 +1,4 @@
+import ResponsiveImage from './ResponsiveImage.jsx';
 // Adapted from the React Bits Masonry source supplied for this project.
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
@@ -146,7 +147,7 @@ export default function Masonry({ items, onOpen, paused = false, autoplayVideos 
         <span className={`masonry-visual${item.type === 'video' ? ' masonry-video' : item.type === 'youtube' ? ' masonry-youtube' : ''}`} style={{ height: item.mediaHeight }}>
           {renderVisual?.(item) || (item.type === 'video'
             ? <video src={item.src} poster={item.poster} muted playsInline loop preload="metadata" onLoadedMetadata={event => measureMedia(item, event.currentTarget)} aria-hidden="true" />
-            : <img src={item.src || item.img || item.poster} alt={mediaAlt(item)} loading="lazy" decoding="async" onLoad={event => measureMedia(item, event.currentTarget)} />)}
+            : <ResponsiveImage sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw" src={item.src || item.img || item.poster} alt={mediaAlt(item)} loading="lazy" decoding="async" onLoad={event => measureMedia(item, event.currentTarget)} />)}
           <span className="masonry-open" aria-hidden="true">{['video', 'youtube'].includes(item.type) ? 'PLAY FILM ↗' : 'EXPAND ↗'}</span>
         </span>
         {!renderDetails && <span className="masonry-caption"><small>{item.category || (item.type === 'video' ? 'Film' : 'Photo')}</small><strong>{item.title}</strong></span>}

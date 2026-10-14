@@ -1,3 +1,4 @@
+import ResponsiveImage from './ResponsiveImage.jsx';
 import { mediaAlt, mediaDescription } from './media-text.js';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
@@ -115,7 +116,7 @@ export default function HomePanels({ lenisRef }) {
     <div className="experience-shell home-panels-intro"><div className="experience-section-top"><span>FILM / PHOTOGRAPHY / DESIGN</span></div><span className="home-panels-kicker">MY PORTFOLIO</span><h2 id="home-gallery-title">SELECTED <em>WORK.</em></h2><p>Browse my travel films, photographs, brand designs, and websites. Scroll to view selected projects, or visit the Work page for more details.</p></div>
     <div className="home-panel-stage">
       <div className="home-panel-track">{panels.map((item, index) => <article className="home-panel" id={`work-panel-${index + 1}`} key={item.id}>
-        <div className="home-panel-media">{item.type === 'video' ? <PanelVideo item={item} play={stageVisible && current === index} /> : <img src={item.src} alt={mediaAlt(item)} loading="lazy" />}</div>
+        <div className="home-panel-media">{item.type === 'video' ? <PanelVideo item={item} play={stageVisible && current === index} /> : <ResponsiveImage src={item.src} alt={mediaAlt(item)} loading="lazy" />}</div>
         <div className="home-panel-shade" />
         <div className="home-panel-content"><span>{item.category || item.type.toUpperCase()}</span><h3>{item.title}</h3><p>{item.type === 'video' ? 'Video project.' : 'Photography and design.'}</p></div>
       </article>)}</div>

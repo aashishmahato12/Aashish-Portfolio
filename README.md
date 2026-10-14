@@ -61,3 +61,5 @@ Each film and motion video has a dedicated `/watch/` page with a visible player 
 ## Loading and accessibility
 
 Fonts are hosted locally as WOFF2. Google tracking initializes on interaction or idle after initial rendering. The footer shader loads near the viewport. Hero text is visible immediately; its entrance moves without hiding it. Decorative silent previews are hidden from assistive technology; watch-page players remain accessible. Image variants provide smaller fallback thumbnails and avatars.
+
+The homepage is prerendered from its actual React components and hydrated on load. Below-the-fold motion setup waits until sections approach the viewport. Responsive image variants preserve original files and reduce phone downloads.

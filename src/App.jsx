@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { heroReel } from './portfolio-data.js';
 import { SiteHeader } from './SiteChrome.jsx';
 import { Mouse } from 'lucide-react';
 
@@ -122,7 +121,7 @@ function Hero() {
   return (
     <section ref={heroRef} className="hero" id="top" aria-labelledby="hero-title">
       <div className="hero-fallback" aria-hidden="true"><div className="fallback-light" /></div>
-      <video ref={videoRef} className={`hero-video ${videoReady ? 'is-ready' : ''}`} muted loop playsInline preload="none" poster={heroReel.poster} aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)}>
+      <video ref={videoRef} className={`hero-video ${videoReady ? 'is-ready' : ''}`} muted loop playsInline preload="none" aria-hidden="true" onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)}>
       </video>
       <div className="hero-shade" aria-hidden="true" />
       <SiteHeader current="home" />
