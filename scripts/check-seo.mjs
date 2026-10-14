@@ -1,3 +1,4 @@
+import { videoPages } from '../src/video-pages.js';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { searchMeta, siteUrl, searchImages, searchProjects } from '../src/seo-data.js';
@@ -38,12 +39,18 @@ for (const [route, [title, description, path]] of Object.entries(searchMeta)) {
   assert.ok(graph.some(item => item['@type'] === 'Person'));
   assert.ok(graph.some(item => item['@type'] === 'WebSite'));
   assert.ok(graph.some(item => item.url === `${siteUrl}${path}` && item['@id'].endsWith('#webpage')));
-  assert.ok(existsSync(`dist${searchImages[route]}`), `${route}: missing search preview image`);
-  assert.ok(html.includes(`property="og:image" content="${siteUrl}${searchImages[route]}"`), `${route}: stale share image`);
-  assert.ok(html.includes(`name="twitter:image" content="${siteUrl}${searchImages[route]}"`), `${route}: stale social card image`);
+  assert.ok(!searchImages[route].startsWith('/') || existsSync(`dist${searchImages[route]}`), `${route}: missing search preview image`);
+  assert.ok(html.includes(`property="og:image" content="${new URL(searchImages[route], siteUrl).href}"`), `${route}: stale share image`);
+  assert.ok(html.includes(`name="twitter:image" content="${new URL(searchImages[route], siteUrl).href}"`), `${route}: stale social card image`);
   const webpage = graph.find(item => item['@id'] === `${siteUrl}${path}#webpage`);
   const primaryImage = graph.find(item => item['@id'] === webpage.primaryImageOfPage['@id']);
-  assert.equal(primaryImage.contentUrl, `${siteUrl}${searchImages[route]}`, `${route}: primary image does not match preview`);
+  assert.equal(primaryImage.contentUrl, new URL(searchImages[route], siteUrl).href, `${route}: primary image does not match preview`);
+  if (route.startsWith('video-')) {
+    const video = videoPages.find(item => item.route === route);
+    assert.ok(html.includes(video.playerUrl ? `<iframe src="${video.playerUrl}"` : `<video controls playsinline preload="metadata"`), `${route}: video is missing from initial HTML`);
+    assert.ok(html.includes(video.playerUrl || video.media.src), `${route}: wrong video source`);
+    assert.ok(sitemap.includes(`<video:title>${escapeHtml(video.title)}</video:title>`), `${route}: missing video sitemap metadata`);
+  }
   if (route === 'contact') assert.ok(html.includes(contactEmail), 'Contact email must be present in readable HTML');
   if (route.startsWith('skill-')) {
     const list = graph.find(item => item['@type'] === 'ItemList');
@@ -59,6 +66,7 @@ for (const [route, [title, description, path]] of Object.entries(searchMeta)) {
     assert.ok(existsSync(`dist${href.endsWith('/') ? href + 'index.html' : href}`), `${route}: broken internal link ${href}`);
   }
 }
+assert.equal([...sitemap.matchAll(/<video:video>/g)].length, videoPages.length);
 assert.equal([...sitemap.matchAll(/<loc>/g)].length, Object.keys(searchMeta).length);
 console.log(`SEO checks passed: ${titles.size} crawlable pages, unique metadata, canonical URLs, navigation, schema, sitemap, and robots.txt.`);
 

@@ -1,3 +1,4 @@
+import { videoPages } from './src/video-pages.js';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
@@ -18,6 +19,7 @@ export default defineConfig({
       if (!route) return html;
       const clean = html.replace(/<title>[\s\S]*?<\/title>/gi, '').replace(/<meta\b[^>]*(?:name=["'](?:description|robots|twitter:[^"']*)["']|property=["']og:[^"']*["'])[^>]*>/gi, '').replace(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi, '').replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
       const [title, description, pagePath] = searchMeta[route];
+      const video = videoPages.find(item => item.route === route);
       return { html: clean, tags: [
         { tag: 'link', attrs: { rel: 'describedby', href: '/llms.txt' }, injectTo: 'head' },
         { tag: 'link', attrs: { rel: 'alternate', type: 'text/markdown', href: `${pagePath}index.md` }, injectTo: 'head' },
@@ -25,9 +27,10 @@ export default defineConfig({
         { tag: 'meta', attrs: { name: 'description', content: description }, injectTo: 'head' },
         { tag: 'meta', attrs: { name: 'robots', content: 'index, follow, max-image-preview:large' }, injectTo: 'head' },
         { tag: 'link', attrs: { rel: 'canonical', href: `${siteUrl}${pagePath}` }, injectTo: 'head' },
-        ...Object.entries({ type: 'website', url: `${siteUrl}${pagePath}`, title, description, image: `${siteUrl}${searchImages[route]}` }).map(([key, content]) => ({ tag: 'meta', attrs: { property: `og:${key}`, content }, injectTo: 'head' })),
+        ...Object.entries({ type: 'website', url: `${siteUrl}${pagePath}`, title, description, image: new URL(searchImages[route], siteUrl).href }).map(([key, content]) => ({ tag: 'meta', attrs: { property: `og:${key}`, content }, injectTo: 'head' })),
+        ...(video ? [{ tag: 'meta', attrs: { property: 'og:video', content: video.playerUrl || video.media.src }, injectTo: 'head' }, { tag: 'meta', attrs: { property: 'og:video:type', content: video.playerUrl ? 'text/html' : 'video/mp4' }, injectTo: 'head' }] : []),
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' }, injectTo: 'head' },
-        { tag: 'meta', attrs: { name: 'twitter:image', content: `${siteUrl}${searchImages[route]}` }, injectTo: 'head' },
+        { tag: 'meta', attrs: { name: 'twitter:image', content: new URL(searchImages[route], siteUrl).href }, injectTo: 'head' },
         { tag: 'meta', attrs: { name: 'twitter:title', content: title }, injectTo: 'head' },
         { tag: 'meta', attrs: { name: 'twitter:description', content: description }, injectTo: 'head' },
         { tag: 'meta', attrs: { property: 'og:image:alt', content: searchImageAlts[route] }, injectTo: 'head' },
@@ -40,6 +43,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
+        ...Object.fromEntries(videoPages.map(video => [video.route, path.join(root, video.path.slice(1), 'index.html')])),
         home: path.join(root, 'index.html'),
         work: path.join(root, 'work/index.html'),
         film: path.join(root, 'work/film/index.html'),

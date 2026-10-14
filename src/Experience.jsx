@@ -1,3 +1,5 @@
+import VideoWatchPage from './VideoWatchPage.jsx';
+import { videoPages, videoPageForMedia } from './video-pages.js';
 import { buildProjectEnquiry, buildGmailEnquiry, buildOutlookEnquiry, contactEmail } from './contact-enquiry.js';
 import { privacySections, privacyProviders, privacyUpdated } from './privacy-content.js';
 import { isWebKit } from './browser-performance.js';
@@ -40,6 +42,8 @@ const GalleryIsometricWave = React.lazy(() => import('./GalleryIsometricWave.jsx
 
 const routeFor = (path) => {
   path = path.replace(/\/index\.html$/, '/');
+  const watchPage = videoPages.find(page => page.path === (path.endsWith('/') ? path : path + '/'));
+  if (watchPage) return watchPage.route;
   const skill = path.match(/^\/work\/(film|photography|motion|branding|graphic|digital|web)\/?$/);
   if (skill) return `skill-${skill[1]}`;
   const normalized = path.replace(/\/index\.html$/, '/').replace(/\/$/, '') || '/';
@@ -64,8 +68,8 @@ function updateSearchMeta(route) {
   document.querySelector('meta[property="og:url"]')?.setAttribute('content', url);
   document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
   document.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
-  document.querySelector('meta[property="og:image"]')?.setAttribute('content', `https://aashish-mahato.com.np${searchImages[route]}`);
-  document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', `https://aashish-mahato.com.np${searchImages[route]}`);
+  document.querySelector('meta[property="og:image"]')?.setAttribute('content', new URL(searchImages[route], 'https://aashish-mahato.com.np').href);
+  document.querySelector('meta[name="twitter:image"]')?.setAttribute('content', new URL(searchImages[route], 'https://aashish-mahato.com.np').href);
   document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', title);
   document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', description);
   document.querySelector('meta[property="og:image:alt"]')?.setAttribute('content', searchImageAlts[route]);
@@ -342,7 +346,7 @@ function WebProjectVisual({ project }) {
 
 const workMasonryVisual = (item) => item.type === 'web' ? <WebProjectVisual project={item.project} /> : null;
 const workMasonryDetails = (item) => <div className="work-masonry-info">
-  <span>{item.category === 'Digital' ? 'UI/UX Design' : item.category}</span><h3>{item.title}</h3>
+  <span>{item.category === 'Digital' ? 'UI/UX Design' : item.category}</span><h3>{videoPageForMedia(item) ? <a href={videoPageForMedia(item).path}>{item.title}</a> : item.title}</h3>
   {item.description && <p>{item.description}</p>}
   {item.type === 'youtube' && <a href={`https://www.youtube.com/watch?v=${item.youtubeId}`} target="_blank" rel="noopener noreferrer">WATCH ON YOUTUBE ↗</a>}
   {item.type === 'web' && <div className="work-masonry-links"><a href={item.project.liveUrl} target="_blank" rel="noopener noreferrer">VISIT WEBSITE ↗</a>{item.project.repoUrl && <a href={item.project.repoUrl} target="_blank" rel="noopener noreferrer">SOURCE CODE ↗</a>}</div>}
@@ -1113,6 +1117,6 @@ export default function Experience() {
     return () => { transition?.kill(); document.removeEventListener('click', onClick); window.removeEventListener('popstate', onPop); if (previousOverflow !== undefined) document.body.style.overflow = previousOverflow; };
   }, []);
 
-  const Page = route.startsWith('skill-') ? SkillPage : { home: Home, work: WorkPage, gallery: GalleryPage, about: AboutPage, contact: ContactPage, privacy: PrivacyPage }[route];
-  return <div className="experience-route-stage" ref={stageRef}><div className="experience-route-page" ref={routePageRef}><Suspense fallback={<div role="status" style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#111111', color: '#ffffff' }}>Opening {route === 'gallery' ? 'gallery' : 'about'}…</div>}><div key={route}><Page skillId={route.startsWith('skill-') ? route.slice(6) : undefined} lenisRef={lenisRef} /></div></Suspense></div></div>;
+  const Page = route.startsWith('video-') ? VideoWatchPage : route.startsWith('skill-') ? SkillPage : { home: Home, work: WorkPage, gallery: GalleryPage, about: AboutPage, contact: ContactPage, privacy: PrivacyPage }[route];
+  return <div className="experience-route-stage" ref={stageRef}><div className="experience-route-page" ref={routePageRef}><Suspense fallback={<div role="status" style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#111111', color: '#ffffff' }}>Opening {route === 'gallery' ? 'gallery' : 'about'}…</div>}><div key={route}><Page videoId={route.startsWith('video-') ? route.slice(6) : undefined} skillId={route.startsWith('skill-') ? route.slice(6) : undefined} lenisRef={lenisRef} /></div></Suspense></div></div>;
 }

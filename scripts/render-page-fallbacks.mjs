@@ -1,3 +1,4 @@
+import { videoPages } from '../src/video-pages.js';
 import { privacySections, privacyUpdated, privacyProviders } from '../src/privacy-content.js';
 import { aboutMarkdown, contactMarkdown } from '../server/agent-content.js';
 import { creativeServices, projectQuestions } from '../src/services-data.js';
@@ -19,7 +20,7 @@ const thumbnail = (item) => {
   const src = item.type === 'video' ? item.poster : item.src || item.cover;
   return src ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(mediaAlt(item))}" loading="lazy" width="320" style="max-width:100%;height:auto"/>` : '';
 };
-const project = (item, href) => `<li id="${escapeHtml(item.id)}">${thumbnail(item)}<h2>${link(href, item.title)}</h2><p>${escapeHtml(item.description || mediaDescription(item) || item.category)}</p>${item.liveUrl ? `<p>${link(item.liveUrl, `Visit ${item.title}`)}${item.repoUrl ? ` · ${link(item.repoUrl, 'View source code')}` : ''}</p>` : ''}${item.media?.length ? `<div class="fallback-project-media">${item.media.map(media => `<figure>${media.type === 'video' ? `<video controls playsinline preload="none" poster="${escapeHtml(media.poster || item.cover)}" src="${escapeHtml(media.src)}" aria-label="${escapeHtml(media.title)}"></video>` : thumbnail(media)}<figcaption>${escapeHtml(media.title)}</figcaption></figure>`).join('')}</div>` : ''}</li>`;
+const project = (item, href) => `<li id="${escapeHtml(item.id)}">${thumbnail(item)}<h2>${link(videoPages.find(video => video.id === item.id)?.path || href, item.title)}</h2><p>${escapeHtml(item.description || mediaDescription(item) || item.category)}</p>${item.liveUrl ? `<p>${link(item.liveUrl, `Visit ${item.title}`)}${item.repoUrl ? ` · ${link(item.repoUrl, 'View source code')}` : ''}</p>` : ''}${item.media?.length ? `<div class="fallback-project-media">${item.media.map(media => `<figure>${media.type === 'video' ? `<video controls playsinline preload="none" poster="${escapeHtml(media.poster || item.cover)}" src="${escapeHtml(media.src)}" aria-label="${escapeHtml(media.title)}"></video>` : thumbnail(media)}<figcaption>${escapeHtml(media.title)}</figcaption></figure>`).join('')}</div>` : ''}</li>`;
 const shell = (heading, intro, content) => `<main class="portfolio-fallback"><nav aria-label="Portfolio pages">${link('/', 'Home')}${link('/work/', 'Work')}${link('/gallery/', 'Gallery')}${link('/about/', 'About')}${link('/contact/', 'Contact')}</nav><h1>${escapeHtml(heading)}</h1><p class="portfolio-fallback-intro">${escapeHtml(intro)}</p>${content}</main>`;
 
 const groups = [
@@ -49,6 +50,13 @@ const routes = new Map([
 for (const [slug, label, intro, items] of groups) {
   const service = creativeServices.find((item) => item.id === slug);
   routes.set(`work/${slug}/index.html`, shell(label, intro, `<section><h2>${escapeHtml(service.name)} by Aashish Mahato</h2><p>${escapeHtml(service.description)} Based in Kathmandu, Nepal.</p><p>${escapeHtml(service.evidence)}</p><p>${link('/contact/', 'Discuss a project')}</p></section><section><h2>Selected work</h2><ul>${items.map((item) => project(item, `/work/${slug}/#${item.id}`)).join('')}</ul></section><p>${link('/gallery/', 'Browse the full gallery')} · ${link('/work/', 'Explore other skills')}</p>`));
+}
+
+for (const video of videoPages) {
+  const player = video.playerUrl
+    ? `<iframe src="${escapeHtml(video.playerUrl)}" title="${escapeHtml(video.title)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen style="width:100%;aspect-ratio:16/9;border:0"></iframe>`
+    : `<video controls playsinline preload="metadata" src="${escapeHtml(video.media.src)}" poster="${escapeHtml(video.thumbnail)}" aria-label="${escapeHtml(video.title)}" style="width:100%;aspect-ratio:16/9"></video>`;
+  routes.set(`${video.path.slice(1)}index.html`, shell(video.title, video.description, `${player}<p>Film and moving-image work by Aashish Mahato, Kathmandu, Nepal.</p><p>${link(video.collection, 'Explore related projects')}</p><section><h2>More to watch</h2>${videoPages.filter(item => item.id !== video.id).map(item => `<p>${link(item.path, item.title)}</p>`).join('')}</section>`));
 }
 
 const style = `<style>.portfolio-fallback{min-height:100vh;padding:clamp(24px,6vw,96px);background:#0d1210;color:#f5f2eb;font:16px/1.6 Arial,sans-serif}.portfolio-fallback nav{display:flex;gap:24px;flex-wrap:wrap}.portfolio-fallback a{color:inherit;text-underline-offset:4px}.portfolio-fallback h1{font-size:clamp(40px,8vw,100px);line-height:1.05;max-width:1100px;margin:16vh 0 20px}.portfolio-fallback-intro{font-size:clamp(18px,2vw,26px);max-width:760px}.portfolio-fallback section{margin-top:80px;max-width:960px}.portfolio-fallback ul{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}.portfolio-fallback li{border-top:1px solid #ffffff50;padding-top:14px}.portfolio-fallback li h2{font-size:20px;margin:0}.portfolio-fallback li p{margin:6px 0 0;color:#d2d8cf}.fallback-project-media{display:grid;gap:20px;margin-top:20px}.fallback-project-media figure{margin:0}.fallback-project-media video{width:100%;height:auto}.fallback-project-media figcaption{font-size:14px;margin-top:8px}</style>`;

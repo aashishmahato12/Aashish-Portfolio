@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://aashish-mahato.com.np/</loc>
     <image:image><image:loc>https://aashish-mahato.com.np/media/photos/about-backlight-white.webp</image:loc></image:image>
@@ -134,5 +134,50 @@
     <image:image><image:loc>https://aashish-mahato.com.np/media/web/cosmic-homepage.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/web/unisync-dashboard.webp</image:loc></image:image>
     <image:image><image:loc>https://aashish-mahato.com.np/media/web/portfolio-website.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://aashish-mahato.com.np/watch/manang-film/</loc>
+    <video:video><video:thumbnail_loc>https://aashish-mahato.com.np/media/posters/manang-thumbnail.jpg</video:thumbnail_loc><video:title>Manang</video:title><video:description>Watch Manang. Moving images of Manang and its Himalayan landscape.</video:description><video:content_loc>https://res.cloudinary.com/ghmgpvvn/video/upload/v1791546684/Manange.mp4</video:content_loc></video:video>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/posters/manang-thumbnail.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://aashish-mahato.com.np/watch/mustang-film/</loc>
+    <video:video><video:thumbnail_loc>https://aashish-mahato.com.np/media/posters/mustang.jpg</video:thumbnail_loc><video:title>Mustang</video:title><video:description>Watch Mustang. A travel film through the landscapes of Mustang, Nepal.</video:description><video:content_loc>https://res.cloudinary.com/ghmgpvvn/video/upload/v1791545360/Timeline_1.mp4</video:content_loc></video:video>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/posters/mustang.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://aashish-mahato.com.np/watch/showreel/</loc>
+    <video:video><video:thumbnail_loc>https://aashish-mahato.com.np/videos/hero-poster.jpg</video:thumbnail_loc><video:title>Current showreel</video:title><video:description>Watch Current showreel. A selection of my video projects.</video:description><video:content_loc>https://res.cloudinary.com/ghmgpvvn/video/upload/v1791543451/hero.mp4</video:content_loc></video:video>
+    <image:image><image:loc>https://aashish-mahato.com.np/videos/hero-poster.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://aashish-mahato.com.np/watch/corporate-_rSA6XdkSKk/</loc>
+    <video:video><video:thumbnail_loc>https://i.ytimg.com/vi/_rSA6XdkSKk/hqdefault.jpg</video:thumbnail_loc><video:title>Celebrating 25 years of Excellence | Cosmic Electrical</video:title><video:description>Watch Celebrating 25 years of Excellence | Cosmic Electrical. Corporate video work by Aashish Mahato, Creative Head at Cosmic Group.</video:description><video:player_loc>https://www.youtube-nocookie.com/embed/_rSA6XdkSKk</video:player_loc></video:video>
+    <image:image><image:loc>https://i.ytimg.com/vi/_rSA6XdkSKk/hqdefault.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://aashish-mahato.com.np/watch/corporate-Q9tsnL9auzA/</loc>
+    <video:video><video:thumbnail_loc>https://i.ytimg.com/vi/Q9tsnL9auzA/hqdefault.jpg</video:thumbnail_loc><video:title>A Gala of Gratitude: Celebrating Projects and Partnerships at Cosmic Electrical 🎉</video:title><video:description>Watch A Gala of Gratitude: Celebrating Projects and Partnerships at Cosmic Electrical 🎉. Corporate video work by Aashish Mahato, Creative Head at Cosmic Group.</video:description><video:player_loc>https://www.youtube-nocookie.com/embed/Q9tsnL9auzA</video:player_loc></video:video>
+    <image:image><image:loc>https://i.ytimg.com/vi/Q9tsnL9auzA/hqdefault.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://aashish-mahato.com.np/watch/corporate-jH0ymoImYpc/</loc>
+    <video:video><video:thumbnail_loc>https://i.ytimg.com/vi/jH0ymoImYpc/hqdefault.jpg</video:thumbnail_loc><video:title>Cosmic Electrical Limited Proves 24 Years of Commitment to Quality.</video:title><video:description>Watch Cosmic Electrical Limited Proves 24 Years of Commitment to Quality.. Corporate video work by Aashish Mahato, Creative Head at Cosmic Group.</video:description><video:player_loc>https://www.youtube-nocookie.com/embed/jH0ymoImYpc</video:player_loc></video:video>
+    <image:image><image:loc>https://i.ytimg.com/vi/jH0ymoImYpc/hqdefault.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://aashish-mahato.com.np/watch/corporate-KXSBv_oYkHo/</loc>
+    <video:video><video:thumbnail_loc>https://i.ytimg.com/vi/KXSBv_oYkHo/hqdefault.jpg</video:thumbnail_loc><video:title>Mahesh Mahato,MD Cosmic Electrical Limited</video:title><video:description>Watch Mahesh Mahato,MD Cosmic Electrical Limited. Corporate video work by Aashish Mahato, Creative Head at Cosmic Group.</video:description><video:player_loc>https://www.youtube-nocookie.com/embed/KXSBv_oYkHo</video:player_loc></video:video>
+    <image:image><image:loc>https://i.ytimg.com/vi/KXSBv_oYkHo/hqdefault.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://aashish-mahato.com.np/watch/corporate-Bd_L1rkCnG4/</loc>
+    <video:video><video:thumbnail_loc>https://i.ytimg.com/vi/Bd_L1rkCnG4/hqdefault.jpg</video:thumbnail_loc><video:title>Cosmic Electrical - Official Trailer</video:title><video:description>Watch Cosmic Electrical - Official Trailer. Corporate video work by Aashish Mahato, Creative Head at Cosmic Group.</video:description><video:player_loc>https://www.youtube-nocookie.com/embed/Bd_L1rkCnG4</video:player_loc></video:video>
+    <image:image><image:loc>https://i.ytimg.com/vi/Bd_L1rkCnG4/hqdefault.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://aashish-mahato.com.np/watch/product-motion/</loc>
+    <video:video><video:thumbnail_loc>https://aashish-mahato.com.np/media/posters/product-motion.jpg</video:thumbnail_loc><video:title>Savari product animation</video:title><video:description>Watch Savari’s product animation. A promotional product animation made for Savari, presenting its digital licence experience.</video:description><video:content_loc>https://res.cloudinary.com/ghmgpvvn/video/upload/v1791546163/Savari_Promo_Video.mp4</video:content_loc></video:video>
+    <image:image><image:loc>https://aashish-mahato.com.np/media/posters/product-motion.jpg</image:loc></image:image>
   </url>
 </urlset>

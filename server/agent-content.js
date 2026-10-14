@@ -1,3 +1,4 @@
+import { videoPages } from '../src/video-pages.js';
 import { searchMeta, siteUrl, creativeBio, officialProfiles } from '../src/seo-data.js';
 import { contactEmail } from '../src/contact-enquiry.js';
 import { creativeServices } from '../src/services-data.js';
@@ -18,6 +19,10 @@ export const pageMarkdown = Object.fromEntries(Object.entries(searchMeta).map(([
   else if (id === 'privacy') body = privacyMarkdown;
   else if (id === 'work') body += `## Skills\n\n${services}\n\n## Selected projects\n\n${projects}\n`;
   else if (id === 'gallery') body += `## Visual archive\n\n${galleryMedia.map(p => `- ${link(p.title, p.src)} — ${p.category}`).join('\n')}\n\n${projects}\n`;
+  else if (id.startsWith('video-')) {
+    const video = videoPages.find(item => item.route === id);
+    body += `## Watch the video\n\n${link('Watch ' + video.title, video.path)}\n\n${link('Explore related projects', video.collection)}\n`;
+  }
   else {
     const service = creativeServices.find(s => id === `skill-${s.id}`);
     body += `${service.description}\n\n${service.evidence}\n\n## Project enquiries\n\n${link('Contact Aashish', '/contact/')}\n`;

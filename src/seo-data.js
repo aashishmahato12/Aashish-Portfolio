@@ -1,3 +1,4 @@
+import { videoPages } from './video-pages.js';
 import { creativeServices } from './services-data.js';
 import { featuredProjects, filmProjects, galleryMedia, webProjects } from './portfolio-data.js';
 import { contactEmail } from './contact-enquiry.js';
@@ -59,6 +60,12 @@ export const searchImageAlts = {
   'skill-web': 'Cosmic Electrical homepage, a website developed by Aashish Mahato',
 };
 
+for (const video of videoPages) {
+  searchMeta[video.route] = [`${video.title} | Watch Video by Aashish Mahato`, video.description, video.path];
+  searchImages[video.route] = video.thumbnail;
+  searchImageAlts[video.route] = `${video.title} video thumbnail`;
+}
+
 export function searchProjects(route) {
   const skill = route.replace('skill-', '');
   if (skill === 'film') return filmProjects;
@@ -92,12 +99,12 @@ export function structuredData(route) {
     '@context': 'https://schema.org',
     '@graph': [
       person,
-      { '@type': 'ImageObject', '@id': `${siteUrl}${path}#primaryimage`, url: `${siteUrl}${searchImages[route]}`, contentUrl: `${siteUrl}${searchImages[route]}`, caption: searchImageAlts[route] },
+      { '@type': 'ImageObject', '@id': `${siteUrl}${path}#primaryimage`, url: new URL(searchImages[route], siteUrl).href, contentUrl: new URL(searchImages[route], siteUrl).href, caption: searchImageAlts[route] },
       ...(route.startsWith('skill-') ? [{ '@type': 'ItemList', '@id': `${siteUrl}${path}#projects`, name: `Selected ${creativeServices.find(service => route === `skill-${service.id}`).name} projects`, itemListElement: searchProjects(route).map((project, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@type': 'CreativeWork', name: project.title, description: project.description || project.category, url: `${siteUrl}${path}#${project.id}`, image: new URL(project.cover || project.src, siteUrl).href, creator: { '@id': personId }, ...(project.liveUrl ? { sameAs: project.liveUrl } : {}) } })) }] : []),
       ...(route !== 'home' ? [{ '@type': 'BreadcrumbList', '@id': `${siteUrl}${path}#breadcrumb`, itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
         ...(route.startsWith('skill-') ? [{ '@type': 'ListItem', position: 2, name: 'Work', item: `${siteUrl}/work/` }] : []),
-        { '@type': 'ListItem', position: route.startsWith('skill-') ? 3 : 2, name: route.startsWith('skill-') ? creativeServices.find(service => route === `skill-${service.id}`).name : route[0].toUpperCase() + route.slice(1), item: `${siteUrl}${path}` },
+        { '@type': 'ListItem', position: route.startsWith('skill-') ? 3 : 2, name: route.startsWith('skill-') ? creativeServices.find(service => route === `skill-${service.id}`).name : videoPages.find(video => video.route === route)?.title || route[0].toUpperCase() + route.slice(1), item: `${siteUrl}${path}` },
       ] }] : []),
       ...(route.startsWith('skill-') ? [{
         '@type': 'Service', '@id': `${siteUrl}${path}#service`,
