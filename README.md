@@ -21,7 +21,7 @@ The build generates `public/sitemap.xml`, copies `public/robots.txt`, and checks
 
 ## Media
 
-The homepage hero uses the original full-quality Cloudinary video on desktop and phone, with `public/videos/hero-poster.webp` while it loads. The same original showreel is available on its watch page. The horizontal homepage gallery mixes that reel with films and photographs.
+The homepage reel and Savari animation prefer verified smaller Cloudinary WebM/VP9 files at quality 100, without resizing or reducing frame rate, and retain original MP4 fallbacks. The travel films retain their original MP4s because their quality-100 WebM derivatives exceed 100 MB. The homepage hero uses the original-resolution Cloudinary video on desktop and phone, with `public/videos/hero-poster.webp` while it loads. The same original showreel is available on its watch page. The horizontal homepage gallery mixes that reel with films and photographs.
 
 The supplied source assets are in `Aashish - Pro/`. Web-sized copies are organized in `public/media/`:
 

@@ -1,3 +1,5 @@
+import { loadVideoSource } from './video-sources.js';
+import Video from './Video.jsx';
 import { mediaAlt } from './media-text.js';
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
@@ -14,7 +16,7 @@ function VideoTile({ item, paused, onDimensions }) {
     let visible = false;
     const sync = () => {
       if (visible && !paused && !document.hidden && !reduced.matches) {
-        if (!video.getAttribute('src')) video.src = item.src;
+        if (!video.getAttribute('src')) loadVideoSource(video, item.src);
         video.play().catch(() => {});
       } else video.pause();
     };
@@ -24,7 +26,7 @@ function VideoTile({ item, paused, onDimensions }) {
     reduced.addEventListener('change', sync);
     return () => { observer.disconnect(); video.pause(); document.removeEventListener('visibilitychange', sync); reduced.removeEventListener('change', sync); };
   }, [item.src, paused]);
-  return <video ref={ref} poster={item.poster} muted loop playsInline preload="none" aria-hidden="true" onLoadedMetadata={onDimensions} />;
+  return <Video ref={ref} poster={item.poster} muted loop playsInline preload="none" aria-hidden="true" onLoadedMetadata={onDimensions} />;
 }
 
 export default function GalleryIsometricWave({ items, onOpen, paused = false }) {

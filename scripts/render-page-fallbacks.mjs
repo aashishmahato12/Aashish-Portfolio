@@ -1,3 +1,4 @@
+import { webmVideoSource } from '../src/video-sources.js';
 import variants from '../src/image-variants.json' with { type: 'json' };
 import { videoPages } from '../src/video-pages.js';
 import { privacySections, privacyUpdated, privacyProviders } from '../src/privacy-content.js';
@@ -14,6 +15,7 @@ import { creativeBio, officialProfiles, searchProjects } from '../src/seo-data.j
 
 const dist = resolve(dirname(fileURLToPath(import.meta.url)), '../dist');
 const escapeHtml = (value) => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+const videoSources = src => `${webmVideoSource(src) ? `<source src="${escapeHtml(webmVideoSource(src))}" type='video/webm; codecs="vp9"'>` : ''}<source src="${escapeHtml(src)}" type="video/mp4">`;
 const plainMarkdown = value => value.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
 const link = (href, label) => `<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>`;
 const profileLinks = () => officialProfiles.map((profile) => link(profile.url, `Aashish Mahato on ${profile.label}`)).join(' · ');
@@ -22,7 +24,7 @@ const thumbnail = (item) => {
   const src = variants[original] || original;
   return src ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(mediaAlt(item))}" loading="lazy" width="320" style="max-width:100%;height:auto"/>` : '';
 };
-const project = (item, href) => `<li id="${escapeHtml(item.id)}">${thumbnail(item)}<h2>${link(videoPages.find(video => video.id === item.id)?.path || href, item.title)}</h2><p>${escapeHtml(item.description || mediaDescription(item) || item.category)}</p>${item.liveUrl ? `<p>${link(item.liveUrl, `Visit ${item.title}`)}${item.repoUrl ? ` · ${link(item.repoUrl, 'View source code')}` : ''}</p>` : ''}${item.media?.length ? `<div class="fallback-project-media">${item.media.map(media => `<figure>${media.type === 'video' ? `<video controls playsinline preload="none" poster="${escapeHtml(variants[media.poster || item.cover] || media.poster || item.cover)}" src="${escapeHtml(media.src)}" aria-label="${escapeHtml(media.title)}"></video>` : thumbnail(media)}<figcaption>${escapeHtml(media.title)}</figcaption></figure>`).join('')}</div>` : ''}</li>`;
+const project = (item, href) => `<li id="${escapeHtml(item.id)}">${thumbnail(item)}<h2>${link(videoPages.find(video => video.id === item.id)?.path || href, item.title)}</h2><p>${escapeHtml(item.description || mediaDescription(item) || item.category)}</p>${item.liveUrl ? `<p>${link(item.liveUrl, `Visit ${item.title}`)}${item.repoUrl ? ` · ${link(item.repoUrl, 'View source code')}` : ''}</p>` : ''}${item.media?.length ? `<div class="fallback-project-media">${item.media.map(media => `<figure>${media.type === 'video' ? `<video controls playsinline preload="none" poster="${escapeHtml(variants[media.poster || item.cover] || media.poster || item.cover)}" aria-label="${escapeHtml(media.title)}">${videoSources(media.src)}</video>` : thumbnail(media)}<figcaption>${escapeHtml(media.title)}</figcaption></figure>`).join('')}</div>` : ''}</li>`;
 const shell = (heading, intro, content) => `<main class="portfolio-fallback"><nav aria-label="Portfolio pages">${link('/', 'Home')}${link('/work/', 'Work')}${link('/gallery/', 'Gallery')}${link('/about/', 'About')}${link('/contact/', 'Contact')}</nav><h1>${escapeHtml(heading)}</h1><p class="portfolio-fallback-intro">${escapeHtml(intro)}</p>${content}</main>`;
 
 const groups = [
@@ -57,7 +59,7 @@ for (const [slug, label, intro, items] of groups) {
 for (const video of videoPages) {
   const player = video.playerUrl
     ? `<iframe src="${escapeHtml(video.playerUrl)}" title="${escapeHtml(video.title)}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen style="width:100%;aspect-ratio:16/9;border:0"></iframe>`
-    : `<video controls playsinline preload="metadata" src="${escapeHtml(video.media.src)}" poster="${escapeHtml(video.thumbnail)}" aria-label="${escapeHtml(video.title)}" style="width:100%;aspect-ratio:16/9"></video>`;
+    : `<video controls playsinline preload="metadata" poster="${escapeHtml(video.thumbnail)}" aria-label="${escapeHtml(video.title)}" style="width:100%;aspect-ratio:16/9">${videoSources(video.media.src)}</video>`;
   routes.set(`${video.path.slice(1)}index.html`, shell(video.title, video.description, `${player}<p>Film and moving-image work by Aashish Mahato, Kathmandu, Nepal.</p><p>${link(video.collection, 'Explore related projects')}</p><section><h2>More to watch</h2>${videoPages.filter(item => item.id !== video.id).map(item => `<p>${link(item.path, item.title)}</p>`).join('')}</section>`));
 }
 

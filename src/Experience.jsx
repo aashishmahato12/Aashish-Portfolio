@@ -1,3 +1,5 @@
+import { loadVideoSource } from './video-sources.js';
+import Video from './Video.jsx';
 import ResponsiveImage from './ResponsiveImage.jsx';
 import { useNearViewport } from './use-near-viewport.js';
 import VideoWatchPage from './VideoWatchPage.jsx';
@@ -108,7 +110,7 @@ function ReelVideo({ item = heroReel, controls = false, className = '' }) {
     observer.observe(video);
     return () => observer.disconnect();
   }, [controls]);
-  return <video ref={ref} className={className} src={item.src} poster={item.poster} muted={!controls} autoPlay={controls} loop={!controls} controls={controls} playsInline preload="metadata" aria-hidden={!controls} aria-label={item.title || 'Portfolio video'} title={mediaDescription(item)} />;
+  return <Video ref={ref} className={className} src={item.src} poster={item.poster} muted={!controls} autoPlay={controls} loop={!controls} controls={controls} playsInline preload="metadata" aria-hidden={!controls} aria-label={item.title || 'Portfolio video'} title={mediaDescription(item)} />;
 }
 
 function SectionTop({ aside }) {
@@ -520,7 +522,7 @@ function HomeFilmPreview({ film }) {
     const start = () => Math.min(6, Math.max(0, video.duration - 6));
     const update = () => {
       if (!visible || preference.matches || document.hidden) { video.pause(); return; }
-      if (!video.getAttribute('src')) { video.src = film.src; video.load(); }
+      if (!video.getAttribute('src')) { loadVideoSource(video, film.src); video.load(); }
       else if (video.readyState >= 2) video.play().catch(() => {});
     };
     const loaded = () => { video.currentTime = start(); update(); };
@@ -545,7 +547,7 @@ function HomeFilmPreview({ film }) {
       document.removeEventListener('visibilitychange', update);
     };
   }, [film.src]);
-  return <video ref={videoRef} muted playsInline preload="none" poster={film.poster} aria-hidden="true" />;
+  return <Video ref={videoRef} muted playsInline preload="none" poster={film.poster} aria-hidden="true" />;
 }
 
 function HomeSkills() {
@@ -787,7 +789,7 @@ function SkillPage({ skillId }) {
   }, [skillId]);
   const serviceContext = <WorkNextSteps service={service} />;
   return <div className={`inner-page skill-page skill-page--${skill.id}`}><SiteNav current="work" /><main>
-    <section className="skill-hero" ref={heroRef} aria-labelledby="skill-title"><div className="skill-hero-image">{skill.slides ? skill.slides.map((src, index) => <picture key={src}>{skill.mobileSlides?.[index] && <source media="(max-width: 700px)" srcSet={skill.mobileSlides[index]} />}<ResponsiveImage className="skill-hero-slide" src={src} alt="" loading={index === 0 ? "eager" : "lazy"} /></picture>) : <ResponsiveImage src={skill.cover} alt="" />}{heroVideo && <video className={`skill-hero-video ${heroVideoReady ? 'is-ready' : ''}`} src={heroVideo.src} muted playsInline preload={heroVideoStart === 0 ? "auto" : "metadata"} poster={heroVideo.poster || skill.cover} aria-hidden="true" onLoadedData={(event) => { if (heroVideoStart !== 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onLoadedMetadata={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} onSeeked={(event) => { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onEnded={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} />}</div><div className="skill-hero-shade" /><div className="skill-hero-content experience-shell"><div className="skill-hero-overline"><a href="/work/">← ALL SKILLS</a></div><div className="skill-hero-main"><span className="skill-hero-kicker">AASHISH MAHATO / MY WORK</span><MaskedHeroTitle text={skill.name} id="skill-title" /><p>{skill.line}</p></div><div className="skill-hero-bottom"><span>SELECTED PROJECTS BELOW</span><span>SCROLL ↓</span></div></div></section>
+    <section className="skill-hero" ref={heroRef} aria-labelledby="skill-title"><div className="skill-hero-image">{skill.slides ? skill.slides.map((src, index) => <picture key={src}>{skill.mobileSlides?.[index] && <source media="(max-width: 700px)" srcSet={skill.mobileSlides[index]} />}<ResponsiveImage className="skill-hero-slide" src={src} alt="" loading={index === 0 ? "eager" : "lazy"} /></picture>) : <ResponsiveImage src={skill.cover} alt="" />}{heroVideo && <Video className={`skill-hero-video ${heroVideoReady ? 'is-ready' : ''}`} src={heroVideo.src} muted playsInline preload={heroVideoStart === 0 ? "auto" : "metadata"} poster={heroVideo.poster || skill.cover} aria-hidden="true" onLoadedData={(event) => { if (heroVideoStart !== 0 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onLoadedMetadata={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} onSeeked={(event) => { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const video = event.currentTarget; video.dataset.ready = 'true'; setHeroVideoReady(true); if (video.getBoundingClientRect().bottom > 0 && video.getBoundingClientRect().top < window.innerHeight) video.play().catch(() => {}); }} onEnded={(event) => { const video = event.currentTarget; video.currentTime = video.duration > heroVideoStart + 2 ? heroVideoStart : Math.max(0, video.duration * .2); }} />}</div><div className="skill-hero-shade" /><div className="skill-hero-content experience-shell"><div className="skill-hero-overline"><a href="/work/">← ALL SKILLS</a></div><div className="skill-hero-main"><span className="skill-hero-kicker">AASHISH MAHATO / MY WORK</span><MaskedHeroTitle text={skill.name} id="skill-title" /><p>{skill.line}</p></div><div className="skill-hero-bottom"><span>SELECTED PROJECTS BELOW</span><span>SCROLL ↓</span></div></div></section>
     <section className={`work-detail work-detail--${skill.id}`}><div className="experience-shell"><nav className="work-detail-switcher" aria-label="Explore other skills">{workSkills.map((item) => <a href={workPath(item.id)} key={item.id} aria-current={skill.id === item.id ? 'page' : undefined}>{item.name}</a>)}</nav><div className="work-detail-heading" data-reveal><span>{skill.name} / SKILLS</span><h2>PROJECTS<i>.</i></h2><p>{skill.line}</p>{skill.id === 'branding' ? <p className="work-branding-support">A selection of identity designs and printed materials for CIC Nepal, Decora, and Cosmic Electrical, including business cards, service booklets, brand presentations, and workplace signage.</p> : <div className="work-detail-capabilities" aria-label={`${skill.name} skills`}>{skill.capabilities.map((capability) => <span key={capability}>{capability}</span>)}</div>}</div><WorkMediaGallery skill={skill} key={skill.id} /><div className="skill-page-end"><a href="/work/">← ALL SKILLS</a><a href="/gallery/">FULL GALLERY ↗</a></div>{serviceContext}</div></section>
   </main><SiteFooter /></div>;
 }

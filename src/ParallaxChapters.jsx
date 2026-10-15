@@ -1,3 +1,5 @@
+import { loadVideoSource } from './video-sources.js';
+import Video from './Video.jsx';
 import { useNearViewport } from './use-near-viewport.js';
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
@@ -86,7 +88,7 @@ export default function ParallaxChapters({ items = chapters, label = 'FILM / PHO
     const sync = () => videos.forEach(video => {
       if (visible.has(video) && !document.hidden && !reducedMotion.matches) {
         if (!video.getAttribute('src')) {
-          video.src = video.dataset.src;
+          loadVideoSource(video, video.dataset.src);
           video.load();
         }
         video.play().catch(() => {});
@@ -139,7 +141,7 @@ export default function ParallaxChapters({ items = chapters, label = 'FILM / PHO
   }, [depthTitles, near]);
   return <div className={`parallax-chapters ${className}`} ref={ref}>{items.map((chapter, index) => <section className="parallax-chapter" key={chapter.title} id={chapter.id} aria-label={chapter.title}>
     <div className="parallax-chapter-image" style={{ backgroundImage: `url(${chapter.video?.poster || chapter.image})` }}>
-      {chapter.video && <video data-src={chapter.video.src} poster={chapter.video.poster || chapter.image} muted loop playsInline preload="none" aria-hidden="true" />}
+      {chapter.video && <Video data-src={chapter.video.src} poster={chapter.video.poster || chapter.image} muted loop playsInline preload="none" aria-hidden="true" />}
       {!chapter.video && chapter.slides?.length > 1 && <ChapterSlideshow images={[chapter.image, ...chapter.slides]} />}
     </div>
     <div className="parallax-chapter-shade" />

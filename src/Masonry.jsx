@@ -1,3 +1,4 @@
+import Video from './Video.jsx';
 import ResponsiveImage from './ResponsiveImage.jsx';
 // Adapted from the React Bits Masonry source supplied for this project.
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -146,7 +147,7 @@ export default function Masonry({ items, onOpen, paused = false, autoplayVideos 
         onFocus={event => hover(event, true)} onBlur={event => hover(event, false)}>
         <span className={`masonry-visual${item.type === 'video' ? ' masonry-video' : item.type === 'youtube' ? ' masonry-youtube' : ''}`} style={{ height: item.mediaHeight }}>
           {renderVisual?.(item) || (item.type === 'video'
-            ? <video src={item.src} poster={item.poster} muted playsInline loop preload="metadata" onLoadedMetadata={event => measureMedia(item, event.currentTarget)} aria-hidden="true" />
+            ? <Video src={item.src} poster={item.poster} muted playsInline loop preload="metadata" onLoadedMetadata={event => measureMedia(item, event.currentTarget)} aria-hidden="true" />
             : <ResponsiveImage sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw" src={item.src || item.img || item.poster} alt={mediaAlt(item)} loading="lazy" decoding="async" onLoad={event => measureMedia(item, event.currentTarget)} />)}
           <span className="masonry-open" aria-hidden="true">{['video', 'youtube'].includes(item.type) ? 'PLAY FILM ↗' : 'EXPAND ↗'}</span>
         </span>

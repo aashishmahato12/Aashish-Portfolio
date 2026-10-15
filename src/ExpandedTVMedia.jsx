@@ -1,3 +1,4 @@
+import Video from './Video.jsx';
 import React, { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -47,7 +48,7 @@ export default function ExpandedTVMedia({ item, slide, origin, startTime, muted 
     <button className="tv-expanded-close" type="button" onClick={close} aria-label="Close expanded preview"><X size={20} /> Close</button>
     <div className="tv-expanded-scroll"><div className="tv-expanded-sticky">
       <div className="tv-expanded-frame" ref={frame}>
-        {item.video ? <video ref={video} src={item.video} poster={item.image} autoPlay loop={!item.rotateFilms} onEnded={onVideoEnd} muted={muted} playsInline controls /> : slides.current.length > 1 ? <div className="tv-expanded-rail" ref={rail}>{[...slides.current, slides.current[0]].map((image, index) => <img key={`${image.src}-${index}`} src={image.src} alt={index === slides.current.length ? '' : image.title} aria-hidden={index === slides.current.length || undefined} />)}</div> : <img src={item.image} alt={item.caption} />}
+        {item.video ? <Video ref={video} src={item.video} poster={item.image} autoPlay loop={!item.rotateFilms} onEnded={onVideoEnd} muted={muted} playsInline controls /> : slides.current.length > 1 ? <div className="tv-expanded-rail" ref={rail}>{[...slides.current, slides.current[0]].map((image, index) => <img key={`${image.src}-${index}`} src={image.src} alt={index === slides.current.length ? '' : image.title} aria-hidden={index === slides.current.length || undefined} />)}</div> : <img src={item.image} alt={item.caption} />}
       </div>
       <p className="tv-expanded-instruction">Scroll to fill the screen ↓</p>
     </div></div>
